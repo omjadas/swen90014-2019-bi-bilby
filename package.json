@@ -4,6 +4,7 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
+    "setup-dev": "git config core.hooksPath .githooks && npm run install-all-dev",
     "install-all": "npm i && cd client && npm i",
     "install-all-dev": "npm i -D && cd client && npm i -D",
     "build": "npx tsc && cd client && npm run build",
