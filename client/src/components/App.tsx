@@ -8,7 +8,7 @@ class App extends React.Component {
    * @returns {JSX.Element}
    * @memberof App
    */
-  render(): JSX.Element {
+  public render(): JSX.Element {
     return (
       <div className="App">
         <header className="App-header">
