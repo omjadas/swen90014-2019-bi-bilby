@@ -14,7 +14,7 @@ To build front and backend run the following command
 npm run build
 ```
 
-To start the server run the following command
+To start the server (once it has been built) run the following command
 
 ```bash
 npm run start
