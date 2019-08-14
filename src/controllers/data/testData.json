@@ -13,11 +13,13 @@
         "numberOfStudents": 20,
         "phoneNumber": "0467399328",
         "disabilityAccess": false,
-        "contactEmail": "s.wetherell@gmail.com"  
+        "contactEmail": "s.wetherell@gmail.com",
+        "special notes": "N/A"  
     } ], 
     "currentBookings": [ {
         "confirmed": true,
         "facilitator": "Joe Blogs",
+        "guest speaker": "Richard Newton",
         "due": 350,
         "location": "Collins St",
         "day": "Thursday",
@@ -49,5 +51,13 @@
         "new": true,
         "must work with": ["Tim Gould"],
         "max per week": 4
-    } ]
+    } ],
+    "locations": [ {
+        "location name": "Lyle Theatre",
+        "address": "230 Collins St",
+        "capacity": 50,
+        "facilities": ["PC", "Scanner"]
+    } ],
+    "workshops": ["Discussions about Homelessness and Disadvantage", 
+        "Primary:Finding Belonging"]
 }
