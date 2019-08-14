@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from '../images/logo.svg';
 import '../stylesheets/App.css';
-import Roster from "./rosterAlgTest";
+import Roster from "../../../src/controllers/rosterAlgTest";
 
 class App extends React.Component {
   /**
@@ -10,7 +10,6 @@ class App extends React.Component {
    * @memberof App
    */
   public render(): JSX.Element {
-    Roster = new Roster();
     return (
       <div className="App">
         <header className="App-header">
