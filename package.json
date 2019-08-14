@@ -9,7 +9,7 @@
     "install-all-dev": "npm i -D && cd client && npm i -D",
     "build": "npx tsc && cd client && npm run build",
     "start": "node out/server.js",
-    "test": "npx jest && cd client && npm run test",
+    "test": "npx jest --passWithNoTests && cd client && npm run test",
     "lint": "npx eslint \"src/**\" \"client/src/components/**\" \"client/src/__tests__/**\""
   },
   "author": "",
