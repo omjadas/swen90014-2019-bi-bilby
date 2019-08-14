@@ -56,6 +56,7 @@
         "location name": "Lyle Theatre",
         "address": "230 Collins St",
         "capacity": 50,
+        "disability access": true,
         "facilities": ["PC", "Scanner"]
     } ],
     "workshops": ["Discussions about Homelessness and Disadvantage", 
