@@ -35,11 +35,19 @@
         "disabilityAccess": false,
         "contactEmail": "s.wetherell@gmail.com" 
     } ],
-    "user": [ {
-        "type": "facilitator",
+    "facilitators": [ {
         "area": "Melbourne",
         "contactName": "Tim Gould",
         "phoneNumber": "045693952",
         "contactEmail": "t.gould@gmail.com" 
+    } ],
+    "guest speakers": [ {
+        "area": "Melbourne",
+        "contactName": "Richard Newton",
+        "phoneNumber": "045633952",
+        "contactEmail": "r.newt@gmail.com",
+        "new": true,
+        "must work with": ["Tim Gould"],
+        "max per week": 4
     } ]
 }
