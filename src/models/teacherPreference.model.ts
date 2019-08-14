@@ -1,21 +1,47 @@
-import mongoose from "mongoose";
+import { prop, Typegoose } from 'typegoose';
 
-// teacherPreference schema
-const teacherPreferenceSchema = new mongoose.Schema({
-  day:{type:String},
-  date:{type:Date},
-  timeBegin:{type:Date},
-  timeEnd:{type:Date},
-  area:{type:String},
-  workshop:{type:String},
-  level:{type:Number},
-  school:{type:String},
-  contactName: { type: String },
-  return:{type: Boolean},
-  numberOfStudents:{type:Number},
-  phoneNumber: { type: String },
-  disabilityAccess:{type: Boolean},
-  contactEmail: { type: String }
-});
+export class TeacherPreference extends Typegoose {
+  @prop({ required: true })
+  public day!: string;
 
-module.exports = mongoose.model("TeacherPreference", teacherPreferenceSchema);
+  @prop({ required: true })
+  public date!: Date;
+
+  @prop({ required: true })
+  public timeBegin!: Date;
+
+  @prop({ required: true })
+  public timeEnd!: Date;
+
+  @prop({ required: true })
+  public area!: string;
+
+  @prop({ required: true })
+  public workshop!: string;
+
+  @prop({ required: true })
+  public level!: number;
+
+  @prop({ required: true })
+  public school!: string;
+
+  @prop({ required: true })
+  public contactName!: string;
+
+  @prop({ required: true })
+  public return!: boolean;
+
+  @prop({ required: true })
+  public numberOfStudents!: number;
+  
+  @prop({ required: true })
+  public phoneNumber!: string;
+  
+  @prop({ required: true })
+  public disabilityAccess!: boolean;
+
+  @prop({ validate: /\S+@\S+\.\S+/ })
+  public contactEmail?: string;
+}
+
+export const FacilitatorModel = new TeacherPreference().getModelForClass(TeacherPreference);

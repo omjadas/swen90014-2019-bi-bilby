@@ -1,12 +1,20 @@
-import mongoose from "mongoose";
+import { prop, Typegoose } from 'typegoose';
 
-// facilitator schema
-const facilitatorSchema = new mongoose.Schema({
-  type: { type: String },
-  area: { type: String },
-  contactName: { type: String },
-  phoneNumber: { type: String },
-  contactEmail: { type: String }
-});
+export class Facilitator extends Typegoose {
+  @prop({ required: true })
+  public type!: string;
 
-module.exports = mongoose.model("facilitator", facilitatorSchema);
+  @prop({ required: true })
+  public area!: string;
+
+  @prop({ required: true })
+  public contactName!: string;
+
+  @prop({ required: true })
+  public phoneNumber!: string;
+
+  @prop({ validate: /\S+@\S+\.\S+/ })
+  public contactEmail?: string;
+}
+
+export const FacilitatorModel = new Facilitator().getModelForClass(Facilitator);
