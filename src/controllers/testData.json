@@ -1,0 +1,38 @@
+{ 
+    "teacherPreference": [ {
+        "day": "Thursday",
+        "date": "14/08/2019",
+        "timeBegin": "0900",
+        "timeEnd": "0100",
+        "area": "Melbourne",
+        "workshop": "Discussions about homelesness and disadvantage",
+        "level": 11,
+        "school": "King's College",
+        "contactName": "Steve Wetherell",
+        "return": false,
+        "numberOfStudents": 20,
+        "phoneNumber": "0467399328",
+        "disabilityAccess": false,
+        "contactEmail": "s.wetherell@gmail.com"  
+    } ], 
+    "currentBookings": [ {
+        "confirmed": true,
+        "facilitator": "Joe Blogs",
+        "due": 350,
+        "location": "Collins St",
+        "day": "Thursday",
+        "date": "14/08/2019",
+        "timeBegin": "0900",
+        "timeEnd": "0100",
+        "area": "Melbourne",
+        "workshop": "Discussions about homelesness and disadvantage",
+        "level": 11,
+        "school": "King's College",
+        "contactName": "Steve Wetherell",
+        "return": false,
+        "numberOfStudents": 20,
+        "phoneNumber": "0467399328",
+        "disabilityAccess": false,
+        "contactEmail": "s.wetherell@gmail.com" 
+    } ]
+}
