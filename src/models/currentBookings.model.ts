@@ -57,4 +57,4 @@ export class CurrentBookings extends Typegoose {
   public contactEmail?: string;
 }
 
-export const FacilitatorModel = new CurrentBookings().getModelForClass(CurrentBookings);
+export const CurrentBookingsModel = new CurrentBookings().getModelForClass(CurrentBookings);

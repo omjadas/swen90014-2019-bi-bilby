@@ -44,4 +44,4 @@ export class TeacherPreference extends Typegoose {
   public contactEmail?: string;
 }
 
-export const FacilitatorModel = new TeacherPreference().getModelForClass(TeacherPreference);
+export const TeacherPreferenceModel = new TeacherPreference().getModelForClass(TeacherPreference);
