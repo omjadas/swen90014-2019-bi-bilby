@@ -1,0 +1,43 @@
+{
+    "workshops": [ {
+        "workshop_1": [ {
+            "name": "Primary : Finding Belonging",
+            "needs_facilitator": true,
+            "needs_guest_speaker": true,
+            "model_facilitator": facilitators.model_1,
+            "model_guest_speaker": guest_speakers.model_1
+        } ],
+        "workshop_2": [ {
+            "name": "Discussions about Homelessness and Disadvantage",
+            "needs_facilitator": true,
+            "needs_guest_speaker": true,
+            "model_facilitator": facilitators.model_2,
+            "model_guest_speaker": guest_speakers.model_2
+        } ],
+        "workshop_3": [ {
+            "name": "Primary : Josh's Story",
+            "needs_facilitator": true,
+            "needs_guest_speaker": false,
+            "model_facilitator": facilitators.model_3
+        } ],
+    } ],
+    "facilitators": [ {
+        "model_1": [ {
+            "trained": true
+        } ],
+        "model_2": [ {
+            "trained": false
+        } ],
+        "model_3": [ {
+            "trained": false
+        } ]
+    } ],
+    "guest_speakers": [   {
+        "model_1": [ {
+            "trained": true
+        } ],
+        "model_2": [ {
+            "trained": false
+        } ]
+    } ]
+}
