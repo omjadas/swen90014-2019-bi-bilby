@@ -1,7 +1,7 @@
 import { prop, Typegoose } from 'typegoose';
 
 export class CurrentBookings extends Typegoose {
-    
+
   @prop({ required: true })
   public confirmed!: boolean;
 
@@ -18,10 +18,13 @@ export class CurrentBookings extends Typegoose {
   public day!: string;
 
   @prop({ required: true })
-  public date!: Date;
+  public date!: string;
 
   @prop({ required: true })
-  public timeBegin!: Date;
+  public timeBeginHour!: number;
+
+  @prop({ required: true })
+  public timeBeginMinute!: number;
 
   @prop({ required: true })
   public timeEnd!: Date;
@@ -46,10 +49,10 @@ export class CurrentBookings extends Typegoose {
 
   @prop({ required: true })
   public numberOfStudents!: number;
-  
+
   @prop({ required: true })
   public phoneNumber!: string;
-  
+
   @prop({ required: true })
   public disabilityAccess!: boolean;
 

@@ -5,7 +5,7 @@ export class TeacherPreference extends Typegoose {
   public day!: string;
 
   @prop({ required: true })
-  public date!: Date;
+  public date!: string;
 
   @prop({ required: true })
   public timeBegin!: Date;
@@ -33,10 +33,10 @@ export class TeacherPreference extends Typegoose {
 
   @prop({ required: true })
   public numberOfStudents!: number;
-  
+
   @prop({ required: true })
   public phoneNumber!: string;
-  
+
   @prop({ required: true })
   public disabilityAccess!: boolean;
 
