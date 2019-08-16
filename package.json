@@ -9,15 +9,18 @@
     "install-all-dev": "npm i -D && cd client && npm i -D",
     "build": "npx tsc && cd client && npm run build",
     "start": "node out/server.js",
-    "test": "npx jest && cd client && npm run test",
+    "test": "npx jest --passWithNoTests && cd client && npm run test",
     "lint": "npx eslint \"src/**\" \"client/src/components/**\" \"client/src/__tests__/**\""
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@types/express": "^4.17.0",
+    "@types/mongoose": "^5.5.12",
     "@types/node": "^12.7.1",
     "express": "^4.17.1",
+    "mongoose": "^5.6.9",
+    "typegoose": "^5.9.0",
     "typescript": "^3.5.3"
   },
   "devDependencies": {
