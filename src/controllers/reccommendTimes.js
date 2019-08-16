@@ -32,6 +32,8 @@ const getAvailableTimes = (date, area, workshop, currentBookings) => {
     
     for (var i = 0; i < numBookings; i++) {
         if (currentBookings[i].area === area) {
+            currentBookings[i].date = new Date(currentBookings[i].date);
+
             if (currentBookings[i].date === date) {
                 if (currentBookings[i].confirmed) {
                     // If we have found a booking, remove from candidate list
