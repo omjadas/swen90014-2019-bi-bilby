@@ -10,6 +10,11 @@ const readData = () => {
         // Define to JSON type
         var jsonContent = JSON.parse(contents);
 
+        // Convert to mongoose schema
+        var Facilitator = mongoose.model( "facilitator", facilitatorModel);
+        var raw = jsonContent.facilitator;
+        var facilitator = new Facilitator(raw);
+
         // Get available times
         timeSlots = getAvailableTimes(jsonContent.teacherPreference.day,
             jsonContent.teacherPreference.area, jsonContent.teacherPreference.workshop,
