@@ -61,7 +61,7 @@
             "contactEmail": "m.jackson@gmail.com",
             "availability": [],
             "trained": true
-        } ],
+        } ]
     } ],
     "guest speakers": [ {
         "guest_1": [ {
@@ -98,7 +98,6 @@
             "trained": true,
             "reliable": false
         } ]
-
     } ],
     "locations": [ {
         "location name": "Lyle Theatre",

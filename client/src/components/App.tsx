@@ -1,7 +1,6 @@
 import React from 'react';
 import logo from '../images/logo.svg';
 import '../stylesheets/App.css';
-import Roster from "../../../src/controllers/rosterAlgTest";
 
 class App extends React.Component {
   /**

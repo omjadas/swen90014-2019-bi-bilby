@@ -5,7 +5,7 @@ const readData = () => {
         console.log("\n *STARTING* \n");
 
         // Get content from file
-        var contents = fs.readFileSync("./data/testData.json");
+        var contents = fs.readFileSync("./src/controllers/data/testData.json");
 
         // Define to JSON type
         var jsonContent = JSON.parse(contents);
@@ -14,6 +14,8 @@ const readData = () => {
         timeSlots = getAvailableTimes(jsonContent.teacherPreference.day,
             jsonContent.teacherPreference.area, jsonContent.teacherPreference.workshop,
             jsonContent.currentBookings);
+
+        console.log(timeSlots);
     }
 
 // See what time slots are available for a specific date, area
@@ -51,3 +53,5 @@ const generateTimes = () => {
 
     return (times);
 }
+
+readData();
