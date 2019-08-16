@@ -1,8 +1,9 @@
 {
     "teacherPreference": [ {
         "day": "Thursday",
-        "date": { "$date": "2019-08-14T14:56:59.301Z" },
-        "timeBegin": "0900",
+        "date": "2019/08/14",
+        "timeBeginHour": "9",
+        "timeBeginMinute": "0",
         "timeEnd": "0100",
         "area": "Melbourne",
         "workshop": "Discussions about homelesness and disadvantage",
@@ -23,8 +24,9 @@
         "due": 350,
         "location": "Collins St",
         "day": "Thursday",
-        "date": { "$date": "2019-08-14T14:56:59.301Z" },
-        "timeBegin": "0900",
+        "date": "2019/08/14",
+        "timeBeginHour": "9",
+        "timeBeginMinute": "0",
         "timeEnd": "0100",
         "area": "Melbourne",
         "workshop": "Discussions about homelesness and disadvantage",
