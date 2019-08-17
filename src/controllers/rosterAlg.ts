@@ -21,7 +21,7 @@ async function findAvailableTimes(): Promise<void> {
 
   const possibleTimes = await generateTimesForDay(year, month - 1, day);
 
-  const blockedTimes = await generateTimesAlreadyBooked(currentBookings);
+  const blockedTimes = await generateTimesAlreadyBooked(currentBookings, teacherPreferences[0].area);
 
   // Remove all blocked out times from candidate list
   for (let i = 0; i < blockedTimes.length; i++) {
@@ -33,9 +33,12 @@ async function findAvailableTimes(): Promise<void> {
     }
   }
 
-  for (let i = 0; i < possibleTimes.length; i++) {
-    console.log(possibleTimes[i]);
-  }
+  // for (let i = 0; i < possibleTimes.length; i++) {
+  //   console.log(possibleTimes[i]);
+  // }
+
+  // From remaining times, manually select prefernce and add to unconfirmed bookings
+
 }
 
 findAvailableTimes();
