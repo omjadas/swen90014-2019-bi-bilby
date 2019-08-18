@@ -1,12 +1,17 @@
 import { prop, Typegoose } from 'typegoose';
+import { Workshop } from './workshop';
+import { Locations } from './locations';
+import { User } from './user';
+import { Facilitator } from './facilitator.model';
 
 export class CurrentBookings extends Typegoose {
 
   @prop({ required: true })
   public confirmed!: boolean;
 
+  //constraints GIVEN
   @prop({ required: true })
-  public facilitator!: string;
+  public facilitator!: Facilitator;
 
   @prop({ required: true })
   public due!: number;
@@ -15,10 +20,7 @@ export class CurrentBookings extends Typegoose {
   public location!: string;
 
   @prop({ required: true })
-  public day!: string;
-
-  @prop({ required: true })
-  public date!: string;
+  public date!: Date;
 
   @prop({ required: true })
   public timeBeginHour!: number;
@@ -29,11 +31,13 @@ export class CurrentBookings extends Typegoose {
   @prop({ required: true })
   public timeEnd!: Date;
 
+  //constraints GIVEN
   @prop({ required: true })
-  public area!: string;
+  public area!: Locations;
 
+  //constraints GIVEN
   @prop({ required: true })
-  public workshop!: string;
+  public workshop!: Workshop;
 
   @prop({ required: true })
   public level!: number;
@@ -41,8 +45,9 @@ export class CurrentBookings extends Typegoose {
   @prop({ required: true })
   public school!: string;
 
+  //constraints GIVEN
   @prop({ required: true })
-  public contactName!: string;
+  public contactName!: User;
 
   @prop({ required: true })
   public return!: boolean;

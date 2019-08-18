@@ -1,113 +1,107 @@
 {
-    "teacherPreference": [ {
-        "day": "Thursday",
-        "date": "2019/08/14",
-        "timeBeginHour": 12,
-        "timeBeginMinute": 0,
-        "timeEnd": "0100",
-        "area": "Melbourne",
-        "workshop": "Discussions about homelesness and disadvantage",
-        "level": 11,
-        "school": "King's College",
-        "contactName": "Steve Wetherell",
-        "return": false,
-        "numberOfStudents": 20,
-        "phoneNumber": "0467399328",
-        "disabilityAccess": false,
-        "contactEmail": "s.wetherell@gmail.com",
-        "special notes": "N/A"
-    } ],
-    "currentBookings": [ {
-        "confirmed": true,
-        "facilitator": "Joe Blogs",
-        "guest speaker": "Richard Newton",
-        "due": 350,
-        "location": "Collins St",
-        "day": "Thursday",
-        "date": "2019/08/14",
-        "timeBeginHour": 9,
-        "timeBeginMinute": 0,
-        "timeEnd": "0100",
-        "area": "Melbourne",
-        "workshop": "Discussions about homelesness and disadvantage",
-        "level": 11,
-        "school": "King's College",
-        "contactName": "Steve Wetherell",
-        "return": false,
-        "numberOfStudents": 20,
-        "phoneNumber": "0467399328",
-        "disabilityAccess": false,
-        "contactEmail": "s.wetherell@gmail.com"
-    } ],
-    "facilitators": [ {
-        "facilitator_1": [ {
-            "area": "Melbourne",
-            "contactName": "Tim Gould",
-            "phoneNumber": "045693952",
-            "contactEmail": "t.gould@gmail.com",
-            "availability": [],
-            "trained": true
-        } ],
-        "facilitator_2": [ {
-            "area": "Melbourne",
-            "contactName": "Jack Lee",
-            "phoneNumber": "045693953",
-            "contactEmail": "j.lee@gmail.com",
-            "availability": [],
-            "trained": false
-        } ],
-        "facilitator_3": [ {
-            "area": "Melbourne",
-            "contactName": "Mark Jackson",
-            "phoneNumber": "045693954",
-            "contactEmail": "m.jackson@gmail.com",
-            "availability": [],
-            "trained": true
-        } ]
-    } ],
-    "guest speakers": [ {
-        "guest_1": [ {
-            "area": "Melbourne",
-            "contactName": "Richard Newton",
-            "phoneNumber": "045633952",
-            "contactEmail": "r.newt@gmail.com",
-            "must work with": ["Tim Gould"],
-            "max per week": 4,
-            "availability": [],
-            "trained": false,
-            "reliable": false
-        } ],
-        "guest_2": [ {
-            "area": "Melbourne",
-            "contactName": "Steve Stevens",
-            "phoneNumber": "045633953",
-            "contactEmail": "s.stevens@gmail.com",
-            "must work with": [],
-            "max per week": 3,
-            "availability": [],
-            "trained": true,
-            "reliable": true
-        } ],
-        "guest_3": [ {
-            "area": "Melbourne",
-            "contactName": "Miles Ford",
-            "phoneNumber": "045633954",
-            "contactEmail": "m.ford@gmail.com",
-            "new": true,
-            "must work with": [],
-            "max per week": 2,
-            "availability": [],
-            "trained": true,
-            "reliable": false
-        } ]
-    } ],
-    "locations": [ {
-        "location name": "Lyle Theatre",
-        "address": "230 Collins St",
-        "capacity": 50,
-        "disability access": true,
-        "facilities": ["PC", "Scanner"]
-    } ],
-    "workshops": ["Discussions about Homelessness and Disadvantage",
-        "Primary:Finding Belonging", "Primary : Josh's Story"]
+	"teacherPreference": [{
+		"day": "Thursday",
+		"date": "2019/08/14",
+		"timeBeginHour": 12,
+		"timeBeginMinute": 0,
+		"timeEnd": "0100",
+		"area": "Melbourne",
+		"workshop": "Discussions about homelesness and disadvantage",
+		"level": 11,
+		"school": "King's College",
+		"contactName": "Steve Wetherell",
+		"return": false,
+		"numberOfStudents": 20,
+		"phoneNumber": "0467399328",
+		"disabilityAccess": false,
+		"contactEmail": "s.wetherell@gmail.com",
+		"special notes": "N/A"
+	}],
+	"currentBookings": [{
+		"confirmed": true,
+		"faci": "Joe Blogs",
+		"guest speaker": "Richard Newton",
+		"due": 350,
+		"location": "Collins St",
+		"day": "Thursday",
+		"date": "2019/08/14",
+		"timeBeginHour": 9,
+		"timeBeginMinute": 0,
+		"timeEnd": "0100",
+		"area": "Melbourne",
+		"workshop": "Discussions about homelesness and disadvantage",
+		"level": 11,
+		"school": "King's College",
+		"contactName": "Steve Wetherell",
+		"return": false,
+		"numberOfStudents": 20,
+		"phoneNumber": "0467399328",
+		"disabilityAccess": false,
+		"contactEmail": "s.wetherell@gmail.com"
+	}],
+	"facilitator": [{
+		"area": "Melbourne",
+		"contactName": "Jonny Bravo",
+		"phoneNumber": "045693952",
+        "contactEmail": "t.gould@gmail.com",
+        "availability": "2019-08-14T20:30:00.000",
+		"trained": true
+	}, {
+		"area": "Melbourne",
+		"contactName": "Jack Lee",
+        "phoneNumber": "045693953",
+		"contactEmail": "j.lee@gmail.com",
+		"availability": "2019-08-14T13:30:00.000",
+		"trained": false
+	}, {
+		"area": "Melbourne",
+		"contactName": "Mark Jackson",
+        "phoneNumber": "045693954",
+		"contactEmail": "m.jackson@gmail.com",
+		"availability": "2015-08-14T14:30:00.000",
+		"trained": true
+
+	}],
+	"guest speakers": [{
+		"area": "Melbourne",
+		"contactName": "Richard Newton",
+		"phoneNumber": "045633952",
+		"contactEmail": "r.newt@gmail.com",
+		"must work with": ["Tim Gould"],
+		"max per week": 4,
+		"availability": [],
+		"trained": false,
+		"reliable": false
+	}, {
+		"area": "Melbourne",
+		"contactName": "Steve Stevens",
+		"phoneNumber": "045633953",
+		"contactEmail": "s.stevens@gmail.com",
+		"must work with": [],
+		"max per week": 3,
+		"availability": [],
+		"trained": true,
+		"reliable": true
+	}, {
+		"area": "Melbourne",
+		"contactName": "Miles Ford",
+		"phoneNumber": "045633954",
+		"contactEmail": "m.ford@gmail.com",
+		"new": true,
+		"must work with": [],
+		"max per week": 2,
+		"availability": [],
+		"trained": true,
+		"reliable": false
+	}],
+	"locations": [{
+		"location name": "Lyle Theatre",
+		"address": "230 Collins St",
+		"capacity": 50,
+		"disability access": true,
+		"facilities": ["PC", "Scanner"]
+	}],
+	"workshops": ["Discussions about Homelessness and Disadvantage",
+		"Primary:Finding Belonging", "Primary : Josh's Story"
+	]
 }

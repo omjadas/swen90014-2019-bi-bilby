@@ -1,20 +1,26 @@
 import { prop, Typegoose } from 'typegoose';
+import { Locations } from './locations';
+import { User } from './user';
 
 export class Facilitator extends Typegoose {
   @prop({ required: true })
   public type!: string;
 
+  //constraints
   @prop({ required: true })
-  public area!: string;
+  public area!: Locations;
 
   @prop({ required: true })
-  public contactName!: string;
+  public contactName!: User;
 
-  @prop({ required: true })
-  public phoneNumber!: string;
+  // @prop({ required: true })
+  // public phoneNumber!: string;
 
-  @prop({ validate: /\S+@\S+\.\S+/ })
-  public contactEmail?: string;
+  // @prop()
+  // public availability!: Date;
+
+  // @prop({ validate: /\S+@\S+\.\S+/ })
+  // public contactEmail?: string;
 }
 
 export const FacilitatorModel = new Facilitator().getModelForClass(Facilitator);

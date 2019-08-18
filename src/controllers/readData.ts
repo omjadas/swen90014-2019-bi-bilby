@@ -12,6 +12,7 @@ export function readData(): Data {
 
   // Define to JSON type
   const jsonContent = JSON.parse(contents.toString());
-
+  //console.log(jsonContent.facilitators);
   return (jsonContent);
 }
+readData();

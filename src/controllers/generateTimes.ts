@@ -18,7 +18,5 @@ export function generateTimesForDay(year: number, month: number, day: number): D
       minutes = 30;
     }
   }
-
   return (times);
 }
-

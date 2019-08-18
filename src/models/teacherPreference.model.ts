@@ -1,11 +1,11 @@
 import { prop, Typegoose } from 'typegoose';
+import { Workshop } from './workshop';
+import { Locations } from './locations';
+import { User } from './user';
 
 export class TeacherPreference extends Typegoose {
   @prop({ required: true })
-  public day!: string;
-
-  @prop({ required: true })
-  public date!: string;
+  public date!: Date;
 
   @prop({ required: true })
   public timeBegin!: Date;
@@ -13,11 +13,13 @@ export class TeacherPreference extends Typegoose {
   @prop({ required: true })
   public timeEnd!: Date;
 
+  //constraints GIVEN
   @prop({ required: true })
-  public area!: string;
+  public area!: Locations;
 
+  //constraints GIVEN
   @prop({ required: true })
-  public workshop!: string;
+  public workshop!: Workshop;
 
   @prop({ required: true })
   public level!: number;
@@ -25,8 +27,9 @@ export class TeacherPreference extends Typegoose {
   @prop({ required: true })
   public school!: string;
 
+  //constraints GIVEN
   @prop({ required: true })
-  public contactName!: string;
+  public contactName!: User;
 
   @prop({ required: true })
   public return!: boolean;
@@ -34,14 +37,14 @@ export class TeacherPreference extends Typegoose {
   @prop({ required: true })
   public numberOfStudents!: number;
 
-  @prop({ required: true })
-  public phoneNumber!: string;
+  // @prop({ required: true })
+  // public phoneNumber!: string;
 
   @prop({ required: true })
   public disabilityAccess!: boolean;
 
-  @prop({ validate: /\S+@\S+\.\S+/ })
-  public contactEmail?: string;
+  // @prop({ validate: /\S+@\S+\.\S+/ })
+  // public contactEmail?: string;
 }
 
 export const TeacherPreferenceModel = new TeacherPreference().getModelForClass(TeacherPreference);
