@@ -3,9 +3,6 @@ import { Locations } from './locations';
 import { User } from './user';
 
 export class Facilitator extends Typegoose {
-  @prop({ required: true })
-  public type!: string;
-
   //constraints
   @prop({ required: true })
   public area!: Locations;
