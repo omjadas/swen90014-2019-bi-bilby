@@ -1,7 +1,6 @@
 // import { generateTimesForDay } from "./generateTimes";
 // import { readData } from "./readData";
 // import { generateTimesAlreadyBooked } from "./getTimesBooked";
-// import { getTimefacilitator } from "./getTimefacilitator";
 
 // /**
 //  * Base function for generating the availabilitites for the facilitator
@@ -22,7 +21,7 @@
 
 //   const possibleTimes = await generateTimesForDay(year, month - 1, day);
 
-//   const blockedTimes = await generateTimesAlreadyBooked(currentBookings);
+//   const blockedTimes = await generateTimesAlreadyBooked(currentBookings, teacherPreferences[0].area);
 
 //   // Remove all blocked out times from candidate list
 //   for (let i = 0; i < blockedTimes.length; i++) {
@@ -34,21 +33,13 @@
 //     }
 //   }
 
-//   //fetching the facilitator availability
-//   const facilitats = data.facilitator;
-//   const facTimes = await getTimefacilitator(facilitats);
-//   for (let i=0; i<facilitats.length;i++){
-//     for(let j=0;j<possibleTimes.length;j++){
-//       if(facTimes[i].getTime()===possibleTimes[j].getTime()){
-//         console.log(facTimes[i]);
-//         console.log(facilitats[i].contactName);
-//       }
-//     }
-//   }
+//   // for (let i = 0; i < possibleTimes.length; i++) {
+//   //   console.log(possibleTimes[i]);
+//   // }
 
-//   for (let i = 0; i < possibleTimes.length; i++) {
-//     //console.log("Possible \n"+possibleTimes[i]);
-//   }
+//   // From remaining times, manually select prefernce and add to unconfirmed bookings
+
 // }
 
 // findAvailableTimes();
+// >>>>>>> b7976871f3871018239ed66bb8ec78f614312001
