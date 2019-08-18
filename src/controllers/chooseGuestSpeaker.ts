@@ -22,5 +22,5 @@ export function selectPossibleGuestSpeakers(timeSlot: Date, workshop: Workshop, 
       availableGuestSpeakers.splice(h,1);
   }
 
-  return availableGuestSpeakers;
+  return (availableGuestSpeakers);
 }
