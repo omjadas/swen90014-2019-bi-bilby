@@ -2,7 +2,7 @@ import { prop, Typegoose } from 'typegoose';
 import { Locations } from './locations';
 import { User } from './user';
 
-export class Facilitator extends Typegoose {
+export class GuestSpeaker extends Typegoose {
   //constraints
   @prop({ required: true })
   public area!: Locations;
@@ -12,6 +12,9 @@ export class Facilitator extends Typegoose {
 
   @prop({ required: true })
   public trained!: boolean;
+
+  @prop({ required: true})
+  public reliable!: boolean;
 
   // @prop({ required: true })
   // public phoneNumber!: string;
@@ -23,4 +26,4 @@ export class Facilitator extends Typegoose {
   // public contactEmail?: string;
 }
 
-export const FacilitatorModel = new Facilitator().getModelForClass(Facilitator);
+export const GuestSpeakerModel = new GuestSpeaker().getModelForClass(GuestSpeaker);

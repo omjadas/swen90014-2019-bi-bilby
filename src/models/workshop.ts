@@ -3,7 +3,7 @@ import { prop, Typegoose } from 'typegoose';
 export class Workshop extends Typegoose {
 
   @prop({ required: true })
-  public workshopName!: boolean;
+  public workshopName!: string;
 
   @prop({ required: true })
   public workshoptype!: string;

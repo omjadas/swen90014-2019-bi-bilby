@@ -37,7 +37,7 @@
 //   //   console.log(possibleTimes[i]);
 //   // }
 
-//   // From remaining times, manually select prefernce and add to unconfirmed bookings
+//   // From remaining times, manually select preference and add to unconfirmed bookings
 
 // }
 

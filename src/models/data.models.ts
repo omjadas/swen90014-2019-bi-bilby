@@ -1,6 +1,7 @@
 import { prop, Typegoose } from 'typegoose';
 import { CurrentBookings } from "../models/currentBookings.model";
 import { Facilitator } from "../models/facilitator.model";
+import { GuestSpeaker } from "../models/guestSpeaker.model";
 import { TeacherPreference } from "../models/teacherPreference.model";
 import { Workshop } from './workshop';
 import { Locations } from './locations';
@@ -15,15 +16,18 @@ export class Data extends Typegoose {
   public facilitator!: Facilitator[];
 
   @prop({ required: true })
+  public guestSpeaker!: GuestSpeaker[];
+
+  @prop({ required: true })
   public teacherPreference!: TeacherPreference[];
 
-  @prop({required: true})
+  @prop({ required: true })
   public workshop!: Workshop;
 
-  @prop({required: true})
+  @prop({ required: true })
   public locations!: Locations[];
 
-  @prop({required: true})
+  @prop({ required: true })
   public user!: User[];
 }
 

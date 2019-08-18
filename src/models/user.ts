@@ -22,7 +22,7 @@ export class User extends Typegoose {
   public phoneNumber!: number;
 
   @prop({ required: true })
-  public availability!: Date;
+  public availability!: Date[];
 
 }
 export const UserModel = new User().getModelForClass(User);
