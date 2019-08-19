@@ -9,8 +9,8 @@ enum Type {
 
 export class User extends Typegoose {
 
-  @prop({ validate: /\S+@\S+\.\S+/ })
-  public email?: string;
+  @prop({ required: true, index: true, unique: true, validate: /\S+@\S+\.\S+/ })
+  public email!: string;
 
   @prop({ required: true })
   public passwordHash!: string;
