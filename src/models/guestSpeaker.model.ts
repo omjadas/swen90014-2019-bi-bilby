@@ -1,4 +1,4 @@
-import { prop, Typegoose, Ref } from 'typegoose';
+import { arrayProp, prop, Typegoose, Ref } from 'typegoose';
 import { Location } from './location.model';
 
 export class GuestSpeaker extends Typegoose {
@@ -12,7 +12,7 @@ export class GuestSpeaker extends Typegoose {
   @prop({ required: true })
   public reliable!: boolean;
 
-  @prop({ required: true })
+  @arrayProp({ required: true, items: Date })
   public availability!: Date[];
 
 }

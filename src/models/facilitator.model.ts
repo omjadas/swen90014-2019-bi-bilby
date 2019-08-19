@@ -1,4 +1,4 @@
-import { prop, Typegoose, Ref } from 'typegoose';
+import { arrayProp, prop, Typegoose, Ref } from 'typegoose';
 import { Location } from './location.model';
 
 export class Facilitator extends Typegoose {
@@ -9,7 +9,7 @@ export class Facilitator extends Typegoose {
   @prop({ required: true })
   public trained!: boolean;
 
-  @prop({ required: true })
+  @arrayProp({ required: true, items: Date })
   public availability!: Date[];
 
 }
