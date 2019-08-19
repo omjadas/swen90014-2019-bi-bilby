@@ -1,6 +1,6 @@
 import { prop, Typegoose } from 'typegoose';
 
-export class Locations extends Typegoose {
+export class Location extends Typegoose {
 
   @prop({ required: true })
   public name!: string;
@@ -18,4 +18,4 @@ export class Locations extends Typegoose {
   public facilities!: string;
 
 }
-export const LocationsModel = new Locations().getModelForClass(Locations);
+export const LocationModel = new Location().getModelForClass(Location);

@@ -1,9 +1,9 @@
-import { CurrentBookings } from "../models/currentBookings.model";
+import { CurrentBooking } from "../models/currentBooking.model";
 
 /**
  * Find all current bookings times for a specified date
  */
-export function generateTimesAlreadyBooked(currentBookings: CurrentBookings[], area: string): Date[] {
+export function generateTimesAlreadyBooked(currentBookings: CurrentBooking[], area: string): Date[] {
   const blockedTimes = [];
 
   for (let i = 0; i < currentBookings.length; i++) {

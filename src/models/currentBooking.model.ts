@@ -1,19 +1,33 @@
 import { prop, Typegoose, Ref } from 'typegoose';
 import { Workshop } from './workshop.model';
-import { Location } from './location.model';
+import { Locations } from './locations.model';
 import { User } from './user.model';
+import { Facilitator } from './facilitator.model';
 
-export class TeacherPreference extends Typegoose {
+export class CurrentBooking extends Typegoose {
+
+  @prop({ required: true })
+  public confirmed!: boolean;
+
+  //constraints GIVEN
+  @prop({ required: true, ref: Facilitator })
+  public facilitator!: Ref<Facilitator>;
+
+  @prop({ required: true })
+  public due!: number;
+
+  @prop({ required: true })
+  public location!: string;
 
   @prop({ required: true })
   public timeBegin!: Date;
 
-  @prop({ required: true })
+  @prop({ required: true})
   public timeEnd!: Date;
 
   //constraints GIVEN
-  @prop({ required: true, ref: Location })
-  public area!: Ref<Location>;
+  @prop({ required: true, ref: Locations })
+  public area!: Ref<Locations>;
 
   //constraints GIVEN
   @prop({ required: true, ref: Workshop })
@@ -36,8 +50,11 @@ export class TeacherPreference extends Typegoose {
   public numberOfStudents!: number;
 
   @prop({ required: true })
+  public phoneNumber!: string;
+
+  @prop({ required: true })
   public disabilityAccess!: boolean;
 
 }
 
-export const TeacherPreferenceModel = new TeacherPreference().getModelForClass(TeacherPreference);
+export const CurrentBookingModel = new CurrentBooking().getModelForClass(CurrentBooking);
