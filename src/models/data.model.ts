@@ -1,4 +1,4 @@
-import { prop, Typegoose } from 'typegoose';
+import { arrayProp, Typegoose } from 'typegoose';
 import { CurrentBooking } from "./currentBooking.model";
 import { TeacherPreference } from "../models/teacherPreference.model";
 import { Workshop } from './workshop.model';
@@ -7,19 +7,19 @@ import { User } from './user.model';
 
 export class Data extends Typegoose {
 
-  @prop({ required: true })
+  @arrayProp({ required: true, items: CurrentBooking })
   public currentBookings!: CurrentBooking[];
 
-  @prop({ required: true })
+  @arrayProp({ required: true, items: TeacherPreference })
   public teacherPreferences!: TeacherPreference[];
 
-  @prop({ required: true })
-  public workshops!: Workshop;
+  @arrayProp({ required: true, items: Workshop })
+  public workshops!: Workshop[];
 
-  @prop({ required: true })
+  @arrayProp({ required: true, items: Location })
   public locations!: Location[];
 
-  @prop({ required: true })
+  @arrayProp({ required: true, items: User })
   public users!: User[];
 
 }
