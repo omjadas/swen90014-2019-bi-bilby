@@ -12,8 +12,8 @@ export class GuestSpeaker extends Typegoose {
   @prop({ required: true })
   public reliable!: boolean;
 
-  // @prop()
-  // public availability!: Date;
+  @prop({ required: true })
+  public availability!: Date[];
 
 }
 

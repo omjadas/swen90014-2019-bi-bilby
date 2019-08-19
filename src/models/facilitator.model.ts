@@ -9,8 +9,8 @@ export class Facilitator extends Typegoose {
   @prop({ required: true })
   public trained!: boolean;
 
-  // @prop()
-  // public availability!: Date;
+  @prop({ required: true })
+  public availability!: Date[];
 
 }
 
