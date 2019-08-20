@@ -17,7 +17,7 @@
 		"contactEmail": "s.wetherell@gmail.com",
 		"special notes": "N/A"
 	}],
-	"currentBookings": [{
+	"bookings": [{
 		"confirmed": true,
 		"faci": "Joe Blogs",
 		"guest speaker": "Richard Newton",

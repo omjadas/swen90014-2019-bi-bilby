@@ -4,14 +4,14 @@ import { Workshop } from './workshop';
 /**
  * Create a list of all the guest speakers avialable for a specific time.
  */
-export function selectPossibleGuestSpeakers(timeSlot: Date, workshop: Workshop, guestSpeaker: GuestSpeaker[]): GuestSpeaker[] {
+export function selectPossibleGuestSpeakers(timeSlot: Date, workshop: Workshop, guestSpeakers: GuestSpeaker[]): GuestSpeaker[] {
 
   const availableGuestSpeakers = [];
 
-  for (let i = 0; i < guestSpeaker.length; i++) {
-    for (let j = 0; j < guestSpeaker[i].availability.length; j++) {
-      if (guestSpeaker[i].availability === timeSlot) {
-        availableGuestSpeakers.push(guestSpeaker[i]);
+  for (let i = 0; i < guestSpeakers.length; i++) {
+    for (let j = 0; j < guestSpeakers[i].availability.length; j++) {
+      if (guestSpeakers[i].availability === timeSlot) {
+        availableGuestSpeakers.push(guestSpeakers[i]);
         break;
       }
     }

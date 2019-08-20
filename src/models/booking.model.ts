@@ -3,8 +3,9 @@ import { Workshop } from './workshop.model';
 import { Locations } from './locations.model';
 import { User } from './user.model';
 import { Facilitator } from './facilitator.model';
+import { GuestSpeaker } from './guestSpeaker.model';
 
-export class CurrentBooking extends Typegoose {
+export class Booking extends Typegoose {
 
   @prop({ required: true })
   public confirmed!: boolean;
@@ -12,6 +13,10 @@ export class CurrentBooking extends Typegoose {
   //constraints GIVEN
   @prop({ required: true, ref: Facilitator })
   public facilitator!: Ref<Facilitator>;
+
+  //constraints GIVEN
+  @prop({ required: true, ref: GuestSpeaker })
+  public guestSpeaker!: Ref<GuestSPeaker>;
 
   @prop({ required: true })
   public due!: number;
@@ -52,9 +57,6 @@ export class CurrentBooking extends Typegoose {
   @prop({ required: true })
   public phoneNumber!: string;
 
-  @prop({ required: true })
-  public disabilityAccess!: boolean;
-
 }
 
-export const CurrentBookingModel = new CurrentBooking().getModelForClass(CurrentBooking);
+export const BookingModel = new Booking().getModelForClass(Booking);

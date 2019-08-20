@@ -4,14 +4,14 @@ import { Workshop } from './workshop';
 /**
  * Create a list of all the facilitators avialable for a specific time.
  */
-export function selectPossibleFacilitators(timeSlot: Date, workshop: Workshop, facilitator: Facilitator[]): Facilitator[] {
+export function selectPossibleFacilitators(timeSlot: Date, workshop: Workshop, facilitators: Facilitator[]): Facilitator[] {
 
   const availableFacilitators = [];
 
-  for (let i = 0; i < facilitator.length; i++) {
-    for (let j = 0; j < facilitator[i].availability.length; j++) {
-      if (facilitator[i].availability === timeSlot) {
-        availableFacilitators.push(facilitator[i]);
+  for (let i = 0; i < facilitators.length; i++) {
+    for (let j = 0; j < facilitators[i].availability.length; j++) {
+      if (facilitators[i].availability === timeSlot) {
+        availableFacilitators.push(facilitators[i]);
         break;
       }
     }

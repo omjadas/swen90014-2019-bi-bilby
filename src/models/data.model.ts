@@ -1,5 +1,5 @@
 import { arrayProp, Typegoose } from 'typegoose';
-import { CurrentBooking } from "./currentBooking.model";
+import { Booking } from "./booking.model";
 import { TeacherPreference } from "../models/teacherPreference.model";
 import { Workshop } from './workshop.model';
 import { Location } from './location.model';
@@ -7,8 +7,8 @@ import { User } from './user.model';
 
 export class Data extends Typegoose {
 
-  @arrayProp({ required: true, items: CurrentBooking })
-  public currentBookings!: CurrentBooking[];
+  @arrayProp({ required: true, items: Booking })
+  public bookings!: Booking[];
 
   @arrayProp({ required: true, items: TeacherPreference })
   public teacherPreferences!: TeacherPreference[];
@@ -24,4 +24,4 @@ export class Data extends Typegoose {
 
 }
 
-export const DataModel = new CurrentBooking().getModelForClass(Data);
+export const DataModel = new Booking().getModelForClass(Data);
