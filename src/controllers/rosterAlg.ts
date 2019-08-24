@@ -3,8 +3,8 @@ import { Data } from "../models/data.model";
 import { newBooking } from "../controllers/bookingOperations";
 
 /**
-  * Base function for generating the availabilitites for the facilitator
-  * to choose on their specified day
+  * Base function for rostering preferences to facilitators
+  * and lectuters
   */
 function rosterByPreferences(): void {
   const data = readData();
@@ -14,16 +14,19 @@ function rosterByPreferences(): void {
   //const guestSpeakers = data.guestSpeakers;
 
   for(let i = 0; i < teacherPreferences.length; i++) {
-    // Find one outcome for each preference
+    // For all the possible preferences, we want to select one
     for(let j = 0; j < teacherPreferences[i].length; j++) {
       const year = teacherPreferences[i][j].timeBegin.getFullYear();
       const month = teacherPreferences[i][j].timeBegin.getUTCMonth();
       const day = teacherPreferences[i][j].timeBegin.getDay();
+      const hours = teacherPreferences[i][j].timeBegin.getHours();
+      const minutes = teacherPreferences[i][j].timeBegin.getMinutes();
     }
 
     // Create new booking instances acording to teacher preferences.
     // This can only be done once we have allocated facilitators
     // and times
+
     // const booking = newBooking(teacherPreference[i][])
   }
 

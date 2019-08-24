@@ -5,8 +5,8 @@ import { Data } from "../models/data.model";
 import { City } from "../models/city.model";
 
 /**
-* Base function for generating the availabilitites for the facilitator
-* to choose on their specified day
+* Base function for generating the availabilitites for the school
+* to select a couple of preferred options
 */
 function findAvailableTimes(date: Date, city: City): Date[] {
   const data = readData();
