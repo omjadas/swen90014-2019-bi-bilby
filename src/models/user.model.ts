@@ -1,10 +1,13 @@
 import { prop, Typegoose, Ref } from 'typegoose';
 import { Facilitator } from './facilitator.model';
 import { GuestSpeaker } from './guestSpeaker.model';
+import { Teacher } from './teacher.model';
 
-enum Type {
+export enum UserType {
   FACILITATOR = "facilitator",
-  GUEST_SPEAKER = "guest_speaker"
+  GUEST_SPEAKER = "guest_speaker",
+  TEACHER = "teacher",
+  COORDINATOR = "coordinator"
 }
 
 export class User extends Typegoose {
@@ -24,11 +27,11 @@ export class User extends Typegoose {
   @prop({ required: true })
   public address!: string;
 
-  @prop({ required: true, enum: Type })
-  public userType!: Type;
+  @prop({ required: true, enum: UserType })
+  public userType!: UserType;
 
   @prop({ required: true })
-  public phoneNumber!: number;
+  public phoneNumber!: string;
 
   @prop({ ref: Facilitator })
   public _facilitator?: Ref<Facilitator>;
@@ -36,5 +39,9 @@ export class User extends Typegoose {
   @prop({ ref: GuestSpeaker })
   public _guestSpeaker?: Ref<GuestSpeaker>;
 
+  @prop({ ref: Teacher })
+  public _teacher?: Ref<Teacher>;
+
 }
+
 export const UserModel = new User().getModelForClass(User);

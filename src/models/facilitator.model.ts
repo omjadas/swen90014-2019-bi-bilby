@@ -1,16 +1,32 @@
 import { arrayProp, prop, Typegoose, Ref } from 'typegoose';
-import { Location } from './location.model';
+import { City } from './city.model';
+
+export enum dayOfWeek {
+  MON = "monday",
+  TUE = "tuesdsay",
+  WED = "wednesday",
+  THU = "thursday",
+  FRI = "friday",
+  SAT = "saturday",
+  SUN = "sunday"
+}
+
+export interface Availability {
+  morning: boolean,
+  afternoon: boolean,
+  dayOfWeek: dayOfWeek,
+}
 
 export class Facilitator extends Typegoose {
-  //constraints
-  @prop({ required: true, ref: Location })
-  public area!: Ref<Location>;
+
+  @prop({ required: true, ref: City })
+  public city!: Ref<City>;
 
   @prop({ required: true })
   public trained!: boolean;
 
-  @arrayProp({ required: true, items: Date })
-  public availability!: Date[];
+  @arrayProp({ required: true, items: Object })
+  public availabilities!: Availability[];
 
 }
 

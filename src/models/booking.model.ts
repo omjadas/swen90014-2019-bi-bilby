@@ -1,28 +1,21 @@
 import { prop, Typegoose, Ref } from 'typegoose';
 import { Workshop } from './workshop.model';
-import { Locations } from './locations.model';
+import { Location } from './location.model';
 import { User } from './user.model';
 import { Facilitator } from './facilitator.model';
 import { GuestSpeaker } from './guestSpeaker.model';
+import { City } from './city.model';
 
 export class Booking extends Typegoose {
 
   @prop({ required: true })
   public confirmed!: boolean;
 
-  //constraints GIVEN
   @prop({ required: true, ref: Facilitator })
   public facilitator!: Ref<Facilitator>;
 
-  //constraints GIVEN
-  @prop({ required: true, ref: GuestSpeaker })
-  public guestSpeaker!: Ref<GuestSPeaker>;
-
-  @prop({ required: true })
-  public due!: number;
-
-  @prop({ required: true })
-  public location!: string;
+  @prop({ required: false, ref: GuestSpeaker })
+  public guestSpeaker?: Ref<GuestSpeaker>;
 
   @prop({ required: true })
   public timeBegin!: Date;
@@ -30,32 +23,26 @@ export class Booking extends Typegoose {
   @prop({ required: true})
   public timeEnd!: Date;
 
-  //constraints GIVEN
-  @prop({ required: true, ref: Locations })
-  public area!: Ref<Locations>;
+  @prop({ required: true, ref: City })
+  public city!: Ref<City>;
 
-  //constraints GIVEN
+  @prop({ required: true, ref: Location })
+  public location!: Ref<Location>;
+
   @prop({ required: true, ref: Workshop })
   public workshop!: Ref<Workshop>;
 
   @prop({ required: true })
   public level!: string;
 
-  @prop({ required: true })
-  public school!: string;
-
-  //constraints GIVEN
   @prop({ required: true, ref: User })
-  public contact!: Ref<User>;
+  public teacher!: Ref<User>;
 
   @prop({ required: true })
   public return!: boolean;
 
   @prop({ required: true })
   public numberOfStudents!: number;
-
-  @prop({ required: true })
-  public phoneNumber!: string;
 
 }
 

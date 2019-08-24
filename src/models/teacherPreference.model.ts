@@ -1,6 +1,6 @@
 import { prop, Typegoose, Ref } from 'typegoose';
 import { Workshop } from './workshop.model';
-import { Location } from './location.model';
+import { City } from './city.model';
 import { User } from './user.model';
 
 export class TeacherPreference extends Typegoose {
@@ -11,11 +11,9 @@ export class TeacherPreference extends Typegoose {
   @prop({ required: true })
   public timeEnd!: Date;
 
-  //constraints GIVEN
-  @prop({ required: true, ref: Location })
-  public area!: Ref<Location>;
+  @prop({ required: true, ref: City })
+  public city!: Ref<City>;
 
-  //constraints GIVEN
   @prop({ required: true, ref: Workshop })
   public workshop!: Ref<Workshop>;
 
@@ -25,7 +23,6 @@ export class TeacherPreference extends Typegoose {
   @prop({ required: true })
   public school!: string;
 
-  //constraints GIVEN
   @prop({ required: true, ref: User })
   public contact!: Ref<User>;
 
@@ -37,6 +34,9 @@ export class TeacherPreference extends Typegoose {
 
   @prop({ required: true })
   public disabilityAccess!: boolean;
+
+  @prop({ required: false })
+  public specialNotes?: string;
 
 }
 

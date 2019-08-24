@@ -14,8 +14,8 @@ export class Location extends Typegoose {
   @prop({ required: true })
   public disabilityAccess!: boolean;
 
-  @prop({ required: true })
-  public facilities!: string;
+  @prop({ required: false })
+  public facilities?: string;
 
 }
 export const LocationModel = new Location().getModelForClass(Location);

@@ -6,7 +6,11 @@ export class Workshop extends Typegoose {
   public workshopName!: string;
 
   @prop({ required: true })
-  public workshopType!: string;
+  public requireFacilitator!: boolean;
+
+  @prop({ required: true })
+  public requireGuestSpeaker!: boolean;
 
 }
+
 export const WorkshopModel = new Workshop().getModelForClass(Workshop);
