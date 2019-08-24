@@ -22,7 +22,7 @@ export class Data extends Typegoose {
   public schools!: School[];
 
   @arrayProp({ required: true, items: TeacherPreference })
-  public teacherPreferences!: TeacherPreference[];
+  public teacherPreferences!: TeacherPreference[][];
 
   @arrayProp({ required: true, items: User })
   public users!: User[];
