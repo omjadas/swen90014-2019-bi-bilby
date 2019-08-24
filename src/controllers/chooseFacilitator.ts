@@ -9,8 +9,8 @@ export function selectPossibleFacilitators(timeSlot: Date, workshop: Workshop, f
   const availableFacilitators = [];
 
   for (let i = 0; i < facilitators.length; i++) {
-    for (let j = 0; j < facilitators[i].availability.length; j++) {
-      if (facilitators[i].availability === timeSlot) {
+    for (let j = 0; j < facilitators[i].availabilities.length; j++) {
+      if (facilitators[i].availabilities === timeSlot) {
         availableFacilitators.push(facilitators[i]);
         break;
       }
