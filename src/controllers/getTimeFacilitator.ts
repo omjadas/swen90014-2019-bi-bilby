@@ -3,7 +3,7 @@ import { Facilitator } from "../models/facilitator.model";
 /**
  * Find all current bookings times for a specified date
  */
-export function getTimefacilitator(facilitator: Facilitator[]): Date[] {
+export function getTimeFacilitator(facilitator: Facilitator[]): Date[] {
   const availableTimes = [];
 
   for (let i = 0; i < facilitator.length; i++) {
