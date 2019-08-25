@@ -1,15 +1,17 @@
-import { prop, Typegoose, Ref } from 'typegoose';
+import { prop, arrayProp, Typegoose, Ref } from 'typegoose';
 import { Workshop } from './workshop.model';
 import { City } from './city.model';
 import { User } from './user.model';
 
+export interface SessionTime {
+  timeBegin: Date,
+  timeEnd: Date,
+}
+
 export class TeacherPreference extends Typegoose {
 
-  @prop({ required: true })
-  public timeBegin!: Date;
-
-  @prop({ required: true })
-  public timeEnd!: Date;
+  @arrayProp({ required: true })
+  public sessionTimes!: SessionTime[];
 
   @prop({ required: true, ref: City })
   public city!: Ref<City>;

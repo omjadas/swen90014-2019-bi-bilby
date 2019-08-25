@@ -15,12 +15,12 @@ function rosterByPreferences(): void {
 
   for(let i = 0; i < teacherPreferences.length; i++) {
     // For all the possible preferences, we want to select one
-    for(let j = 0; j < teacherPreferences[i].length; j++) {
-      const year = teacherPreferences[i][j].timeBegin.getFullYear();
-      const month = teacherPreferences[i][j].timeBegin.getUTCMonth();
-      const day = teacherPreferences[i][j].timeBegin.getDay();
-      const hours = teacherPreferences[i][j].timeBegin.getHours();
-      const minutes = teacherPreferences[i][j].timeBegin.getMinutes();
+    for(let j = 0; j < teacherPreferences[i].sessionTimes.length; j++) {
+      const year = teacherPreferences[i].sessionTimes[j].timeBegin.getFullYear();
+      const month = teacherPreferences[i].sessionTimes[j].timeBegin.getUTCMonth();
+      const day = teacherPreferences[i].sessionTimes[j].timeBegin.getDay();
+      const hours = teacherPreferences[i].sessionTimes[j].timeBegin.getHours();
+      const minutes = teacherPreferences[i].sessionTimes[j].timeBegin.getMinutes();
     }
 
     // Create new booking instances acording to teacher preferences.
