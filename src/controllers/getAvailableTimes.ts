@@ -3,17 +3,15 @@ import { readData } from "./readData";
 import { generateTimesAlreadyBooked } from "./getTimesBooked";
 import { Data } from "../models/data.model";
 import { City } from "../models/city.model";
+import { Booking } from "../models/booking.model";
 
 /**
-* Base function for generating the availabilitites for the school
-* to select a couple of preferred options
+* Base function for generating the availabilitites. The school
+* will select a specific date from the calendar and this function
+* will return the unblocked times.
 */
-function findAvailableTimes(date: Date, city: City): Date[] {
-  const data = readData();
-
+function findAvailableTimes(date: Date, city: City, currentBookings: Booking[]): Date[] {
   // Update so only get bookings for specific date
-  const currentBookings: Data["bookings"] = data.bookings;
-
   const blockedTimes = generateTimesAlreadyBooked(currentBookings, city);
 
   const year = date.getFullYear();
