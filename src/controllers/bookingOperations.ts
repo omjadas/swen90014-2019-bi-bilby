@@ -1,19 +1,29 @@
-import { Booking } from "../models/booking.model";
-import { TeacherPreference } from "../models/teacherPreference.model";
+import { Booking, BookingModel } from "../models/booking.model";
 import {Facilitator} from "../models/facilitator.model";
 import {GuestSpeaker} from "../models/guestSpeaker.model";
-import { BookingModel } from "../models/booking.model";
+import {City} from "../models/city.model";
+import {Workshop} from "../models/workshop.model";
+import {Location} from "../models/location.model";
+import {User} from "../models/user.model";
+import * as mongoose from "mongoose";
 
 /**
   * Create a new instance of Booking.
   */
-/*export function newBooking(preference: TeacherPreference, facilitator: Facilitator, guestSpeaker: GuestSpeaker, timeBegin: Date, timeEnd: Date): Booking {
-  const booking = new BookingModel({false, facilitator, guestSpeaker, timeBegin, timeEnd, preference.city,
-    null, preference.workshop, preference.level, preference.user, null, preference.numberOfStudents});
+export function newBooking(confirmed: boolean, facilitator: Facilitator, guestSpeaker: GuestSpeaker,
+  timeBegin: Date, timeEnd: Date, city: mongoose.Schema.Types.ObjectId | City,
+  location: Location, workshop: Workshop, level: string, teacher: User,
+  firstTime: boolean, numberOfStudents: number): Booking {
 
-  return (booking);
+  const booking = new BookingModel({
+    confirmed, facilitator, guestSpeaker, timeBegin, timeEnd, city,
+    location, workshop, level, teacher, firstTime, numberOfStudents
+  });
+
+
+  return booking;
 }
-*/
+
 /**
   * Set Booking status to confirmed or not confirmed.
   */
@@ -29,7 +39,7 @@ export function setBookingFacilitator(booking: Booking, facilitator: Facilitator
 }
 
 /**
-  * Assign a Guest Spreker to the Booking.
+  * Assign a Guest Speaker to the Booking.
   */
 export function setBookingGuestSpeaker(booking: Booking, guestSpeaker: GuestSpeaker): void {
   booking.guestSpeaker = guestSpeaker;

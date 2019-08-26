@@ -39,7 +39,7 @@ export class Booking extends Typegoose {
   public teacher!: Ref<User>;
 
   @prop({ required: true })
-  public return!: boolean;
+  public firstTime!: boolean;
 
   @prop({ required: true })
   public numberOfStudents!: number;

@@ -2,6 +2,7 @@ import {dayOfWeek, Facilitator} from "../models/facilitator.model";
 import {GuestSpeaker} from "../models/guestSpeaker.model";
 import {Workshop} from '../models/workshop.model';
 import {User, UserType} from "../models/user.model";
+import {Ref} from "typegoose";
 
 /**
   * Check if day matches with availability.
@@ -84,3 +85,34 @@ export function isGuestSpeaker(user: User): boolean {
 
   return false;
 }
+
+/**
+  * Check if user (facilitator or guest speaker) are eligible for a particular workshop.
+  */
+export function eligible(user: User, workshop: Ref<Workshop>): boolean {
+  if (workshop instanceof Workshop)
+    if (user.userType === UserType.FACILITATOR && workshop.requireFacilitator)
+      return true;
+    else if (user.userType === UserType.GUEST_SPEAKER && workshop.requireGuestSpeaker)
+      return true;
+
+  return false;
+}
+
+/**
+  * Check if facilitator and guest speaker can work with each other and pair them for booking.
+  */
+export function pairTeams(facilitator: User, guestSpeaker: User): [any, any] {
+  let team: [Facilitator, GuestSpeaker];
+
+  if (facilitator._facilitator instanceof Facilitator && guestSpeaker._guestSpeaker instanceof GuestSpeaker) {
+    if ((guestSpeaker._guestSpeaker.trained && facilitator._facilitator.trained)
+        || (!(guestSpeaker._guestSpeaker.trained) && facilitator._facilitator.trained)) {
+      team = [facilitator._facilitator, guestSpeaker._guestSpeaker];
+      return team;
+    }
+  }
+
+  return [0,0];
+}
+
