@@ -5,15 +5,15 @@ import {City} from "../models/city.model";
 import {Workshop} from "../models/workshop.model";
 import {Location} from "../models/location.model";
 import {User} from "../models/user.model";
-import * as mongoose from "mongoose";
 import { SessionTime } from "../models/teacherPreference.model";
+import { Ref } from 'typegoose';
 
 /**
   * Create a new instance of Booking.
   */
 export function newBooking(confirmed: boolean, facilitator: Facilitator, guestSpeaker: GuestSpeaker,
-  sessionTime: SessionTime, city: mongoose.Schema.Types.ObjectId | City,
-  location: Location, workshop: Workshop, level: string, teacher: User,
+  sessionTime: SessionTime, city: Ref<City>,
+  location: Ref<Location>, workshop: Ref<Workshop>, level: string, teacher: Ref<User>,
   firstTime: boolean, numberOfStudents: number): Booking {
 
   const booking = new BookingModel({

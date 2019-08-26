@@ -9,6 +9,7 @@ import {
   isGuestSpeaker,
   pairTeams
 } from "./userOperations";
+import { SessionTime } from "../models/teacherPreference.model";
 
 /**
   * Base function for rostering preferences to facilitators
@@ -25,8 +26,7 @@ function rosterByPreferences(): void {
     const availableFacilitators = [];
     const availableGuestSpeakers = [];
     const teams = [];
-    const timeBegin = [];
-    const timeEnd = [];
+    let sessionTime: SessionTime = {timeBegin: {} as any, timeEnd: {} as any};
 
     // For all the possible preferences, we want to select one
     for (let j = 0; j < teacherPreferences[i].sessionTimes.length; j++) {
@@ -70,8 +70,8 @@ function rosterByPreferences(): void {
 
       // If at least one possibility emerged, exit the loop, create booking and move on to the next booking request
       if (teams.length > 0) {
-        timeBegin[0] = teacherPreferences[i].sessionTimes[j].timeBegin;
-        timeEnd[0] = teacherPreferences[i].sessionTimes[j].timeEnd;
+        sessionTime = {timeBegin: teacherPreferences[i].sessionTimes[j].timeBegin,
+          timeEnd: teacherPreferences[i].sessionTimes[j].timeEnd};
         break;
       }
     }
@@ -79,13 +79,15 @@ function rosterByPreferences(): void {
     const facilitator = teams[Math.floor(Math.random() * teams.length)][0];
     const guestSpeaker = teams[Math.floor(Math.random() * teams.length)][1];
     const city = teacherPreferences[i].city;
-    //const location = teacherPreferences[i].location;
+    const location = {} as any;
     const workshop = teacherPreferences[i].workshop;
     const level = teacherPreferences[i].level;
     const teacher = teacherPreferences[i].contact;
     const firstTime = teacherPreferences[i].return;
     const numberOfStudents = teacherPreferences[i].numberOfStudents;
-    //bookings.push(newBooking(true, facilitator, guestSpeaker, timeBegin[0], timeEnd[0], city, location, workshop, level, teacher, firstTime, numberOfStudents));
+
+    bookings.push(newBooking(false, facilitator, guestSpeaker, sessionTime, city,
+      location, workshop, level, teacher, firstTime, numberOfStudents));
 
     // Create new booking instances according to teacher preferences.
     // This can only be done once we have allocated facilitators
