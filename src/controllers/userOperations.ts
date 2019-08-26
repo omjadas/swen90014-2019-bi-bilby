@@ -37,15 +37,17 @@ export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
   */
 export function facilitatorAvailable(user: User, day: number, hours: number): boolean {
   if (user._facilitator instanceof Facilitator) {
-    const dayOW = user._facilitator.availabilities[0].dayOfWeek;
+    for (let i = 0; i < user._facilitator.availabilities.length; i++) {
+      const dayOW = user._facilitator.availabilities[i].dayOfWeek;
 
-    if ((hours >= 8 && hours <= 12 && user._facilitator.availabilities[0].morning)
-        || (hours > 12 && hours <= 17 && user._facilitator.availabilities[0].afternoon))
-
-      if (checkDayOfWeek(day, dayOW))
-        return true;
+      if ((hours >= 8 && hours <= 12 && user._facilitator.availabilities[i].morning)
+        || (hours > 12 && hours <= 17 && user._facilitator.availabilities[i].afternoon)) {
+        if (checkDayOfWeek(day, dayOW)) {
+          return true;
+        }
+      }
+    }
   }
-
   return false;
 }
 
@@ -54,15 +56,17 @@ export function facilitatorAvailable(user: User, day: number, hours: number): bo
   */
 export function guestSpeakerAvailable(user: User, day: number, hours: number): boolean {
   if (user._guestSpeaker instanceof GuestSpeaker) {
-    const dayOW = user._guestSpeaker.availabilities[0].dayOfWeek;
+    for (let i = 0; i < user._guestSpeaker.availabilities.length; i++) {
+      const dayOW = user._guestSpeaker.availabilities[i].dayOfWeek;
 
-    if ((hours >= 8 && hours <= 12 && user._guestSpeaker.availabilities[0].morning)
-        || (hours > 12 && hours <= 17 && user._guestSpeaker.availabilities[0].afternoon))
-
-      if (checkDayOfWeek(day, dayOW))
-        return true;
+      if ((hours >= 8 && hours <= 12 && user._guestSpeaker.availabilities[i].morning)
+        || (hours > 12 && hours <= 17 && user._guestSpeaker.availabilities[i].afternoon)) {
+        if (checkDayOfWeek(day, dayOW)) {
+          return true;
+        }
+      }
+    }
   }
-
   return false;
 }
 

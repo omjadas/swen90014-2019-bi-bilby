@@ -27,6 +27,7 @@ function rosterByPreferences(): void {
     const teams = [];
     const timeBegin = [];
     const timeEnd = [];
+
     // For all the possible preferences, we want to select one
     for (let j = 0; j < teacherPreferences[i].sessionTimes.length; j++) {
       const year = teacherPreferences[i].sessionTimes[j].timeBegin.getFullYear();
@@ -43,6 +44,7 @@ function rosterByPreferences(): void {
           availableGuestSpeakers.push(users[b]);
         }
       }
+
       // Crosscheck the workshop's constraints with user's attributes
       for (let c = 0; c < availableFacilitators.length; c++) {
         if (!eligible(availableFacilitators[c], teacherPreferences[i].workshop))

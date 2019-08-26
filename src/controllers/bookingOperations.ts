@@ -6,20 +6,20 @@ import {Workshop} from "../models/workshop.model";
 import {Location} from "../models/location.model";
 import {User} from "../models/user.model";
 import * as mongoose from "mongoose";
+import { SessionTime } from "../models/teacherPreference.model";
 
 /**
   * Create a new instance of Booking.
   */
 export function newBooking(confirmed: boolean, facilitator: Facilitator, guestSpeaker: GuestSpeaker,
-  timeBegin: Date, timeEnd: Date, city: mongoose.Schema.Types.ObjectId | City,
+  sessionTime: SessionTime, city: mongoose.Schema.Types.ObjectId | City,
   location: Location, workshop: Workshop, level: string, teacher: User,
   firstTime: boolean, numberOfStudents: number): Booking {
 
   const booking = new BookingModel({
-    confirmed, facilitator, guestSpeaker, timeBegin, timeEnd, city,
+    confirmed, facilitator, guestSpeaker, sessionTime, city,
     location, workshop, level, teacher, firstTime, numberOfStudents
   });
-
 
   return booking;
 }
@@ -49,6 +49,6 @@ export function setBookingGuestSpeaker(booking: Booking, guestSpeaker: GuestSpea
   * Set Booking time slot.
   */
 export function setBookingTime(booking: Booking, timeBegin: Date, timeEnd: Date): void {
-  booking.timeBegin = timeBegin;
-  booking.timeEnd = timeEnd;
+  booking.sessionTime.timeBegin = timeBegin;
+  booking.sessionTime.timeEnd = timeEnd;
 }

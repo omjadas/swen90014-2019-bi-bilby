@@ -5,6 +5,7 @@ import { User } from './user.model';
 import { Facilitator } from './facilitator.model';
 import { GuestSpeaker } from './guestSpeaker.model';
 import { City } from './city.model';
+import { SessionTime } from './teacherPreference.model';
 
 export class Booking extends Typegoose {
 
@@ -18,10 +19,7 @@ export class Booking extends Typegoose {
   public guestSpeaker?: Ref<GuestSpeaker>;
 
   @prop({ required: true })
-  public timeBegin!: Date;
-
-  @prop({ required: true})
-  public timeEnd!: Date;
+  public sessionTime!: SessionTime;
 
   @prop({ required: true, ref: City })
   public city!: Ref<City>;
