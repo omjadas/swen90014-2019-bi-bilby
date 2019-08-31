@@ -8,8 +8,13 @@ import { BookingState, BookingModel } from "../../src/models/booking.model";
 import { LocationModel } from "../../src/models/location.model";
 
 const cities = [new CityModel({ city: "Melbourne" }), new CityModel({ city: "Sydney" })];
-const bookings = [new BookingModel({ state: BookingState.PENDING, city: cities[0] }), new BookingModel({})];
-const schools = [new SchoolModel({city: cities[0], name: "Melbourne High School"})];
+const schools = [new SchoolModel({
+  city: cities[0],
+  name: "Melbourne High School"
+}), new SchoolModel({
+  city: cities[1],
+  name: "Shore"
+})];
 const users = [new UserModel({
   firstName: "Fran",
   lastName: "Jes",
@@ -24,6 +29,7 @@ const users = [new UserModel({
 }), new UserModel({})];
 const locations = [new LocationModel()];
 const workshops = [new WorkshopModel()];
+const bookings = [new BookingModel({ state: BookingState.PENDING, city: cities[0], teacher: users[0] }), new BookingModel({})];
 
 export default {
   cities: cities,
