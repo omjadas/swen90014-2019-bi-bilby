@@ -1,101 +1,73 @@
-import {readData} from "./readData";
-import {Data} from "../models/data.model";
-import {newBooking} from "./bookingOperations";
 import {
   eligible,
-  facilitatorAvailable,
-  guestSpeakerAvailable,
-  isFacilitator,
-  isGuestSpeaker,
+  userAvailable,
   pairTeams
 } from "./userOperations";
-import { SessionTime } from "../models/teacherPreference.model";
+import { SessionTime, Booking, BookingState } from "../models/booking.model";
+import { GuestSpeaker } from "../models/guestSpeaker.model";
+import { Facilitator } from "../models/facilitator.model";
+import { Location } from "../models/location.model";
+import { User } from "../models/user.model";
 
 /**
   * Base function for rostering preferences to facilitators
   * and guest speakers
   */
-function rosterByPreferences(): void {
-  const data = readData();
-
-  const teacherPreferences: Data["teacherPreferences"] = data.teacherPreference;
-  const users: Data ["users"] = data.facilitators;
-  const bookings = [];
-
-  for (let i = 0; i < teacherPreferences.length; i++) {
-    const availableFacilitators = [];
-    const availableGuestSpeakers = [];
+export default function rosterByPreferences(bookings: Booking[], guestSpeakers: User[], facilitators: User[], locations: Location[]): Booking[] {
+  for (let i = 0; i < bookings.length; i++) {
+    let availableFacilitators: User[] = [];
+    let availableGuestSpeakers: User[] = [];
     const teams = [];
-    let sessionTime: SessionTime = {timeBegin: {} as any, timeEnd: {} as any};
+    let sessionTime: SessionTime = { timeBegin: {} as any, timeEnd: {} as any };
 
     // For all the possible preferences, we want to select one
-    for (let j = 0; j < teacherPreferences[i].sessionTimes.length; j++) {
-      const year = teacherPreferences[i].sessionTimes[j].timeBegin.getFullYear();
-      const month = teacherPreferences[i].sessionTimes[j].timeBegin.getUTCMonth();
-      const day = teacherPreferences[i].sessionTimes[j].timeBegin.getDay();
-      const hours = teacherPreferences[i].sessionTimes[j].timeBegin.getHours();
-      const minutes = teacherPreferences[i].sessionTimes[j].timeBegin.getMinutes();
+    for (let j = 0; j < bookings[i].possibleTimes.length; j++) {
+      const year = bookings[i].possibleTimes[j].timeBegin.getFullYear();
+      const month = bookings[i].possibleTimes[j].timeBegin.getUTCMonth();
+      const day = bookings[i].possibleTimes[j].timeBegin.getDay();
+      const hours = bookings[i].possibleTimes[j].timeBegin.getHours();
+      const minutes = bookings[i].possibleTimes[j].timeBegin.getMinutes();
 
       // From the user pool we select facilitators and guest speakers and check their availability for a specific booking
-      for (let b = 0; b < users.length; b++) {
-        if (isFacilitator(users[b]) && facilitatorAvailable(users[b], day, hours)) {
-          availableFacilitators.push(users[b]);
-        } else if (isGuestSpeaker(users[b]) && guestSpeakerAvailable(users[b], day, hours)) {
-          availableGuestSpeakers.push(users[b]);
+      availableFacilitators = facilitators.filter(user => {
+        if (user._facilitator instanceof Facilitator) {
+          userAvailable(user._facilitator.availabilities, day, hours);
         }
-      }
-
+      });
+      availableGuestSpeakers = guestSpeakers.filter(user => {
+        if (user._guestSpeaker instanceof GuestSpeaker) {
+          userAvailable(user._guestSpeaker.availabilities, day, hours);
+        }
+      });
       // Crosscheck the workshop's constraints with user's attributes
-      for (let c = 0; c < availableFacilitators.length; c++) {
-        if (!eligible(availableFacilitators[c], teacherPreferences[i].workshop))
-          availableFacilitators.splice(c, 1);
-      }
-
-      for (let d = 0; d < availableGuestSpeakers.length; d++) {
-        if (!eligible(availableGuestSpeakers[d], teacherPreferences[i].workshop))
-          availableGuestSpeakers.splice(d, 1);
-      }
+      availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));
+      availableGuestSpeakers = availableGuestSpeakers.filter(user => eligible(user, bookings[i].workshop));
 
       // Pair facilitators and guest speakers to follow the constraints
       for (let e = 0; e < availableGuestSpeakers.length; e++) {
         for (let f = 0; f < availableFacilitators.length; f++) {
           const pair = pairTeams(availableFacilitators[e], availableGuestSpeakers[f]);
 
-          if (!(pair[0] === 0 && pair[1] === 0))
+          if (pair !== null) {
             teams.push(pair);
-          else
-            continue;
+          }
         }
       }
 
       // If at least one possibility emerged, exit the loop, create booking and move on to the next booking request
       if (teams.length > 0) {
-        sessionTime = {timeBegin: teacherPreferences[i].sessionTimes[j].timeBegin,
-          timeEnd: teacherPreferences[i].sessionTimes[j].timeEnd};
+        sessionTime = {
+          timeBegin: bookings[i].possibleTimes[j].timeBegin,
+          timeEnd: bookings[i].possibleTimes[j].timeEnd
+        };
         break;
       }
     }
 
-    const facilitator = teams[Math.floor(Math.random() * teams.length)][0];
-    const guestSpeaker = teams[Math.floor(Math.random() * teams.length)][1];
-    const city = teacherPreferences[i].city;
-    const location = {} as any;
-    const workshop = teacherPreferences[i].workshop;
-    const level = teacherPreferences[i].level;
-    const teacher = teacherPreferences[i].contact;
-    const firstTime = teacherPreferences[i].return;
-    const numberOfStudents = teacherPreferences[i].numberOfStudents;
-
-    bookings.push(newBooking(false, facilitator, guestSpeaker, sessionTime, city,
-      location, workshop, level, teacher, firstTime, numberOfStudents));
-
-    // Create new booking instances according to teacher preferences.
-    // This can only be done once we have allocated facilitators
-    // and times
-
-    // const booking = newBooking(teacherPreference[i][])
+    bookings[i].facilitator = teams[Math.floor(Math.random() * teams.length)][0];
+    bookings[i].guestSpeaker = teams[Math.floor(Math.random() * teams.length)][1];
+    bookings[i].state = BookingState.UNCONFIRMED;
   }
 
-  // From remaining times, manually select preference and add to unconfirmed bookings
-
+  return bookings;
 }

@@ -5,21 +5,34 @@ import { User } from './user.model';
 import { Facilitator } from './facilitator.model';
 import { GuestSpeaker } from './guestSpeaker.model';
 import { City } from './city.model';
-import { SessionTime } from './teacherPreference.model';
+
+export interface SessionTime {
+  timeBegin: Date,
+  timeEnd: Date,
+}
+
+export enum BookingState {
+  CONFIRMED = "confirmed", // Assigned and confirmed
+  UNCONFIRMED = "unconfirmed", // Assigned, unconfirmed by coordinator
+  PENDING = "pending", // Pending roster
+}
 
 export class Booking extends Typegoose {
 
   @prop({ required: true })
-  public confirmed!: boolean;
+  public state!: BookingState;
 
-  @prop({ required: true, ref: Facilitator })
-  public facilitator!: Ref<Facilitator>;
+  @prop({ required: true, ref: User })
+  public facilitator!: Ref<User>;
 
-  @prop({ required: false, ref: GuestSpeaker })
-  public guestSpeaker?: Ref<GuestSpeaker>;
+  @prop({ required: false, ref: User })
+  public guestSpeaker?: Ref<User>;
 
   @prop({ required: true })
   public sessionTime!: SessionTime;
+
+  @prop({ required: true })
+  public possibleTimes!: SessionTime[];
 
   @prop({ required: true, ref: City })
   public city!: Ref<City>;

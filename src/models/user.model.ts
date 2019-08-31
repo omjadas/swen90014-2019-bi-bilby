@@ -24,8 +24,8 @@ export class User extends Typegoose {
   @prop({ required: true })
   public lastName!: string;
 
-  @prop({ required: true })
-  public address!: string;
+  @prop({ required: false })
+  public address?: string;
 
   @prop({ required: true, enum: UserType })
   public userType!: UserType;
