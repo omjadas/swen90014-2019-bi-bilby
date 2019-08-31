@@ -1,4 +1,4 @@
-import { prop, Typegoose, Ref } from 'typegoose';
+import { arrayProp, prop, Typegoose, Ref } from 'typegoose';
 import { Workshop } from './workshop.model';
 import { Location } from './location.model';
 import { User } from './user.model';
@@ -31,7 +31,7 @@ export class Booking extends Typegoose {
   @prop({ required: true })
   public sessionTime!: SessionTime;
 
-  @prop({ required: true })
+  @arrayProp({ required: true , items: Object})
   public possibleTimes!: SessionTime[];
 
   @prop({ required: true, ref: City })
