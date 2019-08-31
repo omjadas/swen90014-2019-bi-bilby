@@ -1,6 +1,5 @@
-import { Booking } from "../models/booking.model";
+import { Booking, BookingState, SessionTime } from "../models/booking.model";
 import { City } from "../models/city.model";
-import { SessionTime } from "../models/teacherPreference.model";
 
 /**
  * Find all current bookings times for a specified date
@@ -11,7 +10,7 @@ export function generateTimesAlreadyBooked(bookings: Booking[], city: City): Ses
   for (let i = 0; i < bookings.length; i++) {
     // Only block out bookings in same area
     if (bookings[i].city === city) {
-      if (bookings[i].confirmed) {
+      if (bookings[i].state === BookingState.CONFIRMED) {
         // Get date for current booking
         const confirmedBooking = bookings[i];
         const sessionTime: SessionTime = {

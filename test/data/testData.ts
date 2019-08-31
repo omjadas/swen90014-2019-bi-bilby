@@ -4,12 +4,10 @@ import { UserModel, UserType } from "../../src/models/user.model";
 import { FacilitatorModel, dayOfWeek } from "../../src/models/facilitator.model";
 import { TeacherModel } from "../../src/models/teacher.model";
 import { SchoolModel } from "../../src/models/school.model";
-import { TeacherPreferenceModel } from "../../src/models/teacherPreference.model";
 import { BookingModel } from "../../src/models/booking.model";
 import { LocationModel } from "../../src/models/location.model";
 
 const cities = [new CityModel(), new CityModel()];
-const teacherPreferences = [new TeacherPreferenceModel()];
 const bookings = [new BookingModel()];
 const users = [new UserModel()];
 const locations = [new LocationModel()];
@@ -18,7 +16,6 @@ const workshops = [new WorkshopModel()];
 
 export default {
   cities: cities,
-  teacherPreferences: teacherPreferences,
   bookings: bookings,
   users: users,
   locations: locations,
