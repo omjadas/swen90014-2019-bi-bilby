@@ -43,9 +43,7 @@ const bookings = [new BookingModel({
   firstTime: null,
   numberOfStudents: 1
 }), new BookingModel({})];
-const facilitators = [new FacilitatorModel({
-  
-}), new FacilitatorModel({})]
+
 
 export default {
   cities: cities,
