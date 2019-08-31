@@ -6,6 +6,7 @@ import { TeacherModel } from "../../src/models/teacher.model";
 import { SchoolModel } from "../../src/models/school.model";
 import { BookingState, BookingModel, SessionTime } from "../../src/models/booking.model";
 import { LocationModel } from "../../src/models/location.model";
+import { GuestSpeakerModel } from "../../src/models/guestSpeaker.model";
 
 const cities = [new CityModel({ city: "Melbourne" }), new CityModel({ city: "Sydney" }), new CityModel({ city: "Canberra" })];
 const schools = [new SchoolModel({
@@ -26,9 +27,68 @@ const users = [new UserModel({
   _teacher: new TeacherModel({
     school: schools[0]
   })
-}), new UserModel({})];
-const locations = [new LocationModel()];
-const workshops = [new WorkshopModel()];
+}), new UserModel({
+  firstName: "Fran",
+  lastName: "Jes",
+  email: "fjes@doxa.org.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "90468200",
+  _facilitator: new FacilitatorModel({
+    city: cities[0],
+    trained: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.MON,
+    }]
+  })
+}), new UserModel({
+  firstName: "Fran",
+  lastName: "Jes",
+  email: "fjes@doxa.org.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "90468200",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: null,
+    reliable: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.FRI,
+    }]
+  })
+})];
+const locations = [new LocationModel({
+  name: "Unimelb",
+  address: " ",
+  capacity: 25,
+  disabilityAccess: null,
+  facilities: null,
+}), new LocationModel({
+  name: "Unimelb",
+  address: " ",
+  capacity: 25,
+  disabilityAccess: null,
+  facilities: null,
+})];
+const workshops = [new WorkshopModel({
+  workshopName: "Discussions of Homelessness and Disadvantage",
+  requireFacilitator: null,
+  requireGuestSpeaker: null,
+}), new WorkshopModel({
+  workshopName: "Finding belonging",
+  requireFacilitator: null,
+  requireGuestSpeaker: null,
+}), new WorkshopModel({
+  workshopName: "Big Idea Lecture",
+  requireFacilitator: null,
+  requireGuestSpeaker: null,
+})];
 const bookings = [new BookingModel({
   state: BookingState.PENDING,
   facilitator: null,
