@@ -19,7 +19,7 @@ export enum BookingState {
 
 export class Booking extends Typegoose {
 
-  @prop({ required: true })
+  @prop({ required: trcue })
   public state!: BookingState;
 
   @prop({ required: true, ref: User })
