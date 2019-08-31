@@ -4,14 +4,25 @@ import { UserModel, UserType } from "../../src/models/user.model";
 import { FacilitatorModel, dayOfWeek } from "../../src/models/facilitator.model";
 import { TeacherModel } from "../../src/models/teacher.model";
 import { SchoolModel } from "../../src/models/school.model";
-import { BookingModel } from "../../src/models/booking.model";
+import { BookingState, BookingModel } from "../../src/models/booking.model";
 import { LocationModel } from "../../src/models/location.model";
 
-const cities = [new CityModel(), new CityModel()];
-const bookings = [new BookingModel()];
-const users = [new UserModel()];
+const cities = [new CityModel({ city: "Melbourne" }), new CityModel({ city: "Sydney" })];
+const bookings = [new BookingModel({ state: BookingState.PENDING, city: cities[0] }), new BookingModel({})];
+const schools = [new SchoolModel({city: cities[0], name: "Melbourne High School"})];
+const users = [new UserModel({
+  firstName: "Fran",
+  lastName: "Jes",
+  email: "fjes@doxa.org.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "90468200",
+  _teacher: new TeacherModel({
+    school: schools[0]
+  })
+}), new UserModel({})];
 const locations = [new LocationModel()];
-const schools = [new SchoolModel()];
 const workshops = [new WorkshopModel()];
 
 export default {
