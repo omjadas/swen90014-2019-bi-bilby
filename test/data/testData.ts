@@ -575,15 +575,285 @@ const workshops = [new WorkshopModel({
 })];
 const bookings = [new BookingModel({
   state: BookingState.PENDING,
-  possibleTimes: [{ timeBegin: new Date(2018, 1, 20, 9, 30), timeEnd: new Date(2018, 1, 20, 10, 30) }],
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) }],
   city: cities[0],
   location: null,
   workshop: workshops[0],
-  level: "12",
+  level: "9",
+  teacher: users[0],
+  firstTime: true,
+  numberOfStudents: 25
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 6, 15, 0), timeEnd: new Date(2018, 8, 6, 16, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[1],
+  level: "5/6",
+  teacher: users[1],
+  firstTime: true,
+  numberOfStudents: 27
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 7, 10, 0), timeEnd: new Date(2018, 8, 7, 11, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
+  teacher: users[2],
+  firstTime: true,
+  numberOfStudents: 25
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 7, 11, 0), timeEnd: new Date(2018, 8, 7, 12, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
   teacher: users[0],
   firstTime: false,
-  numberOfStudents: 1
-}), new BookingModel({})];
+  numberOfStudents: 25
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 7, 12, 0), timeEnd: new Date(2018, 8, 7, 13, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "VCAL",
+  teacher: users[3],
+  firstTime: true,
+  numberOfStudents: 20
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 7, 13, 0), timeEnd: new Date(2018, 8, 7, 14, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
+  teacher: users[0],
+  firstTime: false,
+  numberOfStudents: 25
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 8, 10, 0), timeEnd: new Date(2018, 8, 8, 11, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "10",
+  teacher: users[4],
+  firstTime: true,
+  numberOfStudents: 17
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 8, 10, 0), timeEnd: new Date(2018, 8, 8, 11, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "8",
+  teacher: users[5],
+  firstTime: true,
+  numberOfStudents: null
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 8, 11, 0), timeEnd: new Date(2018, 8, 8, 12, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "8",
+  teacher: users[5],
+  firstTime: false,
+  numberOfStudents: null
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 8, 11, 0), timeEnd: new Date(2018, 8, 8, 12, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
+  teacher: users[0],
+  firstTime: false,
+  numberOfStudents: 25
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 8, 12, 0), timeEnd: new Date(2018, 8, 8, 13, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[1],
+  level: "1-6",
+  teacher: users[6],
+  firstTime: true,
+  numberOfStudents: 13
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 10, 0), timeEnd: new Date(2018, 8, 9, 12, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[2],
+  level: null,
+  teacher: users[7],
+  firstTime: true,
+  numberOfStudents: null
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 10, 0), timeEnd: new Date(2018, 8, 9, 11, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
+  teacher: users[2],
+  firstTime: false,
+  numberOfStudents: 25
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 10, 0), timeEnd: new Date(2018, 8, 9, 11, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "VCAL",
+  teacher: users[8],
+  firstTime: true,
+  numberOfStudents: 20
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 10, 0), timeEnd: new Date(2018, 8, 9, 11, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "VCAL",
+  teacher: users[8],
+  firstTime: false,
+  numberOfStudents: 20
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 11, 0), timeEnd: new Date(2018, 8, 9, 12, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "7",
+  teacher: users[9],
+  firstTime: true,
+  numberOfStudents: 20
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 11, 0), timeEnd: new Date(2018, 8, 9, 12, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "VCAL",
+  teacher: users[10],
+  firstTime: true,
+  numberOfStudents: 14
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 12, 0), timeEnd: new Date(2018, 8, 9, 13, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
+  teacher: users[11],
+  firstTime: true,
+  numberOfStudents: 30
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 12, 0), timeEnd: new Date(2018, 8, 9, 13, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
+  teacher: users[12],
+  firstTime: true,
+  numberOfStudents: 25
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 12, 30), timeEnd: new Date(2018, 8, 9, 13, 30) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "7",
+  teacher: users[9],
+  firstTime: false,
+  numberOfStudents: 20
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 13, 0), timeEnd: new Date(2018, 8, 9, 14, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "VCAL",
+  teacher: users[8],
+  firstTime: false,
+  numberOfStudents: 20
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 9, 13, 0), timeEnd: new Date(2018, 8, 9, 14, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "VCAL",
+  teacher: users[8],
+  firstTime: false,
+  numberOfStudents: 20
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 10, 9, 0), timeEnd: new Date(2018, 8, 10, 10, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
+  teacher: users[13],
+  firstTime: true,
+  numberOfStudents: 18
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 10, 10, 0), timeEnd: new Date(2018, 8, 10, 11, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
+  teacher: users[14],
+  firstTime: true,
+  numberOfStudents: 25
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 10, 11, 0), timeEnd: new Date(2018, 8, 10, 12, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "7",
+  teacher: users[9],
+  firstTime: false,
+  numberOfStudents: 20
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 10, 12, 0), timeEnd: new Date(2018, 8, 10, 13, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "7",
+  teacher: users[9],
+  firstTime: false,
+  numberOfStudents: 20
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 10, 13, 0), timeEnd: new Date(2018, 8, 10, 14, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "VCAL",
+  teacher: users[15],
+  firstTime: true,
+  numberOfStudents: 15
+}), new BookingModel({
+  state: BookingState.PENDING,
+  possibleTimes: [{ timeBegin: new Date(2018, 8, 10, 13, 0), timeEnd: new Date(2018, 8, 10, 14, 0) }],
+  city: cities[0],
+  location: null,
+  workshop: workshops[0],
+  level: "9",
+  teacher: users[14],
+  firstTime: false,
+  numberOfStudents: 25
+})];
 
 
 export default {
