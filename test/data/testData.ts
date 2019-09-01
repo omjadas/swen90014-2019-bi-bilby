@@ -63,7 +63,7 @@ const users = [new UserModel({
   lastName: "Barker",
   email: "abarker@citycite.vic.edu.au",
   passwordHash: "",
-  address: "",
+  address: "31 Test Drive Avenue",
   userType: UserType.TEACHER,
   phoneNumber: "86606702",
   _teacher: new TeacherModel({
@@ -353,13 +353,13 @@ const users = [new UserModel({
   lastName: "",
   email: "",
   passwordHash: "",
-  address: "",
+  address: "32 Huffington Ave",
   userType: UserType.GUEST_SPEAKER,
   phoneNumber: "",
   _guestSpeaker: new GuestSpeakerModel({
     city: cities[0],
-    trained: null,
-    reliable: null,
+    trained: true,
+    reliable: true,
     availabilities: [{
       morning: true,
       afternoon: true,
@@ -544,47 +544,44 @@ const users = [new UserModel({
 const locations = [new LocationModel({
   name: "DWH",
   address: " ",
-  capacity: null,
-  disabilityAccess: null,
-  facilities: null,
+  capacity: 30,
+  disabilityAccess: true,
+  facilities: "projector",
 }), new LocationModel({
   name: "Melb Uni",
   address: "",
-  capacity: null,
-  disabilityAccess: null,
-  facilities: null,
+  capacity: 30,
+  disabilityAccess: true,
+  facilities: "lecturn",
 }), new LocationModel({
   name: "CAE417",
   address: "",
-  capacity: null,
-  disabilityAccess: null,
+  capacity: 30,
+  disabilityAccess: true,
   facilities: null,
 })];
 const workshops = [new WorkshopModel({
   workshopName: "Discussions of Homelessness and Disadvantage",
-  requireFacilitator: null,
-  requireGuestSpeaker: null,
+  requireFacilitator: true,
+  requireGuestSpeaker: false,
 }), new WorkshopModel({
   workshopName: "Finding belonging",
-  requireFacilitator: null,
-  requireGuestSpeaker: null,
+  requireFacilitator: true,
+  requireGuestSpeaker: false,
 }), new WorkshopModel({
   workshopName: "Big Idea Lecture",
-  requireFacilitator: null,
-  requireGuestSpeaker: null,
+  requireFacilitator: true,
+  requireGuestSpeaker: false,
 })];
 const bookings = [new BookingModel({
   state: BookingState.PENDING,
-  facilitator: null,
-  guestSpeaker: null,
-  sessionTime: null,
   possibleTimes: [{ timeBegin: new Date(2018, 1, 20, 9, 30), timeEnd: new Date(2018, 1, 20, 10, 30) }],
   city: cities[0],
   location: null,
   workshop: workshops[0],
-  level: "",
+  level: "12",
   teacher: users[0],
-  firstTime: null,
+  firstTime: false,
   numberOfStudents: 1
 }), new BookingModel({})];
 

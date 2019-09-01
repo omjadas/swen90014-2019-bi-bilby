@@ -19,20 +19,20 @@ export enum BookingState {
 
 export class Booking extends Typegoose {
 
-  @prop({ required: trcue })
+  @prop({ required: true })
   public state!: BookingState;
 
-  @prop({ required: true, ref: User })
-  public facilitator!: Ref<User>;
+  @prop({ required: false, ref: User })
+  public facilitator?: Ref<User>;
 
   @prop({ required: false, ref: User })
   public guestSpeaker?: Ref<User>;
 
-  @prop({ required: true })
-  public sessionTime!: SessionTime;
+  @prop({ required: false })
+  public sessionTime?: SessionTime;
 
-  @arrayProp({ required: true , items: Object})
-  public possibleTimes!: SessionTime[];
+  @arrayProp({ required: false , items: Object})
+  public possibleTimes?: SessionTime[];
 
   @prop({ required: true, ref: City })
   public city!: Ref<City>;
