@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "target": "es6",
     "lib": [
       "esnext"
@@ -17,7 +18,7 @@
   },
   "include": [
     "src/**/*.ts",
-    "test/**/*.ts", 
+    "test/**/*.ts",
     "src/controllers/rosterAlg.ts"
   ]
 }
