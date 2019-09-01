@@ -11,30 +11,509 @@ import { GuestSpeakerModel } from "../../src/models/guestSpeaker.model";
 const cities = [new CityModel({ city: "Melbourne" }), new CityModel({ city: "Sydney" }), new CityModel({ city: "Canberra" })];
 const schools = [new SchoolModel({
   city: cities[0],
-  name: "Melbourne High School"
+  name: "City Cite - Braybrook SC"
 }), new SchoolModel({
-  city: cities[1],
-  name: "Shore"
+  city: cities[0],
+  name: "Doxa - Lumen Christi School"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Peninsula Grammar"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Noble Park Secondary College"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Mount Clear College"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Carey Baptist Grammar"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Buxton Primary School"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Melbourne Uni – Big Idea"
+}), new SchoolModel({
+  city: cities[0],
+  name: "St Francis Xavier College"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Eltham High School"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Whittlesea Secondary College"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Albert Park College"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Copperfield College"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Mentone Grammar"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Williamstown High School"
+}), new SchoolModel({
+  city: cities[0],
+  name: "Lakeview Senior College"
 })];
 const users = [new UserModel({
-  firstName: "Fran",
-  lastName: "Jes",
-  email: "fjes@doxa.org.au",
+  firstName: "Andrew",
+  lastName: "Barker",
+  email: "abarker@citycite.vic.edu.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "86606702",
+  _teacher: new TeacherModel({
+    school: schools[0]
+  })
+}), new UserModel({
+  firstName: "Tenille",
+  lastName: "McInerney",
+  email: "tmcinerney@doxa.org.au",
   passwordHash: "",
   address: "",
   userType: UserType.TEACHER,
   phoneNumber: "90468200",
   _teacher: new TeacherModel({
-    school: schools[0]
+    school: schools[1]
   })
 }), new UserModel({
-  firstName: "Fran",
-  lastName: "Jes",
-  email: "fjes@doxa.org.au",
+  firstName: "Lorraine",
+  lastName: "Hickey",
+  email: "lhickey@peninsulagrammar.vic.edu.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "97887664",
+  _teacher: new TeacherModel({
+    school: schools[2]
+  })
+}), new UserModel({
+  firstName: "Trevor",
+  lastName: "Barry",
+  email: "barry.trevor.m@edumail.vic.gov.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "0423624108",
+  _teacher: new TeacherModel({
+    school: schools[3]
+  })
+}), new UserModel({
+  firstName: "Cassandra",
+  lastName: "Bawden",
+  email: "bawden.cassandra.j@edumail.vic.gov.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "0423737490",
+  _teacher: new TeacherModel({
+    school: schools[4]
+  })
+}), new UserModel({
+  firstName: "Geoff",
+  lastName: "Trevaskis",
+  email: "geoff.trevaskis@carey.com.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "9816 1563",
+  _teacher: new TeacherModel({
+    school: schools[5]
+  })
+}), new UserModel({
+  firstName: "Andrew",
+  lastName: "Bagnall",
+  email: "bagnall.andrew.a@edumail.vic.gov.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "0431277766",
+  _teacher: new TeacherModel({
+    school: schools[6]
+  })
+}), new UserModel({
+  firstName: "Karina",
+  lastName: "Jenkin",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "",
+  _teacher: new TeacherModel({
+    school: schools[7]
+  })
+}), new UserModel({
+  firstName: "Kerry",
+  lastName: "Little",
+  email: "klittle@sfx.vic.edu.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "0417108341",
+  _teacher: new TeacherModel({
+    school: schools[8]
+  })
+}), new UserModel({
+  firstName: "Melissa",
+  lastName: "Hughes",
+  email: "huh@elthamhs.vic.edu.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "439631177",
+  _teacher: new TeacherModel({
+    school: schools[9]
+  })
+}), new UserModel({
+  firstName: "Janet",
+  lastName: "Elovaris",
+  email: "elovaris.janet.j@edumail.vic.gov.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "Sarah Perry- 0466090784",
+  _teacher: new TeacherModel({
+    school: schools[10]
+  })
+}), new UserModel({
+  firstName: "Chloe",
+  lastName: "Le Merle",
+  email: "chloelemerle@albertparkcollege.vic.edu.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "475414701",
+  _teacher: new TeacherModel({
+    school: schools[11]
+  })
+}), new UserModel({
+  firstName: "Tanya",
+  lastName: "Lane",
+  email: "lane.tanya.t@edumail.vic.gov.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "416864965",
+  _teacher: new TeacherModel({
+    school: schools[12]
+  })
+}), new UserModel({
+  firstName: "Tim",
+  lastName: "Duivenvoorden",
+  email: "tfd@mentonegrammar.net",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "431747640",
+  _teacher: new TeacherModel({
+    school: schools[13]
+  })
+}), new UserModel({
+  firstName: "Gavin",
+  lastName: "Clifford",
+  email: "clifford.gavin.c@edumail.vic.gov.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "93971899",
+  _teacher: new TeacherModel({
+    school: schools[14]
+  })
+}), new UserModel({
+  firstName: "Kath",
+  lastName: "Harper",
+  email: "charper.katharine.v@edumail.vic.gov.au",
+  passwordHash: "",
+  address: "",
+  userType: UserType.TEACHER,
+  phoneNumber: "432801338",
+  _teacher: new TeacherModel({
+    school: schools[15]
+  })
+}), new UserModel({
+  firstName: "Phil",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: null,
+    reliable: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.WED,
+    }, {
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.THU,
+    }, {
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.FRI,
+    }]
+  })
+}), new UserModel({
+  firstName: "Pete",
+  lastName: "B",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: null,
+    reliable: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.TUE,
+    }, {
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.THU,
+    }]
+  })
+}), new UserModel({
+  firstName: "Cheryl",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: null,
+    reliable: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.WED,
+    }, {
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.THU,
+    }]
+  })
+}), new UserModel({
+  firstName: "Debi",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: null,
+    reliable: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.WED,
+    }, {
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.THU,
+    }]
+  })
+}), new UserModel({
+  firstName: "Shane",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: null,
+    reliable: null,
+    availabilities: [{
+      morning: false,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.MON,
+    }, {
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.FRI,
+    }]
+  })
+}), new UserModel({
+  firstName: "Fiona",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: null,
+    reliable: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.THU,
+    }]
+  })
+}), new UserModel({
+  firstName: "Loriner",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: null,
+    reliable: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.THU,
+    }, {
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.TUE,
+    }, {
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.FRI,
+    }]
+  })
+}), new UserModel({
+  firstName: "Peter",
+  lastName: "J",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: null,
+    reliable: null,
+    availabilities: [{
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.THU,
+    }, {
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.MON,
+    }, {
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.WED,
+    }]
+  })
+}), new UserModel({
+  firstName: "Catherine",
+  lastName: "",
+  email: "",
   passwordHash: "",
   address: "",
   userType: UserType.FACILITATOR,
-  phoneNumber: "90468200",
+  phoneNumber: "",
+  _facilitator: new FacilitatorModel({
+    city: cities[0],
+    trained: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.WED,
+    }, {
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.THU,
+    }]
+  })
+}), new UserModel({
+  firstName: "Danilo",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "",
+  _facilitator: new FacilitatorModel({
+    city: cities[0],
+    trained: null,
+    availabilities: [{
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.FRI,
+    }, {
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.TUE,
+    }]
+  })
+}), new UserModel({
+  firstName: "Mel",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "",
+  _facilitator: new FacilitatorModel({
+    city: cities[0],
+    trained: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.THU,
+    }, {
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.FRI,
+    },{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.TUE,
+    }]
+  })
+}), new UserModel({
+  firstName: "Alan",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "",
+  _facilitator: new FacilitatorModel({
+    city: cities[0],
+    trained: null,
+    availabilities: [{
+      morning: true,
+      afternoon: true,
+      dayOfWeek: dayOfWeek.THU,
+    }, {
+      morning: true,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.WED,
+    }]
+  })
+}), new UserModel({
+  firstName: "Tegan",
+  lastName: "",
+  email: "",
+  passwordHash: "",
+  address: "",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "",
   _facilitator: new FacilitatorModel({
     city: cities[0],
     trained: null,
@@ -45,34 +524,39 @@ const users = [new UserModel({
     }]
   })
 }), new UserModel({
-  firstName: "Fran",
-  lastName: "Jes",
-  email: "fjes@doxa.org.au",
+  firstName: "Karina",
+  lastName: "",
+  email: "",
   passwordHash: "",
   address: "",
-  userType: UserType.GUEST_SPEAKER,
-  phoneNumber: "90468200",
-  _guestSpeaker: new GuestSpeakerModel({
+  userType: UserType.FACILITATOR,
+  phoneNumber: "",
+  _facilitator: new FacilitatorModel({
     city: cities[0],
     trained: null,
-    reliable: null,
     availabilities: [{
       morning: true,
-      afternoon: true,
-      dayOfWeek: dayOfWeek.FRI,
+      afternoon: false,
+      dayOfWeek: dayOfWeek.THU,
     }]
   })
 })];
 const locations = [new LocationModel({
-  name: "Unimelb",
+  name: "DWH",
   address: " ",
-  capacity: 25,
+  capacity: null,
   disabilityAccess: null,
   facilities: null,
 }), new LocationModel({
-  name: "Unimelb",
-  address: " ",
-  capacity: 25,
+  name: "Melb Uni",
+  address: "",
+  capacity: null,
+  disabilityAccess: null,
+  facilities: null,
+}), new LocationModel({
+  name: "CAE417",
+  address: "",
+  capacity: null,
   disabilityAccess: null,
   facilities: null,
 })];
@@ -96,7 +580,7 @@ const bookings = [new BookingModel({
   sessionTime: null,
   possibleTimes: [{ timeBegin: new Date(2018, 1, 20, 9, 30), timeEnd: new Date(2018, 1, 20, 10, 30) }],
   city: cities[0],
-  location: locations[0],
+  location: null,
   workshop: workshops[0],
   level: "",
   teacher: users[0],
