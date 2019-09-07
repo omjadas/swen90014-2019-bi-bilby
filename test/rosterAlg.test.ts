@@ -124,7 +124,7 @@ const workshops = [new WorkshopModel({
 
 const bookings = [new BookingModel({
   state: BookingState.PENDING,
-  possibleTimes: [{ timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) }],
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
   city: cities[0],
   location: locations[0],
   workshop: workshops[0],
@@ -134,7 +134,7 @@ const bookings = [new BookingModel({
   numberOfStudents: 25
 }), new BookingModel({
   state: BookingState.PENDING,
-  possibleTimes: [{ timeBegin: new Date(2018, 8, 6, 15, 0), timeEnd: new Date(2018, 8, 6, 16, 0) }],
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 15, 0), timeEnd: new Date(2018, 8, 6, 16, 0) },
   city: cities[0],
   location: locations[0],
   workshop: workshops[1],
@@ -149,7 +149,7 @@ const afterRosterBookings = [new BookingModel({
   state: BookingState.UNCONFIRMED,
   facilitator: facilitators[0],
   guestSpeaker: guestSpeakers[0],
-  possibleTimes: [{ timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) }],
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
   city: cities[0],
   location: locations[0],
   workshop: workshops[0],
@@ -161,7 +161,7 @@ const afterRosterBookings = [new BookingModel({
   state: BookingState.UNCONFIRMED,
   facilitator: facilitators[0],
   guestSpeaker: guestSpeakers[0],
-  possibleTimes: [{ timeBegin: new Date(2018, 8, 6, 15, 0), timeEnd: new Date(2018, 8, 6, 16, 0) }],
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 15, 0), timeEnd: new Date(2018, 8, 6, 16, 0) },
   city: cities[0],
   location: locations[0],
   workshop: workshops[1],
