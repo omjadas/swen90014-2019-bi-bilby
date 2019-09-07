@@ -3,10 +3,9 @@ import {
   userAvailable,
   pairTeams
 } from "./userOperations";
-import { SessionTime, Booking, BookingState } from "../models/booking.model";
+import { Booking, BookingState } from "../models/booking.model";
 import { GuestSpeaker } from "../models/guestSpeaker.model";
 import { Facilitator } from "../models/facilitator.model";
-import { Location } from "../models/location.model";
 import { User } from "../models/user.model";
 
 /**
