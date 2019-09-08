@@ -24,16 +24,13 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       const hours = bookings[i].sessionTime.timeBegin.getHours();
 
       // From the user pool we select facilitators and guest speakers and check their availability for a specific booking
-      availableFacilitators = facilitators.filter(user => {
-        if (user._facilitator instanceof Facilitator) {
-          return userAvailable(user._facilitator.availabilities, day, hours);
+      for (let j = 0; j < facilitators.length; j++) {
+        if (userAvailable(facilitators[j], day, hours)) {
+          availableFacilitators.push(facilitators[j]);
         }
-      });
-      availableGuestSpeakers = guestSpeakers.filter(user => {
-        if (user._guestSpeaker instanceof GuestSpeaker) {
-          return userAvailable(user._guestSpeaker.availabilities, day, hours);
-        }
-      });
+      }
+      console.log(availableFacilitators);
+      availableGuestSpeakers = guestSpeakers.filter(user => userAvailable(user, day, hours));
 
       // Crosscheck the workshop's constraints with user's attributes
       availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));
@@ -50,7 +47,6 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
         }
       }
     }
-
 
     bookings[i].facilitator = teams[Math.floor(Math.random() * teams.length)][0];
     bookings[i].guestSpeaker = teams[Math.floor(Math.random() * teams.length)][1];

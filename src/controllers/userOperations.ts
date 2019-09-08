@@ -1,4 +1,4 @@
-import {dayOfWeek, Facilitator, Availability} from "../models/facilitator.model";
+import {dayOfWeek, Facilitator} from "../models/facilitator.model";
 import {GuestSpeaker} from "../models/guestSpeaker.model";
 import {Workshop} from '../models/workshop.model';
 import {User, UserType} from "../models/user.model";
@@ -28,24 +28,38 @@ export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
 
   else if (day === 6 && dayOW === dayOfWeek.SAT)
     return true;
-
-  return false;
+  else
+    return false;
 }
 
 /**
-  * Check if guest speaker is available for specified time.
+  * Check if user is available for specified time.
   */
-export function userAvailable(availabilities: Availability[], day: number, hours: number): boolean {
-  for (let i = 0; i < availabilities.length; i++) {
-    const dayOW = availabilities[i].dayOfWeek;
-
-    if ((hours >= 8 && hours <= 12 && availabilities[i].morning)
-      || (hours > 12 && hours <= 17 && availabilities[i].afternoon)) {
-      if (checkDayOfWeek(day, dayOW)) {
-        return true;
+export function userAvailable(user: User, day: number, hours: number): boolean {
+  if (user._facilitator instanceof Facilitator) {
+    for (let i = 0; i < user._facilitator.availabilities.length; i++) {
+      const dayOW = user._facilitator.availabilities[i].dayOfWeek;
+      if ((hours >= 8 && hours <= 12 && user._facilitator.availabilities[i].morning)
+        || (hours > 12 && hours <= 17 && user._facilitator.availabilities[i].afternoon)) {
+        if (checkDayOfWeek(day, dayOW)) {
+          return true;
+        }
       }
     }
   }
+
+  else if (user._guestSpeaker instanceof GuestSpeaker) {
+    for (let j = 0; j < user._guestSpeaker.availabilities.length; j++) {
+      const dayOW = user._guestSpeaker.availabilities[j].dayOfWeek;
+      if ((hours >= 8 && hours <= 12 && user._guestSpeaker.availabilities[j].morning)
+        || (hours > 12 && hours <= 17 && user._guestSpeaker.availabilities[j].afternoon)) {
+        if (checkDayOfWeek(day, dayOW)) {
+          return true;
+        }
+      }
+    }
+  }
+
   return false;
 }
 

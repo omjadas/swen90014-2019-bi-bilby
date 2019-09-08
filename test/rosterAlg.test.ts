@@ -3,7 +3,7 @@ import {CityModel} from "../src/models/city.model";
 import {SchoolModel} from "../src/models/school.model";
 import {UserModel, UserType} from "../src/models/user.model";
 import {GuestSpeakerModel} from "../src/models/guestSpeaker.model";
-import {dayOfWeek} from "../src/models/facilitator.model";
+import {dayOfWeek, FacilitatorModel} from "../src/models/facilitator.model";
 import {LocationModel} from "../src/models/location.model";
 import {WorkshopModel} from "../src/models/workshop.model";
 import {BookingModel, BookingState} from "../src/models/booking.model";
@@ -54,24 +54,15 @@ const facilitators = [new UserModel({
   email: "",
   passwordHash: "",
   address: "",
-  userType: UserType.GUEST_SPEAKER,
+  userType: UserType.FACILITATOR,
   phoneNumber: "",
-  _guestSpeaker: new GuestSpeakerModel({
+  _facilitator: new FacilitatorModel({
     city: cities[0],
     trained: true,
-    reliable: true,
     availabilities: [{
       morning: true,
       afternoon: true,
-      dayOfWeek: dayOfWeek.MON,
-    }, {
-      morning: true,
-      afternoon: true,
       dayOfWeek: dayOfWeek.THU,
-    }, {
-      morning: true,
-      afternoon: true,
-      dayOfWeek: dayOfWeek.FRI,
     }]
   })
 })];
@@ -89,10 +80,6 @@ const guestSpeakers = [new UserModel({
     trained: true,
     reliable: true,
     availabilities: [{
-      morning: true,
-      afternoon: true,
-      dayOfWeek: dayOfWeek.MON,
-    }, {
       morning: true,
       afternoon: true,
       dayOfWeek: dayOfWeek.THU,
@@ -132,16 +119,6 @@ const bookings = [new BookingModel({
   teacher: teachers[0],
   firstTime: true,
   numberOfStudents: 25
-}), new BookingModel({
-  state: BookingState.PENDING,
-  sessionTime: { timeBegin: new Date(2018, 8, 6, 15, 0), timeEnd: new Date(2018, 8, 6, 16, 0) },
-  city: cities[0],
-  location: locations[0],
-  workshop: workshops[1],
-  level: "5/6",
-  teacher: teachers[1],
-  firstTime: true,
-  numberOfStudents: 27
 })];
 
 // Expected result for input bookings. Facilitator and guest speaker should be assigned and state should be UNCONFIRMED.
@@ -157,20 +134,8 @@ const afterRosterBookings = [new BookingModel({
   teacher: teachers[0],
   firstTime: true,
   numberOfStudents: 25
-}), new BookingModel({
-  state: BookingState.UNCONFIRMED,
-  facilitator: facilitators[0],
-  guestSpeaker: guestSpeakers[0],
-  sessionTime: { timeBegin: new Date(2018, 8, 6, 15, 0), timeEnd: new Date(2018, 8, 6, 16, 0) },
-  city: cities[0],
-  location: locations[0],
-  workshop: workshops[1],
-  level: "5/6",
-  teacher: teachers[1],
-  firstTime: true,
-  numberOfStudents: 27
 })];
 
-test('assign facilitator and guest speaker to both bookings', () => {
+test('assign facilitator and guest speaker to booking', () => {
   expect(rosterByPreferences(bookings, guestSpeakers, facilitators)).toEqual(afterRosterBookings);
 });
