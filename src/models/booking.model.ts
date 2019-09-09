@@ -1,9 +1,7 @@
-import { arrayProp, prop, Typegoose, Ref } from 'typegoose';
+import { prop, Typegoose, Ref } from 'typegoose';
 import { Workshop } from './workshop.model';
 import { Location } from './location.model';
 import { User } from './user.model';
-import { Facilitator } from './facilitator.model';
-import { GuestSpeaker } from './guestSpeaker.model';
 import { City } from './city.model';
 
 export interface SessionTime {
@@ -28,11 +26,8 @@ export class Booking extends Typegoose {
   @prop({ required: false, ref: User })
   public guestSpeaker?: Ref<User>;
 
-  @prop({ required: false })
-  public sessionTime?: SessionTime;
-
-  @arrayProp({ required: false , items: Object})
-  public possibleTimes?: SessionTime[];
+  @prop({ required: true })
+  public sessionTime!: SessionTime;
 
   @prop({ required: true, ref: City })
   public city!: Ref<City>;
