@@ -1,27 +1,15 @@
 [
     {
-        "School Contact Information": "Name",
+        "Contact Information": "Name",
         "__EMPTY": "School",
         "__EMPTY_1": "Email",
         "__EMPTY_2": "Phone 1",
         "__EMPTY_3": "Phone 2"
     },
     {
-        "School Contact Information": "Fran James",
+        "Contact Information": "Fran James",
         "__EMPTY": "Doxa University Pathways",
         "__EMPTY_1": "fjames@doxa.org.au",
-        "__EMPTY_2": 490468200
-    },
-    {
-        "School Contact Information": "Toby Wetherell",
-        "__EMPTY": "School of Melbourne",
-        "__EMPTY_1": "t.wetherell@gmail.com.au",
-        "__EMPTY_2": 467288231
-    },
-    {
-        "School Contact Information": "Sasha Murray",
-        "__EMPTY": "Melbourne High",
-        "__EMPTY_1": "s.murray@gmail.com",
-        "__EMPTY_2": 472944823
+        "__EMPTY_2": "90468200"
     }
 ]

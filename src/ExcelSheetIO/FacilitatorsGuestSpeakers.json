@@ -7,7 +7,6 @@
         "Phone Number": 4673993852,
         "City": "Melbourne",
         "Trained?": "Yes",
-        "Reliable?": "Yes",
         "Monday": "Morning",
         "Tuesday": "Afternoon",
         "Wednesday": "Morning and Afternoon",
@@ -15,22 +14,5 @@
         "Friday": "Afternoon",
         "Saturday": "Morning and Afternoon",
         "Sunday": "Morning"
-    },
-    {
-        "Type": "Guest Speaker",
-        "First Name": "Test",
-        "Last Name": "Mcgrath",
-        "Email": "t.mcgrath@gmail.com",
-        "Phone Number": 472844295,
-        "City": "Sydney",
-        "Trained?": "No",
-        "Reliable?": "Yes",
-        "Monday": "Morning and Afternoon",
-        "Tuesday": "Afternoon",
-        "Wednesday": "Morning and Afternoon",
-        "Thursday": "Unavailable",
-        "Friday": "Unavailable",
-        "Saturday": "Unavailable",
-        "Sunday": "Unavailable"
     }
 ]

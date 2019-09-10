@@ -6,24 +6,17 @@
     },
     {
         "Locations": "Collins Street",
-        "__EMPTY": "Class Room",
-        "__EMPTY_1": "Class Room",
         "Workshop Type": "P123"
     },
     {
         "Locations": "DWH",
-        "__EMPTY": "Offsite",
-        "__EMPTY_1": "Offsite",
         "Workshop Type": "P456"
     },
     {
-        "Locations": "eClass",
-        "__EMPTY": "eClass",
-        "__EMPTY_1": "eClass",
+        "Locations": "Other",
         "Workshop Type": "DHD"
     },
     {
-        "Locations": "Other",
         "Workshop Type": "HHI"
     },
     {
