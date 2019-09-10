@@ -1,15 +1,15 @@
 [
-    {
-        "Contact Information": "Name",
-        "__EMPTY": "School",
-        "__EMPTY_1": "Email",
-        "__EMPTY_2": "Phone 1",
-        "__EMPTY_3": "Phone 2"
-    },
-    {
-        "Contact Information": "Fran James",
-        "__EMPTY": "Doxa University Pathways",
-        "__EMPTY_1": "fjames@doxa.org.au",
-        "__EMPTY_2": "90468200"
-    }
+  {
+    "Contact Information": "Name",
+    "__EMPTY": "School",
+    "__EMPTY_1": "Email",
+    "__EMPTY_2": "Phone 1",
+    "__EMPTY_3": "Phone 2"
+  },
+  {
+    "Contact Information": "Fran James",
+    "__EMPTY": "Doxa University Pathways",
+    "__EMPTY_1": "fjames@doxa.org.au",
+    "__EMPTY_2": "90468200"
+  }
 ]

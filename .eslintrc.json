@@ -73,7 +73,7 @@
     ],
     "eol-last": "error",
     "no-trailing-spaces": "error",
-    "arrow-spacing": ["error", { "before": false, "after": false }],
+    "arrow-spacing": ["error", { "before": true, "after": true }],
     "comma-spacing": ["error", { "before": false, "after": true }],
     "keyword-spacing": ["error", { "before": true, "after": true }],
     "template-curly-spacing": ["error", "never"],

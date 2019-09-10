@@ -14,7 +14,7 @@
     "build": "npx tsc && cd client && npm run build",
     "start": "node out/server.js",
     "test": "npx jest --passWithNoTests && cd client && npm run test",
-    "lint": "npx eslint \"src/**\" \"client/src/components/**\" \"client/src/__tests__/**\""
+    "lint": "npx eslint src client/src/components client/src/__tests__ --ext \"js, ts, jsx, tsx\""
   },
   "author": "",
   "license": "MIT",

@@ -1,18 +1,18 @@
 [
-    {
-        "Type": "Facilitator",
-        "First Name": "Seb",
-        "Last Name": "Gould",
-        "Email": "s.gould@gmail.com",
-        "Phone Number": 4673993852,
-        "City": "Melbourne",
-        "Trained?": "Yes",
-        "Monday": "Morning",
-        "Tuesday": "Afternoon",
-        "Wednesday": "Morning and Afternoon",
-        "Thursday": "Morning",
-        "Friday": "Afternoon",
-        "Saturday": "Morning and Afternoon",
-        "Sunday": "Morning"
-    }
+  {
+    "Type": "Facilitator",
+    "First Name": "Seb",
+    "Last Name": "Gould",
+    "Email": "s.gould@gmail.com",
+    "Phone Number": 4673993852,
+    "City": "Melbourne",
+    "Trained?": "Yes",
+    "Monday": "Morning",
+    "Tuesday": "Afternoon",
+    "Wednesday": "Morning and Afternoon",
+    "Thursday": "Morning",
+    "Friday": "Afternoon",
+    "Saturday": "Morning and Afternoon",
+    "Sunday": "Morning"
+  }
 ]
