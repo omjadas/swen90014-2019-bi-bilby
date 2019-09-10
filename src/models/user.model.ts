@@ -16,9 +16,6 @@ export class User extends Typegoose {
   public email!: string;
 
   @prop({ required: true })
-  public passwordHash!: string;
-
-  @prop({ required: true })
   public firstName!: string;
 
   @prop({ required: true })

@@ -12,9 +12,14 @@ export enum dayOfWeek {
 }
 
 export interface Availability {
-  morning: boolean,
-  afternoon: boolean,
+  availableFrom: Date,
+  availableUntil: Date,
   dayOfWeek: dayOfWeek,
+}
+
+export interface SpecificUnavailability {
+  date: Date,
+  notes: string,
 }
 
 export class Facilitator extends Typegoose {
@@ -25,8 +30,14 @@ export class Facilitator extends Typegoose {
   @prop({ required: true })
   public trained!: boolean;
 
+  @prop({ required: true })
+  public reliable!: boolean;
+
   @arrayProp({ required: true, items: Object })
   public availabilities!: Availability[];
+
+  @arrayProp({ required: true, items: Object })
+  public SpecificUnavailabilities!: SpecificUnavailability[];
 
 }
 
