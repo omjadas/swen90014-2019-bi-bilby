@@ -1,12 +1,13 @@
 import { CityModel } from "../../src/models/city.model";
 import { WorkshopModel } from "../../src/models/workshop.model";
 import { UserModel, UserType } from "../../src/models/user.model";
-import { FacilitatorModel, dayOfWeek } from "../../src/models/facilitator.model";
+import { FacilitatorModel, } from "../../src/models/facilitator.model";
 import { TeacherModel } from "../../src/models/teacher.model";
 import { SchoolModel } from "../../src/models/school.model";
-import { BookingState, BookingModel, SessionTime } from "../../src/models/booking.model";
+import { BookingState, BookingModel } from "../../src/models/booking.model";
 import { LocationModel } from "../../src/models/location.model";
 import { GuestSpeakerModel } from "../../src/models/guestSpeaker.model";
+import { dayOfWeek } from "../../src/models/availability";
 
 const cities = [new CityModel({ city: "Melbourne" }), new CityModel({ city: "Sydney" }), new CityModel({ city: "Canberra" })];
 const schools = [new SchoolModel({
