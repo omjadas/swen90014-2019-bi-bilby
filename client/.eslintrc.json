@@ -8,6 +8,11 @@
     "@typescript-eslint",
     "react"
   ],
+  "settings": {
+    "react": {
+      "version": "16.9"
+    }
+  },
   "extends": [
     "plugin:react/recommended"
   ]
