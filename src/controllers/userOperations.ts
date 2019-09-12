@@ -1,8 +1,9 @@
-import {dayOfWeek, Facilitator, FacilitatorModel} from "../models/facilitator.model";
-import {GuestSpeaker, GuestSpeakerModel} from "../models/guestSpeaker.model";
-import {Workshop, WorkshopModel} from '../models/workshop.model';
-import {User, UserType} from "../models/user.model";
-import {Ref} from "typegoose";
+import { Facilitator, FacilitatorModel } from "../models/facilitator.model";
+import { GuestSpeaker, GuestSpeakerModel } from "../models/guestSpeaker.model";
+import { Workshop, WorkshopModel } from '../models/workshop.model';
+import { User, UserType } from "../models/user.model";
+import { Ref } from "typegoose";
+import { dayOfWeek } from "../models/availability";
 
 /**
   * Check if day matches with availability.
@@ -65,7 +66,7 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
   * Check if user (facilitator or guest speaker) are eligible for a particular workshop.
   */
 export function eligible(user: User, workshop: Ref<Workshop>): boolean {
-  if (workshop instanceof WorkshopModel){
+  if (workshop instanceof WorkshopModel) {
     const workshop1 = workshop as Workshop;
     if (user.userType === UserType.FACILITATOR && workshop1.requireFacilitator)
       return true;
@@ -85,7 +86,7 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User)
     const facilitator = possibleFacilitator._facilitator as Facilitator;
     const guestSpeaker = possibleGuestSpeaker._guestSpeaker as GuestSpeaker;
     if ((guestSpeaker.trained && facilitator.trained)
-        || (!(guestSpeaker.trained) && facilitator.trained)) {
+      || (!(guestSpeaker.trained) && facilitator.trained)) {
       team = [possibleFacilitator, possibleGuestSpeaker];
       return team;
     }

@@ -479,7 +479,7 @@ const users = [new UserModel({
       morning: true,
       afternoon: true,
       dayOfWeek: dayOfWeek.FRI,
-    },{
+    }, {
       morning: true,
       afternoon: true,
       dayOfWeek: dayOfWeek.TUE,

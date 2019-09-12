@@ -1,4 +1,4 @@
-import { prop, Typegoose} from 'typegoose';
+import { prop, Typegoose } from 'typegoose';
 
 export class City extends Typegoose {
   @prop({ required: true })

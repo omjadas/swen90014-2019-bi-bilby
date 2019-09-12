@@ -4,8 +4,6 @@ import {
   pairTeams
 } from "./userOperations";
 import { Booking, BookingState } from "../models/booking.model";
-import {GuestSpeaker, GuestSpeakerModel} from "../models/guestSpeaker.model";
-import {Facilitator, FacilitatorModel} from "../models/facilitator.model";
 import { User } from "../models/user.model";
 
 /**
