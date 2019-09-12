@@ -56,10 +56,14 @@ const facilitators = [new UserModel({
   _facilitator: new FacilitatorModel({
     city: cities[0],
     trained: true,
+    reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 11, 0),
       availableUntil: new Date(2018, 8, 6, 12, 0),
       dayOfWeek: dayOfWeek.THU,
+    }],
+    specificUnavailabilities: [{
+      date: new Date(2018, 8, 7, 11, 0),
     }]
   })
 })];
@@ -79,6 +83,9 @@ const guestSpeakers = [new UserModel({
       availableFrom: new Date(2018, 8, 6, 11, 0),
       availableUntil: new Date(2018, 8, 6, 12, 0),
       dayOfWeek: dayOfWeek.THU,
+    }],
+    specificUnavailabilities: [{
+      date: new Date(2018, 8, 7, 11, 0),
     }]
   })
 })];
@@ -118,7 +125,7 @@ const bookings = [new BookingModel({
 })];
 
 // Expected result for input bookings. Facilitator and guest speaker should be assigned and state should be UNCONFIRMED.
-const afterRosterBookings = [new BookingModel({
+const afterRosterBookings = [{
   state: BookingState.UNCONFIRMED,
   facilitator: facilitators[0],
   guestSpeaker: guestSpeakers[0],
@@ -130,8 +137,8 @@ const afterRosterBookings = [new BookingModel({
   teacher: teachers[0],
   firstTime: true,
   numberOfStudents: 25
-})];
+}];
 
 test('assign facilitator and guest speaker to booking', () => {
-  expect(rosterByPreferences(bookings, guestSpeakers, facilitators)).toEqual(afterRosterBookings);
+  expect(rosterByPreferences(bookings, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings);
 });
