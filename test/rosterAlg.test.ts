@@ -1,13 +1,14 @@
 import rosterByPreferences from "../src/controllers/rosterAlg";
-import {CityModel} from "../src/models/city.model";
-import {SchoolModel} from "../src/models/school.model";
-import {User, UserModel, UserType} from "../src/models/user.model";
-import {GuestSpeakerModel} from "../src/models/guestSpeaker.model";
-import {dayOfWeek, FacilitatorModel} from "../src/models/facilitator.model";
-import {LocationModel} from "../src/models/location.model";
-import {WorkshopModel} from "../src/models/workshop.model";
-import {BookingModel, BookingState} from "../src/models/booking.model";
-import {TeacherModel} from "../src/models/teacher.model";
+import { CityModel } from "../src/models/city.model";
+import { SchoolModel } from "../src/models/school.model";
+import { UserModel, UserType } from "../src/models/user.model";
+import { GuestSpeakerModel } from "../src/models/guestSpeaker.model";
+import { FacilitatorModel } from "../src/models/facilitator.model";
+import { LocationModel } from "../src/models/location.model";
+import { WorkshopModel } from "../src/models/workshop.model";
+import { BookingModel, BookingState } from "../src/models/booking.model";
+import { TeacherModel } from "../src/models/teacher.model";
+import { dayOfWeek } from "../src/models/availability";
 
 // We want to pass in all the PENDING bookings
 // rosterByPreferences(teacherPreferences, guestSpeakers:, facilitators, locations)

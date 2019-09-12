@@ -1,6 +1,6 @@
-import {dayOfWeek, Facilitator} from "../models/facilitator.model";
-import {GuestSpeaker} from "../models/guestSpeaker.model";
-import {Workshop} from '../models/workshop.model';
+import {dayOfWeek, Facilitator, FacilitatorModel} from "../models/facilitator.model";
+import {GuestSpeaker, GuestSpeakerModel} from "../models/guestSpeaker.model";
+import {Workshop, WorkshopModel} from '../models/workshop.model';
 import {User, UserType} from "../models/user.model";
 import {Ref} from "typegoose";
 
@@ -36,20 +36,22 @@ export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
   * Check if user is available for specified time.
   */
 export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boolean {
-  if (user._facilitator instanceof Facilitator) {
-    for (let i = 0; i < user._facilitator.availabilities.length; i++) {
-      if (checkDayOfWeek(timeBegin.getDay(), user._facilitator.availabilities[i].dayOfWeek)) {
-        if ((user._facilitator.availabilities[i].availableFrom <= timeBegin && user._facilitator.availabilities[i].availableUntil >= timeEnd)) {
+  if (user._facilitator instanceof FacilitatorModel) {
+    const facilitator = user._facilitator as Facilitator;
+    for (let i = 0; i < facilitator.availabilities.length; i++) {
+      if (checkDayOfWeek(timeBegin.getDay(), facilitator.availabilities[i].dayOfWeek)) {
+        if ((facilitator.availabilities[i].availableFrom <= timeBegin && facilitator.availabilities[i].availableUntil >= timeEnd)) {
           return true;
         }
       }
     }
   }
 
-  else if (user._guestSpeaker instanceof GuestSpeaker) {
-    for (let j = 0; j < user._guestSpeaker.availabilities.length; j++) {
-      if (checkDayOfWeek(timeBegin.getDay(), user._guestSpeaker.availabilities[j].dayOfWeek)) {
-        if ((user._guestSpeaker.availabilities[j].availableFrom <= timeBegin && user._guestSpeaker.availabilities[j].availableUntil >= timeEnd)) {
+  else if (user._guestSpeaker instanceof GuestSpeakerModel) {
+    const guestSpeaker = user._guestSpeaker as GuestSpeaker;
+    for (let j = 0; j < guestSpeaker.availabilities.length; j++) {
+      if (checkDayOfWeek(timeBegin.getDay(), guestSpeaker.availabilities[j].dayOfWeek)) {
+        if ((guestSpeaker.availabilities[j].availableFrom <= timeBegin && guestSpeaker.availabilities[j].availableUntil >= timeEnd)) {
           return true;
         }
       }
@@ -63,25 +65,28 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
   * Check if user (facilitator or guest speaker) are eligible for a particular workshop.
   */
 export function eligible(user: User, workshop: Ref<Workshop>): boolean {
-  if (workshop instanceof Workshop)
-    if (user.userType === UserType.FACILITATOR && workshop.requireFacilitator)
+  if (workshop instanceof WorkshopModel){
+    const workshop1 = workshop as Workshop;
+    if (user.userType === UserType.FACILITATOR && workshop1.requireFacilitator)
       return true;
-    else if (user.userType === UserType.GUEST_SPEAKER && workshop.requireGuestSpeaker)
+    else if (user.userType === UserType.GUEST_SPEAKER && workshop1.requireGuestSpeaker)
       return true;
-
+  }
   return false;
 }
 
 /**
   * Check if facilitator and guest speaker can work with each other and pair them for booking.
   */
-export function pairTeams(facilitator: User, guestSpeaker: User): null | [User, User] {
+export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User): null | [User, User] {
   let team: [User, User];
 
-  if (facilitator._facilitator instanceof Facilitator && guestSpeaker._guestSpeaker instanceof GuestSpeaker) {
-    if ((guestSpeaker._guestSpeaker.trained && facilitator._facilitator.trained)
-        || (!(guestSpeaker._guestSpeaker.trained) && facilitator._facilitator.trained)) {
-      team = [facilitator, guestSpeaker];
+  if (possibleFacilitator._facilitator instanceof FacilitatorModel && possibleGuestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
+    const facilitator = possibleFacilitator._facilitator as Facilitator;
+    const guestSpeaker = possibleGuestSpeaker._guestSpeaker as GuestSpeaker;
+    if ((guestSpeaker.trained && facilitator.trained)
+        || (!(guestSpeaker.trained) && facilitator.trained)) {
+      team = [possibleFacilitator, possibleGuestSpeaker];
       return team;
     }
   }
