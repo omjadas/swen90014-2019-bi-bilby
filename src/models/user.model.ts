@@ -1,4 +1,4 @@
-import { prop, Typegoose, Ref } from 'typegoose';
+import { prop, Typegoose, Ref } from '@hasezoey/typegoose';
 import { Facilitator } from './facilitator.model';
 import { GuestSpeaker } from './guestSpeaker.model';
 import { Teacher } from './teacher.model';

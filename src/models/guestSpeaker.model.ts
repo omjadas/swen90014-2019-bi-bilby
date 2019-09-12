@@ -1,4 +1,4 @@
-import { arrayProp, prop, Typegoose, Ref } from 'typegoose';
+import { arrayProp, prop, Typegoose, Ref } from '@hasezoey/typegoose';
 import { City } from './city.model';
 import { Availability, SpecificUnavailability } from './availability';
 

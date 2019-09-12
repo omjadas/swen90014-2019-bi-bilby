@@ -1,4 +1,4 @@
-import { arrayProp, Typegoose } from 'typegoose';
+import { arrayProp, Typegoose } from '@hasezoey/typegoose';
 import { Booking } from "./booking.model";
 import { Workshop } from './workshop.model';
 import { Location } from './location.model';

@@ -2,7 +2,7 @@ import { Facilitator, FacilitatorModel } from "../models/facilitator.model";
 import { GuestSpeaker, GuestSpeakerModel } from "../models/guestSpeaker.model";
 import { Workshop, WorkshopModel } from '../models/workshop.model';
 import { User, UserType } from "../models/user.model";
-import { Ref } from "typegoose";
+import { Ref } from "@hasezoey/typegoose";
 import { dayOfWeek } from "../models/availability";
 
 /**
