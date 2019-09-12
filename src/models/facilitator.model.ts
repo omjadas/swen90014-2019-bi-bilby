@@ -3,7 +3,7 @@ import { City } from './city.model';
 
 export enum dayOfWeek {
   MON = "monday",
-  TUE = "tuesdsay",
+  TUE = "tuesday",
   WED = "wednesday",
   THU = "thursday",
   FRI = "friday",

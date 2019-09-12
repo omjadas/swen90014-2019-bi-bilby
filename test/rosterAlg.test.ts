@@ -1,7 +1,7 @@
 import rosterByPreferences from "../src/controllers/rosterAlg";
 import {CityModel} from "../src/models/city.model";
 import {SchoolModel} from "../src/models/school.model";
-import {UserModel, UserType} from "../src/models/user.model";
+import {User, UserModel, UserType} from "../src/models/user.model";
 import {GuestSpeakerModel} from "../src/models/guestSpeaker.model";
 import {dayOfWeek, FacilitatorModel} from "../src/models/facilitator.model";
 import {LocationModel} from "../src/models/location.model";
@@ -28,7 +28,6 @@ const teachers = [new UserModel({
   firstName: "Andrew",
   lastName: "Barker",
   email: "abarker@citycite.vic.edu.au",
-  passwordHash: "",
   address: "31 Test Drive Avenue",
   userType: UserType.TEACHER,
   phoneNumber: "86606702",
@@ -39,7 +38,6 @@ const teachers = [new UserModel({
   firstName: "Tenille",
   lastName: "McInerney",
   email: "tmcinerney@doxa.org.au",
-  passwordHash: "",
   address: "",
   userType: UserType.TEACHER,
   phoneNumber: "90468200",
@@ -52,7 +50,6 @@ const facilitators = [new UserModel({
   firstName: "Phil",
   lastName: "",
   email: "",
-  passwordHash: "",
   address: "",
   userType: UserType.FACILITATOR,
   phoneNumber: "",
@@ -60,8 +57,8 @@ const facilitators = [new UserModel({
     city: cities[0],
     trained: true,
     availabilities: [{
-      morning: true,
-      afternoon: true,
+      availableFrom: new Date(2018, 8, 6, 11, 0),
+      availableUntil: new Date(2018, 8, 6, 12, 0),
       dayOfWeek: dayOfWeek.THU,
     }]
   })
@@ -71,7 +68,6 @@ const guestSpeakers = [new UserModel({
   firstName: "Pete",
   lastName: "B",
   email: "",
-  passwordHash: "",
   address: "",
   userType: UserType.GUEST_SPEAKER,
   phoneNumber: "",
@@ -80,8 +76,8 @@ const guestSpeakers = [new UserModel({
     trained: true,
     reliable: true,
     availabilities: [{
-      morning: true,
-      afternoon: true,
+      availableFrom: new Date(2018, 8, 6, 11, 0),
+      availableUntil: new Date(2018, 8, 6, 12, 0),
       dayOfWeek: dayOfWeek.THU,
     }]
   })

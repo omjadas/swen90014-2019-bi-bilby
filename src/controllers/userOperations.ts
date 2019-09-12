@@ -35,13 +35,11 @@ export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
 /**
   * Check if user is available for specified time.
   */
-export function userAvailable(user: User, day: number, hours: number): boolean {
+export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boolean {
   if (user._facilitator instanceof Facilitator) {
     for (let i = 0; i < user._facilitator.availabilities.length; i++) {
-      const dayOW = user._facilitator.availabilities[i].dayOfWeek;
-      if ((hours >= 8 && hours <= 12 && user._facilitator.availabilities[i].morning)
-        || (hours > 12 && hours <= 17 && user._facilitator.availabilities[i].afternoon)) {
-        if (checkDayOfWeek(day, dayOW)) {
+      if (checkDayOfWeek(timeBegin.getDay(), user._facilitator.availabilities[i].dayOfWeek)) {
+        if ((user._facilitator.availabilities[i].availableFrom <= timeBegin && user._facilitator.availabilities[i].availableUntil >= timeEnd)) {
           return true;
         }
       }
@@ -50,10 +48,8 @@ export function userAvailable(user: User, day: number, hours: number): boolean {
 
   else if (user._guestSpeaker instanceof GuestSpeaker) {
     for (let j = 0; j < user._guestSpeaker.availabilities.length; j++) {
-      const dayOW = user._guestSpeaker.availabilities[j].dayOfWeek;
-      if ((hours >= 8 && hours <= 12 && user._guestSpeaker.availabilities[j].morning)
-        || (hours > 12 && hours <= 17 && user._guestSpeaker.availabilities[j].afternoon)) {
-        if (checkDayOfWeek(day, dayOW)) {
+      if (checkDayOfWeek(timeBegin.getDay(), user._guestSpeaker.availabilities[j].dayOfWeek)) {
+        if ((user._guestSpeaker.availabilities[j].availableFrom <= timeBegin && user._guestSpeaker.availabilities[j].availableUntil >= timeEnd)) {
           return true;
         }
       }
