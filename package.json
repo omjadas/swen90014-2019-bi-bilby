@@ -8,7 +8,6 @@
     "docker-build": "docker build -t bi-bilby .",
     "docker-build:test": "docker build -t bi-bilby:test -f Dockerfile.test .",
     "install-all": "npm i && cd client && npm i",
-    "install-all:dev": "npm i -D && cd client && npm i -D",
     "ci-all": "npm ci --only=production && cd client && npm ci --only=production",
     "ci-all:dev": "npm ci && cd client && npm ci",
     "build": "npx tsc && cd client && npm run build",
@@ -24,7 +23,7 @@
     "@types/node": "^12.7.1",
     "express": "^4.17.1",
     "mongoose": "^5.6.9",
-    "typegoose": "^5.9.0",
+    "typegoose": "^5.9.1",
     "typescript": "^3.5.3",
     "xlsx": "^0.15.1"
   },
