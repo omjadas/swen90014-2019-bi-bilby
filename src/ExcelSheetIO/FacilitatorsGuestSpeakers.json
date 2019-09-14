@@ -14,11 +14,19 @@
         "Type": "Guest Speaker",
         "First Name": "Pete",
         "Last Name": "B",
+        "Email": "Abc@abc.com",
+        "Phone Number": 999888777,
         "City": "Melbourne",
+        "Trained": "Yes",
+        "Reliable": "Yes",
+        "Monday Available From": 0.4166666666666667,
+        "Monday Available Until": 0.4583333333333333,
         "Tuesday Available From": 0.4791666666666667,
         "Tuesday Available Until": 0.6041666666666666,
         "Thursday Available From": 0.3958333333333333,
-        "Thursday Available Until": 0.4791666666666667
+        "Thursday Available Until": 0.4791666666666667,
+        "Specific Unavailability 1": 10,
+        "Notes": "I am not available"
     },
     {
         "Type": "Guest Speaker",

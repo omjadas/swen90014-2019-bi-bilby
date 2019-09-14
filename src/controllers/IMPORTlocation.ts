@@ -3,7 +3,6 @@ import fs from 'fs';
 import { CityModel, City } from '../models/city.model';
 import { WorkshopModel, Workshop } from '../models/workshop.model';
 
-
 const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
 const wb = XLSX.read(buf, { type: 'buffer' });
 
@@ -22,18 +21,29 @@ fs.writeFile("src/ExcelSheetIO/Locations.json", locationObject, function (err) {
 });
 
 
-//Sample code to fetch from the JSON file
+//Cities
 const cities: City[] = [];
-Object.values(mydataCity[0]).forEach((city) => {
-  cities.push(new CityModel({ city: city }));
-});
-console.log(cities.toString());
+/**
+  * Function to get the Cities
+  */
+function getCities(): City[] {
+  Object.values(mydataCity[0]).forEach((city) => {
+    cities.push(new CityModel({ city: city }));
+  });
+  return cities;
+}
+console.log(getCities().toString());
 
 //Workshop Type
 const workshops: Workshop[] = [];
-
-for (let i = 1; i < Object.keys(mydataCity).length; i++) {
-  workshops.push(new WorkshopModel({ workshopType: mydataCity[i]["Workshop Type"] }));
+/**
+  * Function to get Workshop types
+  */
+function getWorkshopTypes(): Workshop[] {
+  for (let i = 1; i < Object.keys(mydataCity).length; i++) {
+    workshops.push(new WorkshopModel({ workshopName: mydataCity[i]["Workshop Type"] }));
+  }
+  return workshops;
 }
 
-console.log(workshops.toString());
+console.log(getWorkshopTypes().toString());
