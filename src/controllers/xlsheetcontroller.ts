@@ -22,7 +22,7 @@ fs.writeFile("src/ExcelSheetIO/Locations.json", locationObject, function (err) {
 //Sample code to fetch from the JSON file
 const c = new City();
 c.city = mydataCity[0].City;
-console.log("value  :" + c.city);
+console.log("City value  :" + c.city);
 
 //Getting Facilitators | GuestSpeakers sheet
 const FandGS = XLSX.utils.sheet_to_json(wb.Sheets["Facilitators | GuestSpeakers"]);
@@ -39,7 +39,6 @@ const f = new Facilitator();
 const mydata = JSON.parse(FandGSObject);
 f.city = mydata[0].City;
 console.log("value  :" + f.city);
-
 
 //Getting contacts sheet
 const contacts = XLSX.utils.sheet_to_json(wb.Sheets["Contact Information"]);
@@ -58,17 +57,6 @@ const Melbourne = XLSX.utils.sheet_to_json(wb.Sheets["Melbourne"]);
 const MelbourneObject = JSON.stringify(Melbourne, null, 4);
 //console.log(MelbourneObject);
 fs.writeFile("src/ExcelSheetIO/Melbourne.json", MelbourneObject, function (err) {
-  if (err) {
-    console.log(err);
-  }
-  console.log("Done");
-});
-
-//Getting RosterOutput sheet
-const Roster = XLSX.utils.sheet_to_json(wb.Sheets["RosterOutput"]);
-const RosterObject = JSON.stringify(Roster, null, 4);
-//console.log(RosterObject);
-fs.writeFile("src/ExcelSheetIO/RosterOutput.json", RosterObject, function (err) {
   if (err) {
     console.log(err);
   }

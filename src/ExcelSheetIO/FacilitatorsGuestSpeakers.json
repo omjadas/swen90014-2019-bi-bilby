@@ -1,48 +1,132 @@
 [
     {
-        "Type": "Facilitator",
-        "First Name": "Seb",
-        "Last Name": "Gould",
-        "Email": "s.gould@gmail.com",
-        "Phone Number": 4673993852,
+        "Type": "Guest Speaker",
+        "First Name": "Phil",
         "City": "Melbourne",
-        "Trained": "Yes",
-        "Reliable": "Yes",
-        "Monday Available From": 0.375,
-        "Monday Available Until": 0.5416666666666666,
-        "Tuesday Available From": 0.375,
-        "Tuesday Available Until": 0.5416666666666666,
-        "Wednesday Available From": 0.375,
-        "Wednesday Available Until": 0.5416666666666666,
-        "Friday Available From": 0.375,
-        "Friday Available Until": 0.5416666666666666,
-        "Sunday Available From": 0.375,
-        "Sunday Available Until": 0.5416666666666666,
-        "Specific Unavailability 1": 43811,
-        "Notes": "On leave",
-        "Specific Unavailability 2": 43476,
-        "Notes_1": "Holiday"
+        "Wednesday Available From": 0.4375,
+        "Wednesday Available Until": 0.5208333333333334,
+        "Thursday Available From": 0.4791666666666667,
+        "Thursday Available Until": 0.5625,
+        "Friday Available From": 0.4375,
+        "Friday Available Until": 0.5208333333333334
     },
     {
         "Type": "Guest Speaker",
-        "First Name": "Test",
-        "Last Name": "Mcgrath",
-        "Email": "t.mcgrath@gmail.com",
-        "Phone Number": 472844295,
-        "City": "Sydney",
-        "Trained": "No",
-        "Reliable": "Yes",
-        "Monday Available From": 0.4166666666666667,
-        "Monday Available Until": 0.5833333333333334,
-        "Tuesday Available From": 0.4166666666666667,
-        "Tuesday Available Until": 0.5833333333333334,
+        "First Name": "Pete",
+        "Last Name": "B",
+        "City": "Melbourne",
+        "Tuesday Available From": 0.4791666666666667,
+        "Tuesday Available Until": 0.6041666666666666,
+        "Thursday Available From": 0.3958333333333333,
+        "Thursday Available Until": 0.4791666666666667
+    },
+    {
+        "Type": "Guest Speaker",
+        "First Name": "Cheryl",
+        "City": "Melbourne",
+        "Wednesday Available From": 0.4791666666666667,
+        "Wednesday Available Until": 0.5625,
+        "Thursday Available From": 0.5208333333333334,
+        "Thursday Available Until": 0.6041666666666666
+    },
+    {
+        "Type": "Guest Speaker",
+        "First Name": "Fiona",
+        "City": "Melbourne",
         "Thursday Available From": 0.4166666666666667,
+        "Thursday Available Until": 0.5833333333333334
+    },
+    {
+        "Type": "Guest Speaker",
+        "First Name": "Loriner",
+        "City": "Melbourne",
+        "Tuesday Available From": 0.3958333333333333,
+        "Tuesday Available Until": 0.5208333333333334,
+        "Thursday Available From": 0.4791666666666667,
+        "Thursday Available Until": 0.6041666666666666,
+        "Friday Available From": 0.4791666666666667,
+        "Friday Available Until": 0.6041666666666666
+    },
+    {
+        "Type": "Guest Speaker",
+        "First Name": "Peter",
+        "Last Name": "J",
+        "City": "Melbourne",
+        "Monday Available From": 0.4375,
+        "Monday Available Until": 0.5208333333333334,
+        "Wednesday Available From": 0.3958333333333333,
+        "Wednesday Available Until": 0.4791666666666667,
+        "Thursday Available From": 0.3958333333333333,
+        "Thursday Available Until": 0.4791666666666667
+    },
+    {
+        "Type": "Guest Speaker",
+        "First Name": "Shane",
+        "City": "Melbourne",
+        "Monday Available From": 0.6041666666666666,
+        "Monday Available Until": 0.6875,
+        "Friday Available From": 0.3541666666666667,
+        "Friday Available Until": 0.4791666666666667
+    },
+    {
+        "Type": "Guest Speaker",
+        "First Name": "Debi",
+        "City": "Melbourne",
+        "Wednesday Available From": 0.3958333333333333,
+        "Wednesday Available Until": 0.5208333333333334,
+        "Thursday Available From": 0.3958333333333333,
+        "Thursday Available Until": 0.4791666666666667
+    },
+    {
+        "Type": "Facilitator",
+        "First Name": "Catherine",
+        "City": "Melbourne",
+        "Wednesday Available From": 0.3958333333333333,
+        "Wednesday Available Until": 0.5625,
+        "Thursday Available From": 0.3958333333333333,
+        "Thursday Available Until": 0.6041666666666666
+    },
+    {
+        "Type": "Facilitator",
+        "First Name": "Danilo",
+        "City": "Melbourne",
+        "Tuesday Available From": 0.3958333333333333,
+        "Tuesday Available Until": 0.5208333333333334,
+        "Friday Available From": 0.3541666666666667,
+        "Friday Available Until": 0.5208333333333334
+    },
+    {
+        "Type": "Facilitator",
+        "First Name": "Mel",
+        "City": "Melbourne",
+        "Tuesday Available From": 0.4791666666666667,
+        "Tuesday Available Until": 0.6041666666666666,
+        "Thursday Available From": 0.3958333333333333,
         "Thursday Available Until": 0.5833333333333334,
-        "Friday Available From": 0.4166666666666667,
-        "Friday Available Until": 0.5833333333333334,
-        "Sunday Available From": 0.4166666666666667,
-        "Sunday Available Until": 0.5833333333333334,
-        "Specific Unavailability 1": 43827,
-        "Notes": "Christmas"
+        "Friday Available From": 0.4791666666666667,
+        "Friday Available Until": 0.6041666666666666
+    },
+    {
+        "Type": "Facilitator",
+        "First Name": "Alan",
+        "City": "Melbourne",
+        "Wednesday Available From": 0.3958333333333333,
+        "Wednesday Available Until": 0.5208333333333334,
+        "Thursday Available From": 0.3958333333333333,
+        "Thursday Available Until": 0.6041666666666666
+    },
+    {
+        "Type": "Facilitator",
+        "First Name": "Tegan",
+        "City": "Melbourne",
+        "Monday Available From": 0.4375,
+        "Monday Available Until": 0.6875
+    },
+    {
+        "Type": "Facilitator",
+        "First Name": "Karina",
+        "City": "Melbourne",
+        "Thursday Available From": 0.4166666666666667,
+        "Thursday Available Until": 0.5
     }
 ]
