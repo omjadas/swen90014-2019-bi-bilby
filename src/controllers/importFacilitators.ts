@@ -106,4 +106,11 @@ function getFacilitators(file: Buffer): User[]
 }
 
 const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
+
+//to get all the details
 console.log("Facilitator Details  :\n" + getFacilitators(buf));
+
+//To get the availabilities
+const c = getFacilitators(buf);
+console.log(c[0]);
+console.log(c[0]._facilitator);

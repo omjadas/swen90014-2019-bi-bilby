@@ -40,9 +40,8 @@ function getGuestSpeakers(file: Buffer): User[]
           }),
           availabilities:[
             {
-              availableFrom: new Date(2018, 8, 6, 11, 0),
-              //getDate(FandGSO[i]["Monday Available From"]),
-              availableUntil: new Date(2018, 8, 6, 11, 0),
+              availableFrom: getDate(FandGSO[i]["Monday Available From"]),
+              availableUntil: getDate(FandGSO[i]["Monday Available Until"]),
               dayOfWeek: dayOfWeek.MON
             },
             {
@@ -108,4 +107,11 @@ function getGuestSpeakers(file: Buffer): User[]
 }
 
 const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
+
+// to get the all the details
 console.log("Guest Speaker Details  :\n" + getGuestSpeakers(buf));
+
+//To get the availabilities
+const c = getGuestSpeakers(buf);
+console.log(c[0]);
+console.log(c[0]._guestSpeaker);

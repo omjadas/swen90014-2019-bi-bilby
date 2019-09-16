@@ -23,10 +23,10 @@ function getSchools(file: Buffer): User[]
       userType: UserType.TEACHER,
       _teacher: new TeacherModel({
         school: new SchoolModel({
-          name: contact[i]["C"],
           city: new CityModel({
             city: contact[i]["B"],
           }),
+          name: contact[i]["C"],
         }),
       }),
     }));
@@ -35,5 +35,8 @@ function getSchools(file: Buffer): User[]
 }
 
 const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
-console.log("Details of school :" + getSchools(buf).toString());
+console.log("Details of school :" + getSchools(buf));
 
+//To get the city
+const c = getSchools(buf);
+console.log(c[1]._teacher);
