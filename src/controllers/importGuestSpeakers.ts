@@ -3,6 +3,7 @@ import fs from 'fs';
 import { User, UserModel } from '../models/user.model';
 import { dayOfWeek } from '../models/availability';
 import { GuestSpeakerModel } from '../models/guestSpeaker.model';
+import { CityModel } from '../models/city.model';
 
 
 /**
@@ -32,13 +33,16 @@ function getGuestSpeakers(file: Buffer): User[]
         userType: FandGSO[i]["Type"],
         phoneNumber: FandGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
-          city: FandGSO[i]["City"],
-          trained: FandGSO[i]["Trained"],
-          reliable: FandGSO[i]["Reliable"],
+          trained: ((FandGSO[i]["Trained"] == "Yes") ? true : false),
+          reliable: ((FandGSO[i]["Reliable"] == "Yes") ? true : false),
+          city: new CityModel({
+            city: FandGSO[i]["City"]
+          }),
           availabilities:[
             {
-              availableFrom: getDate(FandGSO[i]["Monday Available From"]),
-              availableUntil: getDate(FandGSO[i]["Monday Available Until"]),
+              availableFrom: new Date(2018, 8, 6, 11, 0),
+              //getDate(FandGSO[i]["Monday Available From"]),
+              availableUntil: new Date(2018, 8, 6, 11, 0),
               dayOfWeek: dayOfWeek.MON
             },
             {

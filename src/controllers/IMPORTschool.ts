@@ -2,7 +2,8 @@ import * as XLSX from 'xlsx';
 import fs from 'fs';
 import { School, SchoolModel } from '../models/school.model';
 import { Teacher, TeacherModel } from '../models/teacher.model';
-import { User, UserModel } from '../models/user.model';
+import { User, UserModel, UserType } from '../models/user.model';
+import { City, CityModel } from '../models/city.model';
 
 /**
   * Function for Getting all the School details
@@ -13,19 +14,21 @@ function getSchools(file: Buffer): User[]
   const c = wb.Sheets["Contact Information"];
   const contact: any[]  = XLSX.utils.sheet_to_json(c, { header: "A" });
   const schools: User[] = [];
-  console.log(contact);
 
   for (let i = 2; i < Object.keys(contact).length; i++) {
     schools.push(new UserModel({
-      _school: new SchoolModel({
-        city: contact[i]["B"],
-        name: contact[i]["C"]
+      firstName: contact[i]["A"],
+      email: contact[i]["D"],
+      phoneNumber: contact[i]["E"],
+      userType: UserType.TEACHER,
+      _teacher: new TeacherModel({
+        school: new SchoolModel({
+          name: contact[i]["C"],
+          city: new CityModel({
+            city: contact[i]["B"],
+          }),
+        }),
       }),
-      _techer: new TeacherModel({
-        firstName: contact[i]["A"],
-        email: contact[i]["D"],
-        phoneNumber: contact[i]["E"]
-      })
     }));
   }
   return schools;
