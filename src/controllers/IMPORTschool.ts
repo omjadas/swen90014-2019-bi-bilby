@@ -1,6 +1,9 @@
 import * as XLSX from 'xlsx';
 import fs from 'fs';
 import { User, UserModel, UserType } from '../models/user.model';
+import { TeacherModel } from '../models/teacher.model';
+import { SchoolModel } from '../models/school.model';
+import { CityModel } from '../models/city.model';
 
 /**
   * Function for Getting all the School details

@@ -4,7 +4,7 @@ import { User, UserModel } from '../models/user.model';
 import { dayOfWeek } from '../models/availability';
 import { GuestSpeakerModel } from '../models/guestSpeaker.model';
 import { CityModel } from '../models/city.model';
-import { getDate } from '../controllers/getDateFunction';
+import { getconversionDate } from '../controllers/getDateFunction';
 
 /**
   * Function for Getting all the Guest Speakers
@@ -33,63 +33,63 @@ function getGuestSpeakers(file: Buffer): User[]
           }),
           availabilities:[
             {
-              availableFrom: getDate(FandGSO[i]["Monday Available From"]),
-              availableUntil: getDate(FandGSO[i]["Monday Available Until"]),
+              availableFrom: getconversionDate(FandGSO[i]["Monday Available From"]),
+              availableUntil: getconversionDate(FandGSO[i]["Monday Available Until"]),
               dayOfWeek: dayOfWeek.MON
             },
             {
-              availableFrom: getDate(FandGSO[i]["Tuesday Available From"]),
-              availableUntil: getDate(FandGSO[i]["Tuesday Available Until"]),
+              availableFrom: getconversionDate(FandGSO[i]["Tuesday Available From"]),
+              availableUntil: getconversionDate(FandGSO[i]["Tuesday Available Until"]),
               dayOfWeek: dayOfWeek.TUE
             },
             {
-              availableFrom: getDate(FandGSO[i]["Wednesday Available From"]),
-              availableUntil: getDate(FandGSO[i]["Wednesday Available Until"]),
+              availableFrom: getconversionDate(FandGSO[i]["Wednesday Available From"]),
+              availableUntil: getconversionDate(FandGSO[i]["Wednesday Available Until"]),
               dayOfWeek: dayOfWeek.WED
             },
             {
-              availableFrom: getDate(FandGSO[i]["Thursday Available From"]),
-              availableUntil: getDate(FandGSO[i]["Thursday Available Until"]),
+              availableFrom: getconversionDate(FandGSO[i]["Thursday Available From"]),
+              availableUntil: getconversionDate(FandGSO[i]["Thursday Available Until"]),
               dayOfWeek: dayOfWeek.THU
             },
             {
-              availableFrom: getDate(FandGSO[i]["Friday Available From"]),
-              availableUntil: getDate(FandGSO[i]["Friday Available Until"]),
+              availableFrom: getconversionDate(FandGSO[i]["Friday Available From"]),
+              availableUntil: getconversionDate(FandGSO[i]["Friday Available Until"]),
               dayOfWeek: dayOfWeek.FRI
             },
             {
-              availableFrom: getDate(FandGSO[i]["Saturday Available From"]),
-              availableUntil: getDate(FandGSO[i]["Saturday Available Until"]),
+              availableFrom: getconversionDate(FandGSO[i]["Saturday Available From"]),
+              availableUntil: getconversionDate(FandGSO[i]["Saturday Available Until"]),
               dayOfWeek: dayOfWeek.SAT
             },
             {
-              availableFrom: getDate(FandGSO[i]["Sunday Available From"]),
-              availableUntil: getDate(FandGSO[i]["Sunday Available Until"]),
+              availableFrom: getconversionDate(FandGSO[i]["Sunday Available From"]),
+              availableUntil: getconversionDate(FandGSO[i]["Sunday Available Until"]),
               dayOfWeek: dayOfWeek.SUN
             }],
           specificUnavailabilities:[
             {
-              date: getDate(FandGSO[i]["Specific Unavailability 1"]),
+              date: getconversionDate(FandGSO[i]["Specific Unavailability 1"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getDate(FandGSO[i]["Specific Unavailability 2"]),
+              date: getconversionDate(FandGSO[i]["Specific Unavailability 2"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getDate(FandGSO[i]["Specific Unavailability 3"]),
+              date: getconversionDate(FandGSO[i]["Specific Unavailability 3"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getDate(FandGSO[i]["Specific Unavailability 4"]),
+              date: getconversionDate(FandGSO[i]["Specific Unavailability 4"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getDate(FandGSO[i]["Specific Unavailability 5"]),
+              date: getconversionDate(FandGSO[i]["Specific Unavailability 5"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getDate(FandGSO[i]["Specific Unavailability 6"]),
+              date: getconversionDate(FandGSO[i]["Specific Unavailability 6"]),
               notes: FandGSO[i]["Notes"],
             }]
         })
