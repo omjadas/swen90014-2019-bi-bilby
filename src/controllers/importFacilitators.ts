@@ -4,13 +4,7 @@ import { User, UserModel } from '../models/user.model';
 import { dayOfWeek } from '../models/availability';
 import { FacilitatorModel } from '../models/facilitator.model';
 import { CityModel } from '../models/city.model';
-
-/**
-  * Function for Getting the date format
-  */
-function getDate(excelDate: any): Date {
-  return new Date((excelDate - (25567 + 1 )) * 86400 * 1000);
-}
+import { getDate } from '../controllers/getDateFunction';
 
 /**
   * Function for Getting all the facilitators
@@ -108,9 +102,5 @@ function getFacilitators(file: Buffer): User[]
 const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
 
 //to get all the details
-console.log("Facilitator Details  :\n" + getFacilitators(buf));
+console.log("Facilitators Details  :\n" + JSON.stringify(getFacilitators(buf), null, 4));
 
-//To get the availabilities
-const c = getFacilitators(buf);
-console.log(c[0]);
-console.log(c[0]._facilitator);

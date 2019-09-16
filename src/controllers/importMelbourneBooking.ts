@@ -1,44 +1,60 @@
 import * as XLSX from 'xlsx';
 import fs from 'fs';
-import { Booking, BookingModel } from '../models/booking.model';
+import { Booking, BookingModel, BookingState } from '../models/booking.model';
+import { CityModel } from '../models/city.model';
+import { UserModel } from '../models/user.model';
+import { SchoolModel } from '../models/school.model';
+import { FacilitatorModel } from '../models/facilitator.model';
+import { GuestSpeakerModel } from '../models/guestSpeaker.model';
+import { LocationModel } from '../models/location.model';
+import { WorkshopModel } from '../models/workshop.model';
+import { getDate } from '../controllers/getDateFunction';
 
-const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
-const wb = XLSX.read(buf, { type: 'buffer' });
-const m = wb.Sheets["Melbourne"];
-console.log(XLSX.utils.sheet_to_json(m));
 /**
   * Function for Getting all the Booking details
   */
-// function getBooking(file: Buffer): Booking
-// {
-//   const wb = XLSX.read(file, { type: 'buffer' });
-//   const m = wb.Sheets["Melbourne"];
-//   const MelbourneObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
+function getBooking(file: Buffer): any //Return should be given booking...but its giving an error
+{
+  const wb = XLSX.read(file, { type: 'buffer' });
+  const m = wb.Sheets["Melbourne"];
+  const MelbourneObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
+  const booking: Booking[] = [];
 
-//   const bookings: Booking[] = [];
+  for (let i = 2; i < Object.keys(MelbourneObject).length; i++) {
+    booking.push(new BookingModel({
+      state: BookingState.PENDING,
+      facilitator: new FacilitatorModel({
+      }),
+      guestSpeaker: new GuestSpeakerModel({
+      }),
+      sessionTime: {
+        timeBegin:  getDate(MelbourneObject[i]["E"]),
+        timeEnd:  getDate(MelbourneObject[i]["F"]),
+      },
+      city:  new CityModel({
+        city: MelbourneObject[i]["G"],
+      }),
+      location: new LocationModel({
+        location:  MelbourneObject[i]["G"],
+      }),
+      workshop: new WorkshopModel({
+        workshopName: MelbourneObject[i]["I"],
+      }),
+      level: MelbourneObject[i]["K"],
+      teacher: new UserModel({
+        firstName:  MelbourneObject[i]["L"],
+        email:  MelbourneObject[i]["N"],
+        school: new SchoolModel({
+          name: MelbourneObject[i]["M"],
+        }),
+      }),
+      numberOfStudents: MelbourneObject[i]["J"],
+      //check this
+      firstTime: false,
+    }));
+  }
+  return booking;
+}
 
-//   for (let i = 2; i < Object.keys(MelbourneObject).length; i++) {
-//     bookings.push(new BookingModel({
-//         :  MelbourneObject[i]["A"],
-//         :  MelbourneObject[i]["B"],
-//         :  MelbourneObject[i]["C"],
-//         :  MelbourneObject[i]["D"],
-//         :  MelbourneObject[i]["E"],
-//         :  MelbourneObject[i]["F"],
-//         :  MelbourneObject[i]["G"],
-//         :  MelbourneObject[i]["H"],
-//         :  MelbourneObject[i]["I"],
-//       numberOfStudents: MelbourneObject[i]["J"],
-//       level: MelbourneObject[i]["K"],
-//         :  MelbourneObject[i]["P"],
-//         :  MelbourneObject[i]["L"],
-//         :  MelbourneObject[i]["M"],
-//         :  MelbourneObject[i]["N"],
-//         :  MelbourneObject[i]["O"],
-//     }));
-//   }
-//   return bookings;
-// }
-
-// const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
-// console.log("Booking Details  :" + getBooking(buf));
+const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
+console.log("Booking Details  :" + getBooking(buf));

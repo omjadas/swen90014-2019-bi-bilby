@@ -1,9 +1,6 @@
 import * as XLSX from 'xlsx';
 import fs from 'fs';
-import { School, SchoolModel } from '../models/school.model';
-import { Teacher, TeacherModel } from '../models/teacher.model';
 import { User, UserModel, UserType } from '../models/user.model';
-import { City, CityModel } from '../models/city.model';
 
 /**
   * Function for Getting all the School details
@@ -35,8 +32,4 @@ function getSchools(file: Buffer): User[]
 }
 
 const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
-console.log("Details of school :" + getSchools(buf));
-
-//To get the city
-const c = getSchools(buf);
-console.log(c[1]._teacher);
+console.log("Details of school :\n" + JSON.stringify(getSchools(buf), null, 4));

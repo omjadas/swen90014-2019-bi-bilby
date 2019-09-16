@@ -4,14 +4,7 @@ import { User, UserModel } from '../models/user.model';
 import { dayOfWeek } from '../models/availability';
 import { GuestSpeakerModel } from '../models/guestSpeaker.model';
 import { CityModel } from '../models/city.model';
-
-
-/**
-  * Function for Getting the date format
-  */
-function getDate(excelDate: any): Date {
-  return new Date((excelDate - (25567 + 1 )) * 86400 * 1000);
-}
+import { getDate } from '../controllers/getDateFunction';
 
 /**
   * Function for Getting all the Guest Speakers
@@ -109,9 +102,4 @@ function getGuestSpeakers(file: Buffer): User[]
 const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
 
 // to get the all the details
-console.log("Guest Speaker Details  :\n" + getGuestSpeakers(buf));
-
-//To get the availabilities
-const c = getGuestSpeakers(buf);
-console.log(c[0]);
-console.log(c[0]._guestSpeaker);
+console.log("Guest Speaker Details  :\n" + JSON.stringify(getGuestSpeakers(buf), null, 4));
