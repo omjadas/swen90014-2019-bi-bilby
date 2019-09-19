@@ -59,13 +59,14 @@ const facilitators = [new UserModel({
     trained: true,
     reliable: true,
     availabilities: [{
-      availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
+      availableFrom: new Date(2018, 8, 6, 9, 0),
+      availableUntil: new Date(2018, 8, 6, 13, 0),
       dayOfWeek: dayOfWeek.THU,
     }],
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
     }],
+    assignedTimes: []
   })
 })];
 
@@ -81,13 +82,14 @@ const guestSpeakers = [new UserModel({
     trained: true,
     reliable: true,
     availabilities: [{
-      availableFrom: new Date(2018, 8, 6, 10, 0),
+      availableFrom: new Date(2018, 8, 6, 9, 0),
       availableUntil: new Date(2018, 8, 6, 12, 0),
       dayOfWeek: dayOfWeek.THU,
     }],
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
     }],
+    assignedTimes: []
   })
 })];
 
@@ -113,12 +115,23 @@ const workshops = [new WorkshopModel({
   requireGuestSpeaker: true,
 })];
 
-const bookings = [new BookingModel({
+const bookings2 = [new BookingModel({
   state: BookingState.PENDING,
-  sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 9, 0), timeEnd: new Date(2018, 8, 6, 10, 0) },
   city: cities[0],
   location: locations[0],
   workshop: workshops[0],
+  level: "9",
+  teacher: teachers[0],
+  firstTime: true,
+  numberOfStudents: 30
+}),
+new BookingModel({
+  state: BookingState.PENDING,
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 10, 0), timeEnd: new Date(2018, 8, 6, 11, 0) },
+  city: cities[0],
+  location: locations[0],
+  workshop: workshops[1],
   level: "9",
   teacher: teachers[0],
   firstTime: true,
@@ -137,13 +150,23 @@ const facilitators2 = [new UserModel({
     trained: true,
     reliable: true,
     availabilities: [{
-      availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 11, 0),
+      availableFrom: new Date(2018, 8, 6, 11, 0),
+      availableUntil: new Date(2018, 8, 6, 13, 0),
       dayOfWeek: dayOfWeek.THU,
     }],
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
-    }]
+    }],
+    assignedTimes: [{
+      availableFrom: new Date(2018, 8, 6, 9, 0),
+      availableUntil: new Date(2018, 8, 6, 10, 0),
+      dayOfWeek: dayOfWeek.THU,
+    },
+    {
+      availableFrom: new Date(2018, 8, 6, 10, 0),
+      availableUntil: new Date(2018, 8, 6, 11, 0),
+      dayOfWeek: dayOfWeek.THU,
+    }],
   })
 })];
 
@@ -159,31 +182,57 @@ const guestSpeakers2 = [new UserModel({
     trained: true,
     reliable: true,
     availabilities: [{
-      availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 11, 0),
+      availableFrom: new Date(2018, 8, 6, 11, 0),
+      availableUntil: new Date(2018, 8, 6, 12, 0),
       dayOfWeek: dayOfWeek.THU,
     }],
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
-    }]
+    }],
+    assignedTimes: [{
+      availableFrom: new Date(2018, 8, 6, 9, 0),
+      availableUntil: new Date(2018, 8, 6, 10, 0),
+      dayOfWeek: dayOfWeek.THU,
+    },
+    {
+      availableFrom: new Date(2018, 8, 6, 10, 0),
+      availableUntil: new Date(2018, 8, 6, 11, 0),
+      dayOfWeek: dayOfWeek.THU,
+    }],
   })
 })];
 
-// Expected result for input bookings. Facilitator and guest speaker should be assigned and state should be UNCONFIRMED.
-const afterRosterBookings = [{
+const afterRosterBookings2 = [new BookingModel({
   state: BookingState.UNCONFIRMED,
   facilitator: facilitators2[0],
   guestSpeaker: guestSpeakers2[0],
-  sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 9, 0), timeEnd: new Date(2018, 8, 6, 10, 0) },
   city: cities[0],
   location: locations[0],
   workshop: workshops[0],
   level: "9",
   teacher: teachers[0],
   firstTime: true,
+  numberOfStudents: 30
+}),
+new BookingModel({
+  state: BookingState.UNCONFIRMED,
+  facilitator: facilitators2[0],
+  guestSpeaker: guestSpeakers2[0],
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 10, 0), timeEnd: new Date(2018, 8, 6, 11, 0) },
+  city: cities[0],
+  location: locations[0],
+  workshop: workshops[1],
+  level: "9",
+  teacher: teachers[0],
+  firstTime: true,
   numberOfStudents: 25
-}];
+})];
 
 test('assign facilitator and guest speaker to booking', () => {
   expect(rosterByPreferences(bookings, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings);
+});
+
+test('several back to back bookings for the same facilitator', () => {
+  expect(rosterByPreferences(bookings2, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings2);
 });

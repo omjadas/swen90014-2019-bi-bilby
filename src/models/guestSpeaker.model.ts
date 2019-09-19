@@ -19,6 +19,9 @@ export class GuestSpeaker extends Typegoose {
   @arrayProp({ required: true, items: Object })
   public specificUnavailabilities!: SpecificUnavailability[];
 
+  @arrayProp({ required: true, items: Object })
+  public assignedTimes!: Availability[];
+
 }
 
 export const GuestSpeakerModel = new GuestSpeaker().getModelForClass(GuestSpeaker);
