@@ -125,14 +125,14 @@ const bookings = [new BookingModel({
   numberOfStudents: 25
 })];
 
-const facilitators2 = [new UserModel({
+const facilitators2 = [{
   firstName: "Phil",
   lastName: "",
   email: "",
   address: "",
   userType: UserType.FACILITATOR,
   phoneNumber: "",
-  _facilitator: new FacilitatorModel({
+  _facilitator: {
     city: cities[0],
     trained: true,
     reliable: true,
@@ -144,17 +144,17 @@ const facilitators2 = [new UserModel({
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
     }]
-  })
-})];
+  }
+}];
 
-const guestSpeakers2 = [new UserModel({
+const guestSpeakers2 = [{
   firstName: "Pete",
   lastName: "B",
   email: "",
   address: "",
   userType: UserType.GUEST_SPEAKER,
   phoneNumber: "",
-  _guestSpeaker: new GuestSpeakerModel({
+  _guestSpeaker: {
     city: cities[0],
     trained: true,
     reliable: true,
@@ -166,8 +166,8 @@ const guestSpeakers2 = [new UserModel({
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
     }]
-  })
-})];
+  }
+}];
 
 // Expected result for input bookings. Facilitator and guest speaker should be assigned and state should be UNCONFIRMED.
 const afterRosterBookings = [{
