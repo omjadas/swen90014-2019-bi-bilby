@@ -252,47 +252,53 @@ export function getWorkshopTypes(file: Buffer): Workshop[] {
 /**
   * Function for Getting all the Booking details
   */
-function getBooking(file: Buffer, tilldate: Date): Booking[] {
+function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Date): Booking[] {
   const wb = XLSX.read(file, { type: 'buffer' });
-  const m = wb.Sheets["Melbourne"];
-  const MelbourneObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
-  const booking: Booking[] = [];
+  if (wb.Sheets[sheetname]) {
+    const m = wb.Sheets[sheetname];
+    const MelbourneObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
+    const booking: Booking[] = [];
+    for (let i = 2; i < Object.keys(MelbourneObject).length; i++) {
+      const da = getconversionDate(MelbourneObject[i]["B"]);
 
-  for (let i = 2; i < Object.keys(MelbourneObject).length; i++) {
-    const da = new Date(2019, 6, MelbourneObject[i]["D"]);
-    //console.log(da);
-    if (da <= tilldate) {
-      booking.push(new BookingModel({
-        state: BookingState.PENDING,
-        facilitator: new FacilitatorModel({
-        }),
-        guestSpeaker: new GuestSpeakerModel({
-        }),
-        sessionTime: {
-          timeBegin: getconversionDate(MelbourneObject[i]["E"]),
-          timeEnd: getconversionDate(MelbourneObject[i]["F"]),
-        },
-        city: new CityModel({
-        }),
-        location: new LocationModel({
-          name: MelbourneObject[i]["G"],
-          capacity: MelbourneObject[i]["J"],
-        }),
-        workshop: new WorkshopModel({
-          workshopName: MelbourneObject[i]["I"],
-        }),
-        level: MelbourneObject[i]["K"],
-        teacher: new UserModel({
-          firstName: MelbourneObject[i]["L"],
-          email: MelbourneObject[i]["N"],
-          school: new SchoolModel({
-            name: MelbourneObject[i]["M"],
+      if (da >= frmdate && da <= tilldate){ // Date function not taking the  ==date
+        console.log(da);
+        booking.push(new BookingModel({
+          state: BookingState.PENDING,
+          facilitator: new FacilitatorModel({
           }),
-        }),
-        //check this
-        firstTime: false,
-      }));
+          guestSpeaker: new GuestSpeakerModel({
+          }),
+          sessionTime: {
+            timeBegin: getconversionDate(MelbourneObject[i]["C"]),
+            timeEnd: getconversionDate(MelbourneObject[i]["D"]),
+          },
+          city: new CityModel({
+          }),
+          location: new LocationModel({
+            name: MelbourneObject[i]["E"],
+            capacity: MelbourneObject[i]["H"],
+          }),
+          workshop: new WorkshopModel({
+            workshopName: MelbourneObject[i]["G"],
+          }),
+          level: MelbourneObject[i]["I"],
+          teacher: new UserModel({
+            firstName: MelbourneObject[i]["J"],
+            email: MelbourneObject[i]["L"],
+            phoneNumber: MelbourneObject[i]["M"],
+            school: new SchoolModel({
+              name: MelbourneObject[i]["K"],
+            }),
+          }),
+          firstTime: false,// Check This ..cant find any first time option in the excel sheet 
+        }));
+      }
     }
-  }
-  return booking;
+    return booking;
+  } else
+    return [];
 }
+
+const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
+console.log("Booking Details  :" + getBooking(buf, "Melbourne", new Date(2019, 7, 8), new Date(2019, 7, 10)));
