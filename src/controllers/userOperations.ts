@@ -160,31 +160,19 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
         // If the booking starts at the same time as the beginning of the user's availability
         if (availableFrom.toTimeString() === timeBegin.toTimeString() && timeEnd < availableUntil) {
           facilitator.availabilities[i].availableFrom = timeEnd;
-
-          //facilitator.assignedTimes.push(facilitator.availabilities[i]);
-          //facilitator.assignedTimes[facilitator.assignedTimes.length - 1].availableFrom = timeBegin;
-          //facilitator.assignedTimes[facilitator.assignedTimes.length - 1].availableUntil = timeEnd;
         }
         // If the booking end at the same time as the end of the user's availability
         else if (availableFrom < timeBegin && timeEnd.toTimeString() === availableUntil.toTimeString()) {
-          console.log(facilitator.availabilities);
           facilitator.availabilities[i].availableUntil = timeBegin;
-          console.log(facilitator.availabilities);
-
-          //facilitator.assignedTimes. push(facilitator.availabilities[i]);
-          //facilitator.assignedTimes[facilitator.assignedTimes.length - 1].availableFrom = timeBegin;
-          //facilitator.assignedTimes[facilitator.assignedTimes.length - 1].availableUntil = timeEnd;
         }
         // If the booking starts and ends in the middle of the user's availability
         else if (availableFrom < timeBegin && timeEnd < availableUntil) {
           facilitator.availabilities[i].availableUntil = timeBegin;
           facilitator.availabilities.splice(i + 1, 0, facilitator.availabilities[i]);
           facilitator.availabilities[i + 1].availableFrom = timeEnd;
-
-          //facilitator.assignedTimes.push(facilitator.availabilities[i]);
-          //facilitator.assignedTimes[facilitator.assignedTimes.length - 1].availableFrom = timeBegin;
-          //facilitator.assignedTimes[facilitator.assignedTimes.length - 1].availableUntil = timeEnd;
         }
+
+        facilitator.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: facilitator.availabilities[i].dayOfWeek });
       }
     }
   }
@@ -199,27 +187,19 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
         // If the booking starts at the same time as the beginning of the user's availability
         if (availableFrom.toTimeString() === timeBegin.toTimeString() && timeEnd < availableUntil) {
           guestSpeaker.availabilities[j].availableFrom = timeEnd;
-          //guestSpeaker.assignedTimes.push(guestSpeaker.availabilities[j]);
-          //guestSpeaker.assignedTimes[guestSpeaker.assignedTimes.length - 1].availableFrom = timeBegin;
-          //guestSpeaker.assignedTimes[guestSpeaker.assignedTimes.length - 1].availableUntil = timeEnd;
         }
         // If the booking end at the same time as the end of the user's availability
         else if (availableFrom < timeBegin && timeEnd.toTimeString() === availableUntil.toTimeString()) {
           guestSpeaker.availabilities[j].availableUntil = timeBegin;
-          //guestSpeaker.assignedTimes.push(guestSpeaker.availabilities[j]);
-          //guestSpeaker.assignedTimes[guestSpeaker.assignedTimes.length - 1].availableFrom = timeBegin;
-          //guestSpeaker.assignedTimes[guestSpeaker.assignedTimes.length - 1].availableUntil = timeEnd;
         }
         // If the booking starts and ends in the middle of the user's availability
         else if (availableFrom < timeBegin && timeEnd < availableUntil) {
           guestSpeaker.availabilities[j].availableUntil = timeBegin;
           guestSpeaker.availabilities.splice(j + 1, 0, guestSpeaker.availabilities[j]);
           guestSpeaker.availabilities[j + 1].availableFrom = timeEnd;
-
-          //guestSpeaker.assignedTimes.push(guestSpeaker.availabilities[j]);
-          //guestSpeaker.assignedTimes[guestSpeaker.assignedTimes.length - 1].availableFrom = timeBegin;
-          //guestSpeaker.assignedTimes[guestSpeaker.assignedTimes.length - 1].availableUntil = timeEnd;
         }
+
+        guestSpeaker.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: guestSpeaker.availabilities[j].dayOfWeek });
       }
     }
   }

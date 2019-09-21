@@ -66,6 +66,7 @@ const facilitators = [new UserModel({
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
     }],
+    assignedTimes: []
   })
 })];
 
@@ -88,6 +89,7 @@ const guestSpeakers = [new UserModel({
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
     }],
+    assignedTimes: []
   })
 })];
 
@@ -143,6 +145,11 @@ const facilitators2 = [{
     }],
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
+    }],
+    assignedTimes: [{
+      availableFrom: new Date(2018, 8, 6, 11, 0),
+      availableUntil: new Date(2018, 8, 6, 12, 0),
+      dayOfWeek: dayOfWeek.THU,
     }]
   }
 }];
@@ -165,6 +172,11 @@ const guestSpeakers2 = [{
     }],
     specificUnavailabilities: [{
       date: new Date(2018, 8, 7, 11, 0),
+    }],
+    assignedTimes: [{
+      availableFrom: new Date(2018, 8, 6, 11, 0),
+      availableUntil: new Date(2018, 8, 6, 12, 0),
+      dayOfWeek: dayOfWeek.THU,
     }]
   }
 }];
