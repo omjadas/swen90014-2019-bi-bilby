@@ -229,10 +229,6 @@ new BookingModel({
   numberOfStudents: 25
 })];
 
-test('assign facilitator and guest speaker to booking', () => {
-  expect(rosterByPreferences(bookings, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings);
-});
-
 test('several back to back bookings for the same facilitator', () => {
   expect(rosterByPreferences(bookings2, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings2);
 });

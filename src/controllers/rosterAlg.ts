@@ -24,7 +24,6 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       backToBackFacilitator = checkBackToBackFacilitator(bookings[i - 1], bookings[i]);
       backToBackGuestSpeaker = checkBackToBackGuestSpeaker(bookings[i - 1], bookings[i]);
     }
-    console.log(backToBackFacilitator, backToBackGuestSpeaker, i);
 
     // Neither facilitator nor guest speaker can do back to back.
     if (!backToBackFacilitator && !backToBackGuestSpeaker) {
