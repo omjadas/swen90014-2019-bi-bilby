@@ -29,15 +29,14 @@ export function getCities(file: Buffer): City[] {
 /**
   * Function for Getting all the Guest Speakers
   */
-export function getGuestSpeakers(file: Buffer): User[]
-{
+export function getGuestSpeakers(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
   const FandGSO: any[] = XLSX.utils.sheet_to_json(u);
   const GSusers: User[] = [];
 
   for (let i = 0; i < Object.keys(FandGSO).length; i++) {
-    if (FandGSO[i]["Type"] == 'Guest Speaker'){
+    if (FandGSO[i]["Type"] == 'Guest Speaker') {
       GSusers.push(new UserModel({
         firstName: FandGSO[i]["First Name"],
         lastName: FandGSO[i]["Last Name"],
@@ -51,7 +50,7 @@ export function getGuestSpeakers(file: Buffer): User[]
           city: new CityModel({
             city: FandGSO[i]["City"]
           }),
-          availabilities:[
+          availabilities: [
             {
               availableFrom: getconversionDate(FandGSO[i]["Monday Available From"]),
               availableUntil: getconversionDate(FandGSO[i]["Monday Available Until"]),
@@ -87,7 +86,7 @@ export function getGuestSpeakers(file: Buffer): User[]
               availableUntil: getconversionDate(FandGSO[i]["Sunday Available Until"]),
               dayOfWeek: dayOfWeek.SUN
             }],
-          specificUnavailabilities:[
+          specificUnavailabilities: [
             {
               date: getconversionDate(FandGSO[i]["Specific Unavailability 1"]),
               notes: FandGSO[i]["Notes"],
@@ -121,15 +120,14 @@ export function getGuestSpeakers(file: Buffer): User[]
 /**
   * Function for Getting all the facilitators
   */
-export function getFacilitators(file: Buffer): User[]
-{
+export function getFacilitators(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
   const FandGSO: any[] = XLSX.utils.sheet_to_json(u);
 
   const facilitatorusers: User[] = [];
   for (let i = 0; i < Object.keys(FandGSO).length; i++) {
-    if (FandGSO[i]["Type"] == 'Facilitator'){
+    if (FandGSO[i]["Type"] == 'Facilitator') {
       facilitatorusers.push(new UserModel({
         firstName: FandGSO[i]["First Name"],
         lastName: FandGSO[i]["Last Name"],
@@ -143,7 +141,7 @@ export function getFacilitators(file: Buffer): User[]
           city: new CityModel({
             city: FandGSO[i]["City"]
           }),
-          availabilities:[
+          availabilities: [
             {
               availableFrom: getconversionDate(FandGSO[i]["Monday Available From"]),
               availableUntil: getconversionDate(FandGSO[i]["Monday Available Until"]),
@@ -179,7 +177,7 @@ export function getFacilitators(file: Buffer): User[]
               availableUntil: getconversionDate(FandGSO[i]["Sunday Available Until"]),
               dayOfWeek: dayOfWeek.SUN
             }],
-          specificUnavailabilities:[
+          specificUnavailabilities: [
             {
               date: getconversionDate(FandGSO[i]["Specific Unavailability 1"]),
               notes: FandGSO[i]["Notes"],
@@ -213,11 +211,10 @@ export function getFacilitators(file: Buffer): User[]
 /**
   * Function for Getting all the School details
   */
-export function getSchools(file: Buffer): User[]
-{
+export function getSchools(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const c = wb.Sheets["Contact Information"];
-  const contact: any[]  = XLSX.utils.sheet_to_json(c, { header: "A" });
+  const contact: any[] = XLSX.utils.sheet_to_json(c, { header: "A" });
   const schools: User[] = [];
 
   for (let i = 2; i < Object.keys(contact).length; i++) {
@@ -255,8 +252,7 @@ export function getWorkshopTypes(file: Buffer): Workshop[] {
 /**
   * Function for Getting all the Booking details
   */
-function getBooking(file: Buffer, tilldate: Date): any //Return should be given booking...but its giving an error
-{
+function getBooking(file: Buffer, tilldate: Date): Booking[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const m = wb.Sheets["Melbourne"];
   const MelbourneObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
@@ -265,8 +261,7 @@ function getBooking(file: Buffer, tilldate: Date): any //Return should be given 
   for (let i = 2; i < Object.keys(MelbourneObject).length; i++) {
     const da = new Date(2019, 6, MelbourneObject[i]["D"]);
     //console.log(da);
-    if (da <= tilldate)
-    {
+    if (da <= tilldate) {
       booking.push(new BookingModel({
         state: BookingState.PENDING,
         facilitator: new FacilitatorModel({
@@ -274,13 +269,13 @@ function getBooking(file: Buffer, tilldate: Date): any //Return should be given 
         guestSpeaker: new GuestSpeakerModel({
         }),
         sessionTime: {
-          timeBegin:  getconversionDate(MelbourneObject[i]["E"]),
-          timeEnd:  getconversionDate(MelbourneObject[i]["F"]),
+          timeBegin: getconversionDate(MelbourneObject[i]["E"]),
+          timeEnd: getconversionDate(MelbourneObject[i]["F"]),
         },
-        city:  new CityModel({
+        city: new CityModel({
         }),
         location: new LocationModel({
-          name:  MelbourneObject[i]["G"],
+          name: MelbourneObject[i]["G"],
           capacity: MelbourneObject[i]["J"],
         }),
         workshop: new WorkshopModel({
@@ -288,8 +283,8 @@ function getBooking(file: Buffer, tilldate: Date): any //Return should be given 
         }),
         level: MelbourneObject[i]["K"],
         teacher: new UserModel({
-          firstName:  MelbourneObject[i]["L"],
-          email:  MelbourneObject[i]["N"],
+          firstName: MelbourneObject[i]["L"],
+          email: MelbourneObject[i]["N"],
           school: new SchoolModel({
             name: MelbourneObject[i]["M"],
           }),
