@@ -138,14 +138,14 @@ new BookingModel({
   numberOfStudents: 25
 })];
 
-const facilitators2 = [new UserModel({
+const facilitators2 = [{
   firstName: "Phil",
   lastName: "",
   email: "",
   address: "",
   userType: UserType.FACILITATOR,
   phoneNumber: "",
-  _facilitator: new FacilitatorModel({
+  _facilitator: {
     city: cities[0],
     trained: true,
     reliable: true,
@@ -167,17 +167,17 @@ const facilitators2 = [new UserModel({
       availableUntil: new Date(2018, 8, 6, 11, 0),
       dayOfWeek: dayOfWeek.THU,
     }],
-  })
-})];
+  }
+}];
 
-const guestSpeakers2 = [new UserModel({
+const guestSpeakers2 = [{
   firstName: "Pete",
   lastName: "B",
   email: "",
   address: "",
   userType: UserType.GUEST_SPEAKER,
   phoneNumber: "",
-  _guestSpeaker: new GuestSpeakerModel({
+  _guestSpeaker: {
     city: cities[0],
     trained: true,
     reliable: true,
@@ -199,10 +199,10 @@ const guestSpeakers2 = [new UserModel({
       availableUntil: new Date(2018, 8, 6, 11, 0),
       dayOfWeek: dayOfWeek.THU,
     }],
-  })
-})];
+  }
+}];
 
-const afterRosterBookings2 = [new BookingModel({
+const afterRosterBookings2 = [{
   state: BookingState.UNCONFIRMED,
   facilitator: facilitators2[0],
   guestSpeaker: guestSpeakers2[0],
@@ -214,8 +214,8 @@ const afterRosterBookings2 = [new BookingModel({
   teacher: teachers[0],
   firstTime: true,
   numberOfStudents: 30
-}),
-new BookingModel({
+},
+{
   state: BookingState.UNCONFIRMED,
   facilitator: facilitators2[0],
   guestSpeaker: guestSpeakers2[0],
@@ -227,7 +227,7 @@ new BookingModel({
   teacher: teachers[0],
   firstTime: true,
   numberOfStudents: 25
-})];
+}];
 
 test('several back to back bookings for the same facilitator', () => {
   expect(rosterByPreferences(bookings2, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings2);
