@@ -291,7 +291,7 @@ function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Da
               name: MelbourneObject[i]["K"],
             }),
           }),
-          firstTime: false,// Check This ..cant find any first time option in the excel sheet 
+          firstTime: false, // Check This ..cant find any first time option in the excel sheet
         }));
       }
     }
