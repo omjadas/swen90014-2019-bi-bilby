@@ -65,6 +65,7 @@
         }
       }
     ],
+    "valid-jsdoc": "error",
     "no-multiple-empty-lines": [
       "error",
       {
