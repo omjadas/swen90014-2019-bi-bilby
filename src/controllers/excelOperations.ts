@@ -261,7 +261,7 @@ function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Da
     for (let i = 2; i < Object.keys(MelbourneObject).length; i++) {
       const da = getconversionDate(MelbourneObject[i]["B"]);
 
-      if (da >= frmdate && da <= tilldate){ // Date function not taking the  ==date
+      if (da >= frmdate && da <= tilldate) { // Date function not taking the  ==date
         console.log(da);
         booking.push(new BookingModel({
           state: BookingState.PENDING,
