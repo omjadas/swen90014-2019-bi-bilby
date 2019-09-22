@@ -22,9 +22,9 @@ export function upload(req: Request, res: Response): any {
 
   const file = req.files.excel.data;
   const cities = getCities(file);
-  const bookings: Booking[] = [];
+  let bookings: Booking[] = [];
   cities.forEach(city => {
-    bookings.concat(getBooking(file, city.city, new Date(req.body.from), new Date(req.body.to)));
+    bookings = bookings.concat(getBooking(file, city.city, new Date(req.body.from), new Date(req.body.to)));
   });
   const guestSpeakers = getGuestSpeakers(file);
   const facilitators = getFacilitators(file);
