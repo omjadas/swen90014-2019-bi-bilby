@@ -16,6 +16,8 @@ class Upload extends React.Component {
         method="post"
         encType="multipart/form-data">
         <input type="file" accept=".xlsx" name="excel" />
+        <input type="date" name="from" />
+        <input type="date" name="to" />
         <input type="submit" value="upload" />
       </form>
     );
