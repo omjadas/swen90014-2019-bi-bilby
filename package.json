@@ -20,6 +20,7 @@
   "dependencies": {
     "@hasezoey/typegoose": "^5.9.1",
     "@types/express": "^4.17.1",
+    "@types/express-fileupload": "^1.1.0",
     "@types/mongoose": "^5.5.17",
     "@types/node": "^12.7.5",
     "express": "^4.17.1",
