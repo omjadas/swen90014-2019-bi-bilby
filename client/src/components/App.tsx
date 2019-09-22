@@ -3,6 +3,7 @@ import logo from '../images/logo.svg';
 import '../stylesheets/App.css';
 
 class App extends React.Component {
+
   /**
    * This method renders the App
    * @returns {JSX.Element}
@@ -28,6 +29,7 @@ class App extends React.Component {
       </div>
     );
   }
+
 }
 
 export default App;

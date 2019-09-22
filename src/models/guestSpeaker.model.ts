@@ -2,7 +2,7 @@ import { arrayProp, prop, Typegoose, Ref } from '@hasezoey/typegoose';
 import { City } from './city.model';
 import { Availability, SpecificUnavailability } from './availability';
 
-export class Facilitator extends Typegoose {
+export class GuestSpeaker extends Typegoose {
 
   @prop({ required: true, ref: City })
   public city!: Ref<City>;
@@ -24,4 +24,4 @@ export class Facilitator extends Typegoose {
 
 }
 
-export const FacilitatorModel = new Facilitator().getModelForClass(Facilitator);
+export const GuestSpeakerModel = new GuestSpeaker().getModelForClass(GuestSpeaker);
