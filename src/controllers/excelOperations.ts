@@ -262,7 +262,7 @@ export function getWorkshopTypes(file: Buffer): Workshop[] {
 /**
  * Function for Getting all the Booking details
  */
-function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Date): Booking[] {
+export function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Date): Booking[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   if (wb.Sheets[sheetname]) {
     const m = wb.Sheets[sheetname];
@@ -306,6 +306,7 @@ function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Da
       }
     }
     return booking;
-  } else
+  } else {
     return [];
+  }
 }
