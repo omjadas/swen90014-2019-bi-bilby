@@ -1,5 +1,4 @@
 import * as XLSX from 'xlsx';
-import fs from 'fs';
 import { Booking, BookingModel, BookingState } from '../models/booking.model';
 import { CityModel, City } from '../models/city.model';
 import { UserModel, User, UserType } from '../models/user.model';
@@ -8,13 +7,19 @@ import { FacilitatorModel } from '../models/facilitator.model';
 import { GuestSpeakerModel } from '../models/guestSpeaker.model';
 import { LocationModel } from '../models/location.model';
 import { WorkshopModel, Workshop } from '../models/workshop.model';
-import { getconversionDate } from '../controllers/getDateFunction';
 import { dayOfWeek } from '../models/availability';
 import { TeacherModel } from '../models/teacher.model';
 
 /**
-  * Function to get the Cities
-  */
+ * Function for Getting the date format
+ */
+function getconversionDate(excelDate: any): Date {
+  return new Date((excelDate - (25567 + 1)) * 86400 * 1000);
+}
+
+/**
+ * Function to get the Cities
+ */
 export function getCities(file: Buffer): City[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const s = wb.Sheets["Locations | Workshops"];
@@ -26,9 +31,10 @@ export function getCities(file: Buffer): City[] {
   });
   return cities;
 }
+
 /**
-  * Function for Getting all the Guest Speakers
-  */
+ * Function for Getting all the Guest Speakers
+ */
 export function getGuestSpeakers(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
@@ -117,9 +123,10 @@ export function getGuestSpeakers(file: Buffer): User[] {
   }
   return GSusers;
 }
+
 /**
-  * Function for Getting all the facilitators
-  */
+ * Function for Getting all the facilitators
+ */
 export function getFacilitators(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
@@ -208,9 +215,10 @@ export function getFacilitators(file: Buffer): User[] {
   }
   return facilitatorusers;
 }
+
 /**
-  * Function for Getting all the School details
-  */
+ * Function for Getting all the School details
+ */
 export function getSchools(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const c = wb.Sheets["Contact Information"];
@@ -235,6 +243,7 @@ export function getSchools(file: Buffer): User[] {
   }
   return schools;
 }
+
 /**
   * Function to get Workshop types
   */
@@ -249,9 +258,10 @@ export function getWorkshopTypes(file: Buffer): Workshop[] {
   }
   return workshops;
 }
+
 /**
-  * Function for Getting all the Booking details
-  */
+ * Function for Getting all the Booking details
+ */
 function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Date): Booking[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   if (wb.Sheets[sheetname]) {
@@ -299,6 +309,3 @@ function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Da
   } else
     return [];
 }
-
-const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
-console.log("Booking Details  :" + getBooking(buf, "Melbourne", new Date(2019, 7, 8), new Date(2019, 7, 10)));
