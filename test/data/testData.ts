@@ -856,7 +856,6 @@ const bookings = [new BookingModel({
   numberOfStudents: 25
 })];
 
-
 export default {
   cities: cities,
   bookings: bookings,
@@ -865,7 +864,6 @@ export default {
   schools: schools,
   workshops: workshops
 };
-
 
 // export default {
 //   "teacherPreference": teacherPreferences,

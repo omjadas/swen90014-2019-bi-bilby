@@ -4,7 +4,8 @@ import {
   pairTeams,
   adjustAvailabilities,
   checkBackToBackFacilitator,
-  checkBackToBackGuestSpeaker } from "./userOperations";
+  checkBackToBackGuestSpeaker
+} from "./userOperations";
 import { Booking, BookingState } from "../models/booking.model";
 import { User } from "../models/user.model";
 
@@ -25,8 +26,7 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       backToBackGuestSpeaker = checkBackToBackGuestSpeaker(bookings[i - 1], bookings[i]);
     }
 
-    // Neither facilitator nor guest speaker can do back to back.
-    if (!backToBackFacilitator && !backToBackGuestSpeaker) {
+    if (!backToBackFacilitator && !backToBackGuestSpeaker) { // Neither facilitator nor guest speaker can do back to back.
       // From the user pool we select facilitators and guest speakers and check their availability for a specific booking
       availableFacilitators = facilitators.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
       availableGuestSpeakers = guestSpeakers.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
@@ -45,10 +45,7 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
           }
         }
       }
-    }
-
-    // Facilitator from previous booking can't do back to back but guest speaker can.
-    else if (!backToBackFacilitator && backToBackGuestSpeaker) {
+    } else if (!backToBackFacilitator && backToBackGuestSpeaker) { // Facilitator from previous booking can't do back to back but guest speaker can.
       availableFacilitators = facilitators.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
       availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));
 
@@ -61,10 +58,7 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
           teams.push(pair);
         }
       }
-    }
-
-    // Facilitator from previous booking can do back to back but guest speaker can't.
-    else if (backToBackFacilitator && !backToBackGuestSpeaker) {
+    } else if (backToBackFacilitator && !backToBackGuestSpeaker) { // Facilitator from previous booking can do back to back but guest speaker can't.
       availableGuestSpeakers = guestSpeakers.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
       availableGuestSpeakers = availableGuestSpeakers.filter(user => eligible(user, bookings[i].workshop));
 
@@ -77,10 +71,7 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
           teams.push(pair);
         }
       }
-    }
-
-    // Both facilitator and guest speaker from previous booking can do back to back.
-    else if (backToBackFacilitator && backToBackGuestSpeaker){
+    } else if (backToBackFacilitator && backToBackGuestSpeaker) { // Both facilitator and guest speaker from previous booking can do back to back.
       bookings[i].facilitator = bookings[i - 1].facilitator;
       bookings[i].guestSpeaker = bookings[i - 1].guestSpeaker;
       bookings[i].state = BookingState.UNCONFIRMED;
