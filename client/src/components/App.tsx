@@ -2,31 +2,20 @@ import React from "react";
 import logo from "../images/logo.svg";
 import "../stylesheets/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Upload from "./Upload";
 
 class App extends React.Component {
 
   /**
-   * This method renders the App
+   * Render the app.
+   *
    * @returns {JSX.Element} Element to be rendered
    * @memberof App
    */
   public render(): JSX.Element {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Upload></Upload>
       </div>
     );
   }

@@ -29,4 +29,5 @@ export function upload(req: Request, res: Response): any {
   const guestSpeakers = getGuestSpeakers(file);
   const facilitators = getFacilitators(file);
   const roster = rosterByPreferences(bookings, guestSpeakers, facilitators);
+  return res.sendStatus(200);
 }
