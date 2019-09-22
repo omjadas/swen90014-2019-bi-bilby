@@ -2,23 +2,29 @@ import * as XLSX from 'xlsx';
 import { Booking, BookingModel, BookingState } from '../models/booking.model';
 import { CityModel, City } from '../models/city.model';
 import { UserModel, User, UserType } from '../models/user.model';
-import { SchoolModel } from '../models/school.model';
-import { FacilitatorModel } from '../models/facilitator.model';
+import { SchoolModel, School } from '../models/school.model';
+import { FacilitatorModel, Facilitator } from '../models/facilitator.model';
 import { GuestSpeakerModel } from '../models/guestSpeaker.model';
 import { LocationModel } from '../models/location.model';
 import { WorkshopModel, Workshop } from '../models/workshop.model';
 import { dayOfWeek } from '../models/availability';
-import { TeacherModel } from '../models/teacher.model';
+import { TeacherModel, Teacher } from '../models/teacher.model';
+import * as fs from 'fs';
+import { Timestamp } from 'bson';
 
 /**
  * Function for Getting the date format
+ * @param {Date} excelDate The date to be converted
+ * @returns {Date} converted Date
  */
 function getconversionDate(excelDate: any): Date {
-  return new Date((excelDate - (25567 + 1)) * 86400 * 1000);
+  return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
 }
 
 /**
  * Function to get the Cities
+ * @param {Buffer} file - The excel sheet
+* @returns {City} Cities array
  */
 export function getCities(file: Buffer): City[] {
   const wb = XLSX.read(file, { type: 'buffer' });
@@ -34,6 +40,8 @@ export function getCities(file: Buffer): City[] {
 
 /**
  * Function for Getting all the Guest Speakers
+ * @param {Buffer} file - The excel sheet
+* @returns {User} Users array
  */
 export function getGuestSpeakers(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
@@ -126,6 +134,8 @@ export function getGuestSpeakers(file: Buffer): User[] {
 
 /**
  * Function for Getting all the facilitators
+ * @param {Buffer} file - The excel sheet
+ * @returns {User} Users array
  */
 export function getFacilitators(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
@@ -218,6 +228,8 @@ export function getFacilitators(file: Buffer): User[] {
 
 /**
  * Function for Getting all the School details
+ * @param {Buffer} file - The excel sheet
+ * @returns {User} Users array
  */
 export function getSchools(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
@@ -246,6 +258,8 @@ export function getSchools(file: Buffer): User[] {
 
 /**
   * Function to get Workshop types
+  * @param {Buffer} file - The excel sheet
+  * @returns {Workshop} Workshop array
   */
 export function getWorkshopTypes(file: Buffer): Workshop[] {
   const wb = XLSX.read(file, { type: 'buffer' });
@@ -261,6 +275,11 @@ export function getWorkshopTypes(file: Buffer): Workshop[] {
 
 /**
  * Function for Getting all the Booking details
+ * @param {Buffer} file - The excel sheet
+ * @param {string} sheetname - Sheet name
+ * @param {Date} frmdate - From Date
+ * @param {Date} tilldate - Till Date
+ * @returns {Booking} booking
  */
 export function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Date): Booking[] {
   const wb = XLSX.read(file, { type: 'buffer' });
@@ -268,11 +287,10 @@ export function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilld
     const m = wb.Sheets[sheetname];
     const MelbourneObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
     const booking: Booking[] = [];
+    tilldate.setDate(tilldate.getDate() + 1);
     for (let i = 2; i < Object.keys(MelbourneObject).length; i++) {
       const da = getconversionDate(MelbourneObject[i]["B"]);
-
-      if (da >= frmdate && da <= tilldate) { // Date function not taking the  ==date
-        console.log(da);
+      if (da > frmdate && da < tilldate ) {
         booking.push(new BookingModel({
           state: BookingState.PENDING,
           facilitator: new FacilitatorModel({
@@ -297,8 +315,8 @@ export function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilld
             firstName: MelbourneObject[i]["J"],
             email: MelbourneObject[i]["L"],
             phoneNumber: MelbourneObject[i]["M"],
-            school: new SchoolModel({
-              name: MelbourneObject[i]["K"],
+            school: new SchoolModel ({
+              name: MelbourneObject[i]["K"]
             }),
           }),
           firstTime: false, // Check This ..cant find any first time option in the excel sheet
@@ -308,5 +326,36 @@ export function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilld
     return booking;
   } else {
     return [];
+  }
+}
+/**
+ * Function for Getting all the Booking details
+ * @param {Buffer} file - The excel sheet
+ * @param {Booking} b - The Booking array
+ * @returns {void}
+ */
+export function printBooking( file: Buffer, b: Booking[]): void {
+  const wb = XLSX.read(file, { type: 'buffer' });
+  const sheetConfirmed = "confirmed";
+  if (!wb.Sheets[sheetConfirmed]) {
+    const wsdata = [
+      [ "Teacher", "Phone", "GuestSpeaker", "Facilitator", "TimeBegin", "TimeEnbd" ],
+    ];
+    for (let i = 0; i < Object.keys(b).length; i++) {
+      const timebegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
+      const timeend = b[i].sessionTime.timeEnd.toLocaleTimeString();
+      const facilitator = b[i].facilitator as User;
+      const GuestSpeaker = b[i].guestSpeaker as User;
+      const teacher = b[i].teacher as User;
+      //const school = b[i].teacher.school as School;
+
+      wsdata.push([ teacher.firstName, teacher.phoneNumber, facilitator.firstName, GuestSpeaker.firstName, timebegin, timeend ]);
+    }
+    const ws = XLSX.utils.aoa_to_sheet(wsdata);
+    wb.SheetNames.push(sheetConfirmed);
+    wb.Sheets[sheetConfirmed] = ws;
+    XLSX.writeFile(wb, "/Users/Muzamil/Desktop/swen90014-2019-bi-bilby/src/ExcelSheetIO/newRostered.xlsx");
+  } else {
+    console.log();
   }
 }
