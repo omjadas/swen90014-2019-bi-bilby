@@ -13,11 +13,11 @@ import { Booking } from "../models/booking.model";
  */
 export function upload(req: Request, res: Response): any {
   if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
+    return res.status(400).send("No files were uploaded.");
   }
 
   if (Array.isArray(req.files.excel)) {
-    return res.status(400).send('Only one file is allowed to be uploaded.');
+    return res.status(400).send("Only one file is allowed to be uploaded.");
   }
 
   const file = req.files.excel.data;
