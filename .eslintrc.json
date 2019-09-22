@@ -130,6 +130,7 @@
         "allowSingleLineBlocks": false
       }
     ],
-    "lines-between-class-members": ["error", "always"]
+    "lines-between-class-members": ["error", "always"],
+    "space-before-blocks": "error"
   }
 }
