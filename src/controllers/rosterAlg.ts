@@ -12,6 +12,10 @@ import { User } from "../models/user.model";
 /**
   * Base function for rostering preferences to facilitators
   * and guest speakers
+  * @param {Booking[]} bookings - Array of bookings to roster.
+  * @param {User[]} guestSpeakers - Array of working guest speakers.
+  * @param {User[]} facilitators - Array of working facilitators.
+  * @return {Booking[]} bookings - Array of rostered bookings.
   */
 export default function rosterByPreferences(bookings: Booking[], guestSpeakers: User[], facilitators: User[]): Booking[] {
   for (let i = 0; i < bookings.length; i++) {
@@ -75,17 +79,22 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       bookings[i].facilitator = bookings[i - 1].facilitator;
       bookings[i].guestSpeaker = bookings[i - 1].guestSpeaker;
       bookings[i].state = BookingState.UNCONFIRMED;
+
+      adjustAvailabilities((facilitators.filter(user => user === bookings[i].facilitator)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
+      adjustAvailabilities((guestSpeakers.filter(user => user === bookings[i].guestSpeaker)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
     }
 
-    if (!(backToBackFacilitator && backToBackGuestSpeaker)) {
+    if (!(backToBackFacilitator && backToBackGuestSpeaker) && teams.length > 0) {
       const index = Math.floor(Math.random() * teams.length);
       bookings[i].facilitator = teams[index][0];
       bookings[i].guestSpeaker = teams[index][1];
       bookings[i].state = BookingState.UNCONFIRMED;
-    }
 
-    adjustAvailabilities((facilitators.filter(user => user === bookings[i].facilitator)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
-    adjustAvailabilities((guestSpeakers.filter(user => user === bookings[i].guestSpeaker)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
+      adjustAvailabilities((facilitators.filter(user => user === bookings[i].facilitator)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
+      adjustAvailabilities((guestSpeakers.filter(user => user === bookings[i].guestSpeaker)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
+    } else {
+      continue;
+    }
   }
 
   return bookings;
