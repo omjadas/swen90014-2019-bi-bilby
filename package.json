@@ -4,14 +4,13 @@
   "description": "",
   "main": "src/server.ts",
   "scripts": {
-    "setup-dev": "git config core.hooksPath .githooks && npm run install-all:dev",
+    "setup-dev": "git config core.hooksPath .githooks && npm run install-all",
     "docker-build": "docker build -t bi-bilby .",
     "docker-build:test": "docker build -t bi-bilby:test -f Dockerfile.test .",
     "install-all": "npm i && cd client && npm i",
-    "ci-all": "npm ci --only=production && cd client && npm ci --only=production",
-    "ci-all:dev": "npm ci && cd client && npm ci",
+    "ci-all": "npm ci && cd client && npm ci",
     "build": "npx tsc && cd client && npm run build",
-    "start": "node out/src/server.js",
+    "start": "node out/server.js",
     "test": "npx jest --passWithNoTests && cd client && npm run test",
     "lint": "npx eslint src test client/src/components client/src/__tests__ --ext \"js, ts, jsx, tsx\""
   },
