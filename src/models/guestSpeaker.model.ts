@@ -1,6 +1,6 @@
-import { arrayProp, prop, Typegoose, Ref } from '@hasezoey/typegoose';
-import { City } from './city.model';
-import { Availability, SpecificUnavailability } from './availability';
+import { arrayProp, prop, Typegoose, Ref } from "@hasezoey/typegoose";
+import { City } from "./city.model";
+import { Availability, SpecificUnavailability } from "./availability";
 
 export class GuestSpeaker extends Typegoose {
 

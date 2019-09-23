@@ -1,10 +1,10 @@
-import { arrayProp, Typegoose } from '@hasezoey/typegoose';
+import { arrayProp, Typegoose } from "@hasezoey/typegoose";
 import { Booking } from "./booking.model";
-import { Workshop } from './workshop.model';
-import { Location } from './location.model';
-import { User } from './user.model';
-import { City } from './city.model';
-import { School } from './school.model';
+import { Workshop } from "./workshop.model";
+import { Location } from "./location.model";
+import { User } from "./user.model";
+import { City } from "./city.model";
+import { School } from "./school.model";
 
 export class Data extends Typegoose {
 

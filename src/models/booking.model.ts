@@ -1,8 +1,8 @@
-import { prop, Typegoose, Ref } from '@hasezoey/typegoose';
-import { Workshop } from './workshop.model';
-import { Location } from './location.model';
-import { User } from './user.model';
-import { City } from './city.model';
+import { prop, Typegoose, Ref } from "@hasezoey/typegoose";
+import { Workshop } from "./workshop.model";
+import { Location } from "./location.model";
+import { User } from "./user.model";
+import { City } from "./city.model";
 
 export interface SessionTime {
   timeBegin: Date,

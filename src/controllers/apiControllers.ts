@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
+import stream from "stream";
 import rosterByPreferences from "./rosterAlg";
-import { getCities, getBooking, getGuestSpeakers, getFacilitators } from "./excelOperations";
+import { getCities, getBookings, getGuestSpeakers, getFacilitators, printBooking } from "./excelOperations";
 import { Booking } from "../models/booking.model";
 
 /**
@@ -24,10 +25,20 @@ export function upload(req: Request, res: Response): any {
   const cities = getCities(file);
   let bookings: Booking[] = [];
   cities.forEach(city => {
-    bookings = bookings.concat(getBooking(file, city.city, new Date(req.body.from), new Date(req.body.to)));
+    bookings = bookings.concat(getBookings(file, city.city, new Date(req.body.from), new Date(req.body.to)));
   });
   const guestSpeakers = getGuestSpeakers(file);
   const facilitators = getFacilitators(file);
   const roster = rosterByPreferences(bookings, guestSpeakers, facilitators);
-  return res.sendStatus(200);
+  const out = printBooking(file, "out", roster);
+
+  const readStream = new stream.PassThrough();
+  readStream.end(out);
+
+  res.set("Content-disposition", "attachment; filename=out.xlsx");
+  res.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+  readStream.pipe(res);
+
+  // return res.send(out);
 }
