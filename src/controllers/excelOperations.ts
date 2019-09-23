@@ -12,21 +12,25 @@ import { TeacherModel } from '../models/teacher.model';
 
 /**
  * Function for Getting the date format
+ * @param {number} excelDate The date to be converted
+ * @returns {Date} converted Date
  */
-function getconversionDate(excelDate: any): Date {
-  return new Date((excelDate - (25567 + 1)) * 86400 * 1000);
+function getConversionDate(excelDate: number): Date {
+  return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
 }
 
 /**
  * Function to get the Cities
+ * @param {Buffer} file - The excel sheet
+ * @returns {City} Cities array
  */
 export function getCities(file: Buffer): City[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const s = wb.Sheets["Locations | Workshops"];
-  const mydataCity: any[] = XLSX.utils.sheet_to_json(s);
+  const myDataCity: any[] = XLSX.utils.sheet_to_json(s);
   const cities: City[] = [];
 
-  Object.values(mydataCity[0]).forEach((city) => {
+  Object.values(myDataCity[0]).forEach((city) => {
     cities.push(new CityModel({ city: city }));
   });
   return cities;
@@ -34,108 +38,112 @@ export function getCities(file: Buffer): City[] {
 
 /**
  * Function for Getting all the Guest Speakers
+ * @param {Buffer} file - The excel sheet
+ * @returns {User} Users array
  */
 export function getGuestSpeakers(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
-  const FandGSO: any[] = XLSX.utils.sheet_to_json(u);
-  const GSusers: User[] = [];
+  const FAndGSO: any[] = XLSX.utils.sheet_to_json(u);
+  const GSUsers: User[] = [];
 
-  for (let i = 0; i < Object.keys(FandGSO).length; i++) {
-    if (FandGSO[i]["Type"] == 'Guest Speaker') {
-      GSusers.push(new UserModel({
-        firstName: FandGSO[i]["First Name"],
-        lastName: FandGSO[i]["Last Name"],
-        address: FandGSO[i]["Address"],
-        email: FandGSO[i]["email"],
-        userType: FandGSO[i]["Type"],
-        phoneNumber: FandGSO[i]["Phone Number"],
+  for (let i = 0; i < Object.keys(FAndGSO).length; i++) {
+    if (FAndGSO[i]["Type"] == 'Guest Speaker') {
+      GSUsers.push(new UserModel({
+        firstName: FAndGSO[i]["First Name"],
+        lastName: FAndGSO[i]["Last Name"],
+        address: FAndGSO[i]["Address"],
+        email: FAndGSO[i]["email"],
+        userType: FAndGSO[i]["Type"],
+        phoneNumber: FAndGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
-          trained: ((FandGSO[i]["Trained"] == "Yes") ? true : false),
-          reliable: ((FandGSO[i]["Reliable"] == "Yes") ? true : false),
+          trained: ((FAndGSO[i]["Trained"] == "Yes") ? true : false),
+          reliable: ((FAndGSO[i]["Reliable"] == "Yes") ? true : false),
           city: new CityModel({
-            city: FandGSO[i]["City"]
+            city: FAndGSO[i]["City"]
           }),
           availabilities: [
             {
-              availableFrom: getconversionDate(FandGSO[i]["Monday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Monday Available Until"]),
+              availableFrom: getConversionDate(FAndGSO[i]["Monday Available From"]),
+              availableUntil: getConversionDate(FAndGSO[i]["Monday Available Until"]),
               dayOfWeek: dayOfWeek.MON
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Tuesday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Tuesday Available Until"]),
+              availableFrom: getConversionDate(FAndGSO[i]["Tuesday Available From"]),
+              availableUntil: getConversionDate(FAndGSO[i]["Tuesday Available Until"]),
               dayOfWeek: dayOfWeek.TUE
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Wednesday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Wednesday Available Until"]),
+              availableFrom: getConversionDate(FAndGSO[i]["Wednesday Available From"]),
+              availableUntil: getConversionDate(FAndGSO[i]["Wednesday Available Until"]),
               dayOfWeek: dayOfWeek.WED
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Thursday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Thursday Available Until"]),
+              availableFrom: getConversionDate(FAndGSO[i]["Thursday Available From"]),
+              availableUntil: getConversionDate(FAndGSO[i]["Thursday Available Until"]),
               dayOfWeek: dayOfWeek.THU
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Friday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Friday Available Until"]),
+              availableFrom: getConversionDate(FAndGSO[i]["Friday Available From"]),
+              availableUntil: getConversionDate(FAndGSO[i]["Friday Available Until"]),
               dayOfWeek: dayOfWeek.FRI
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Saturday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Saturday Available Until"]),
+              availableFrom: getConversionDate(FAndGSO[i]["Saturday Available From"]),
+              availableUntil: getConversionDate(FAndGSO[i]["Saturday Available Until"]),
               dayOfWeek: dayOfWeek.SAT
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Sunday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Sunday Available Until"]),
+              availableFrom: getConversionDate(FAndGSO[i]["Sunday Available From"]),
+              availableUntil: getConversionDate(FAndGSO[i]["Sunday Available Until"]),
               dayOfWeek: dayOfWeek.SUN
             }],
           specificUnavailabilities: [
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 1"]),
-              notes: FandGSO[i]["Notes"],
+              date: getConversionDate(FAndGSO[i]["Specific Unavailability 1"]),
+              notes: FAndGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 2"]),
-              notes: FandGSO[i]["Notes"],
+              date: getConversionDate(FAndGSO[i]["Specific Unavailability 2"]),
+              notes: FAndGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 3"]),
-              notes: FandGSO[i]["Notes"],
+              date: getConversionDate(FAndGSO[i]["Specific Unavailability 3"]),
+              notes: FAndGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 4"]),
-              notes: FandGSO[i]["Notes"],
+              date: getConversionDate(FAndGSO[i]["Specific Unavailability 4"]),
+              notes: FAndGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 5"]),
-              notes: FandGSO[i]["Notes"],
+              date: getConversionDate(FAndGSO[i]["Specific Unavailability 5"]),
+              notes: FAndGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 6"]),
-              notes: FandGSO[i]["Notes"],
+              date: getConversionDate(FAndGSO[i]["Specific Unavailability 6"]),
+              notes: FAndGSO[i]["Notes"],
             }]
         })
       }));
     }
   }
-  return GSusers;
+  return GSUsers;
 }
 
 /**
  * Function for Getting all the facilitators
+ * @param {Buffer} file - The excel sheet
+ * @returns {User} Users array
  */
 export function getFacilitators(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
   const FandGSO: any[] = XLSX.utils.sheet_to_json(u);
 
-  const facilitatorusers: User[] = [];
+  const facilitatorUsers: User[] = [];
   for (let i = 0; i < Object.keys(FandGSO).length; i++) {
     if (FandGSO[i]["Type"] == 'Facilitator') {
-      facilitatorusers.push(new UserModel({
+      facilitatorUsers.push(new UserModel({
         firstName: FandGSO[i]["First Name"],
         lastName: FandGSO[i]["Last Name"],
         address: FandGSO[i]["Address"],
@@ -150,74 +158,76 @@ export function getFacilitators(file: Buffer): User[] {
           }),
           availabilities: [
             {
-              availableFrom: getconversionDate(FandGSO[i]["Monday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Monday Available Until"]),
+              availableFrom: getConversionDate(FandGSO[i]["Monday Available From"]),
+              availableUntil: getConversionDate(FandGSO[i]["Monday Available Until"]),
               dayOfWeek: dayOfWeek.MON
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Tuesday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Tuesday Available Until"]),
+              availableFrom: getConversionDate(FandGSO[i]["Tuesday Available From"]),
+              availableUntil: getConversionDate(FandGSO[i]["Tuesday Available Until"]),
               dayOfWeek: dayOfWeek.TUE
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Wednesday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Wednesday Available Until"]),
+              availableFrom: getConversionDate(FandGSO[i]["Wednesday Available From"]),
+              availableUntil: getConversionDate(FandGSO[i]["Wednesday Available Until"]),
               dayOfWeek: dayOfWeek.WED
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Thursday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Thursday Available Until"]),
+              availableFrom: getConversionDate(FandGSO[i]["Thursday Available From"]),
+              availableUntil: getConversionDate(FandGSO[i]["Thursday Available Until"]),
               dayOfWeek: dayOfWeek.THU
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Friday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Friday Available Until"]),
+              availableFrom: getConversionDate(FandGSO[i]["Friday Available From"]),
+              availableUntil: getConversionDate(FandGSO[i]["Friday Available Until"]),
               dayOfWeek: dayOfWeek.FRI
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Saturday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Saturday Available Until"]),
+              availableFrom: getConversionDate(FandGSO[i]["Saturday Available From"]),
+              availableUntil: getConversionDate(FandGSO[i]["Saturday Available Until"]),
               dayOfWeek: dayOfWeek.SAT
             },
             {
-              availableFrom: getconversionDate(FandGSO[i]["Sunday Available From"]),
-              availableUntil: getconversionDate(FandGSO[i]["Sunday Available Until"]),
+              availableFrom: getConversionDate(FandGSO[i]["Sunday Available From"]),
+              availableUntil: getConversionDate(FandGSO[i]["Sunday Available Until"]),
               dayOfWeek: dayOfWeek.SUN
             }],
           specificUnavailabilities: [
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 1"]),
+              date: getConversionDate(FandGSO[i]["Specific Unavailability 1"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 2"]),
+              date: getConversionDate(FandGSO[i]["Specific Unavailability 2"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 3"]),
+              date: getConversionDate(FandGSO[i]["Specific Unavailability 3"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 4"]),
+              date: getConversionDate(FandGSO[i]["Specific Unavailability 4"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 5"]),
+              date: getConversionDate(FandGSO[i]["Specific Unavailability 5"]),
               notes: FandGSO[i]["Notes"],
             },
             {
-              date: getconversionDate(FandGSO[i]["Specific Unavailability 6"]),
+              date: getConversionDate(FandGSO[i]["Specific Unavailability 6"]),
               notes: FandGSO[i]["Notes"],
             }]
         })
       }));
     }
   }
-  return facilitatorusers;
+  return facilitatorUsers;
 }
 
 /**
  * Function for Getting all the School details
+ * @param {Buffer} file - The excel sheet
+ * @returns {User} Users array
  */
 export function getSchools(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: 'buffer' });
@@ -246,60 +256,72 @@ export function getSchools(file: Buffer): User[] {
 
 /**
   * Function to get Workshop types
+  * @param {Buffer} file - The excel sheet
+  * @returns {Workshop} Workshop array
   */
 export function getWorkshopTypes(file: Buffer): Workshop[] {
   const wb = XLSX.read(file, { type: 'buffer' });
   const s = wb.Sheets["Locations | Workshops"];
-  const mydataCity: any[] = XLSX.utils.sheet_to_json(s);
+  const myDataCity: any[] = XLSX.utils.sheet_to_json(s);
   const workshops: Workshop[] = [];
 
-  for (let i = 1; i < Object.keys(mydataCity).length; i++) {
-    workshops.push(new WorkshopModel({ workshopName: mydataCity[i]["Workshop Type"] }));
+  for (let i = 1; i < Object.keys(myDataCity).length; i++) {
+    workshops.push(new WorkshopModel({ workshopName: myDataCity[i]["Workshop Type"] }));
   }
   return workshops;
 }
 
 /**
  * Function for Getting all the Booking details
+ * @param {Buffer} file - The excel sheet
+ * @param {string} cityName - Sheet name
+ * @param {Date} fromDate - From Date
+ * @param {Date} toDate - Till Date
+ * @returns {Booking} booking
  */
-export function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilldate: Date): Booking[] {
+export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDate: Date): Booking[] {
   const wb = XLSX.read(file, { type: 'buffer' });
-  if (wb.Sheets[sheetname]) {
-    const m = wb.Sheets[sheetname];
-    const MelbourneObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
+  if (wb.Sheets[cityName]) {
+    const m = wb.Sheets[cityName];
+    const cityObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
     const booking: Booking[] = [];
-    for (let i = 2; i < Object.keys(MelbourneObject).length; i++) {
-      const da = getconversionDate(MelbourneObject[i]["B"]);
-
-      if (da >= frmdate && da <= tilldate) { // Date function not taking the  ==date
-        console.log(da);
+    toDate.setDate(toDate.getDate() + 1);
+    for (let i = 2; i < Object.keys(cityObject).length; i++) {
+      const da = getConversionDate(cityObject[i]["B"]);
+      if (da > fromDate && da < toDate ) {
         booking.push(new BookingModel({
           state: BookingState.PENDING,
-          facilitator: new FacilitatorModel({
-          }),
-          guestSpeaker: new GuestSpeakerModel({
-          }),
+          facilitator: undefined,
+          guestSpeaker: undefined,
           sessionTime: {
-            timeBegin: getconversionDate(MelbourneObject[i]["C"]),
-            timeEnd: getconversionDate(MelbourneObject[i]["D"]),
+            timeBegin: getConversionDate(cityObject[i]["C"]),
+            timeEnd: getConversionDate(cityObject[i]["D"]),
           },
           city: new CityModel({
+            city: cityName
           }),
           location: new LocationModel({
-            name: MelbourneObject[i]["E"],
-            capacity: MelbourneObject[i]["H"],
+            name: cityObject[i]["E"],
+            capacity: cityObject[i]["H"],
           }),
           workshop: new WorkshopModel({
-            workshopName: MelbourneObject[i]["G"],
+            workshopName: cityObject[i]["G"],
           }),
-          level: MelbourneObject[i]["I"],
+          level: cityObject[i]["I"],
           teacher: new UserModel({
-            firstName: MelbourneObject[i]["J"],
-            email: MelbourneObject[i]["L"],
-            phoneNumber: MelbourneObject[i]["M"],
-            school: new SchoolModel({
-              name: MelbourneObject[i]["K"],
-            }),
+            email: cityObject[i]["L"],
+            firstName: cityObject[i]["J"],
+            lastName: cityObject[i]["J"],
+            userType: UserType.TEACHER,
+            phoneNumber: cityObject[i]["M"],
+            _teacher: {
+              school: new SchoolModel ({
+                name: cityObject[i]["K"],
+                city: new CityModel({
+                  city: cityName
+                })
+              })
+            }
           }),
           firstTime: false, // Check This ..cant find any first time option in the excel sheet
         }));
@@ -309,4 +331,31 @@ export function getBooking(file: Buffer, sheetname: string, frmdate: Date, tilld
   } else {
     return [];
   }
+}
+/**
+ * Function for Getting all the Booking details
+ * @param {Buffer} file - The excel sheet
+ * @param {string} sheetname - Name of the sheet to be exported
+ * @param {Booking} b - The Booking array
+ * @returns {void}
+ */
+export function printBooking( file: Buffer, sheetname: string, b: Booking[]): void {
+  const wb = XLSX.read(file, { type: 'buffer' });
+  const wsData = [
+    [ "Teacher", "Phone", "GuestSpeaker", "Facilitator", "TimeBegin", "TimeEnd" ],
+  ];
+  for (let i = 0; i < Object.keys(b).length; i++) {
+    const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
+    const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
+    const facilitator = b[i].facilitator as User;
+    const GuestSpeaker = b[i].guestSpeaker as User;
+    const teacher = b[i].teacher as User;
+    //const school = b[i].teacher.school as School;
+    wsData.push([ teacher.firstName, teacher.phoneNumber, facilitator.firstName, GuestSpeaker.firstName, timeBegin, timeEnd ]);
+  }
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  wb.SheetNames.push(sheetname);
+  wb.Sheets[sheetname] = ws;
+  const content = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx', bookSST: false });
+  return content;
 }
