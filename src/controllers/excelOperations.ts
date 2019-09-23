@@ -335,31 +335,27 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
 /**
  * Function for Getting all the Booking details
  * @param {Buffer} file - The excel sheet
+ * @param {string} sheetname - Name of the sheet to be exported
  * @param {Booking} b - The Booking array
  * @returns {void}
  */
-export function printBooking( file: Buffer, b: Booking[]): void {
+export function printBooking( file: Buffer, sheetname: string, b: Booking[]): void {
   const wb = XLSX.read(file, { type: 'buffer' });
-  const sheetConfirmed = "confirmed";
-  if (!wb.Sheets[sheetConfirmed]) {
-    const wsData = [
-      [ "Teacher", "Phone", "GuestSpeaker", "Facilitator", "TimeBegin", "TimeEnd" ],
-    ];
-    for (let i = 0; i < Object.keys(b).length; i++) {
-      const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
-      const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
-      const facilitator = b[i].facilitator as User;
-      const GuestSpeaker = b[i].guestSpeaker as User;
-      const teacher = b[i].teacher as User;
-      //const school = b[i].teacher.school as School;
-
-      wsData.push([ teacher.firstName, teacher.phoneNumber, facilitator.firstName, GuestSpeaker.firstName, timeBegin, timeEnd ]);
-    }
-    const ws = XLSX.utils.aoa_to_sheet(wsData);
-    wb.SheetNames.push(sheetConfirmed);
-    wb.Sheets[sheetConfirmed] = ws;
-    XLSX.writeFile(wb, "/Users/Muzamil/Desktop/swen90014-2019-bi-bilby/src/ExcelSheetIO/newRostered.xlsx");
-  } else {
-    console.log();
+  const wsData = [
+    [ "Teacher", "Phone", "GuestSpeaker", "Facilitator", "TimeBegin", "TimeEnd" ],
+  ];
+  for (let i = 0; i < Object.keys(b).length; i++) {
+    const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
+    const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
+    const facilitator = b[i].facilitator as User;
+    const GuestSpeaker = b[i].guestSpeaker as User;
+    const teacher = b[i].teacher as User;
+    //const school = b[i].teacher.school as School;
+    wsData.push([ teacher.firstName, teacher.phoneNumber, facilitator.firstName, GuestSpeaker.firstName, timeBegin, timeEnd ]);
   }
+  const ws = XLSX.utils.aoa_to_sheet(wsData);
+  wb.SheetNames.push(sheetname);
+  wb.Sheets[sheetname] = ws;
+  const content = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx', bookSST: false });
+  return content;
 }
