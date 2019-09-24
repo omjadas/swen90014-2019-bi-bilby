@@ -294,8 +294,8 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
           facilitator: undefined,
           guestSpeaker: undefined,
           sessionTime: {
-            timeBegin: getConversionDate(cityObject[i]["C"]),
-            timeEnd: getConversionDate(cityObject[i]["D"]),
+            timeBegin: new Date(getConversionDate(cityObject[i]["C"]).setFullYear(da.getFullYear(), da.getMonth(), da.getDate())),
+            timeEnd: new Date(getConversionDate(cityObject[i]["D"]).setFullYear(da.getFullYear(), da.getMonth(), da.getDate())),
           },
           city: new CityModel({
             city: cityName
