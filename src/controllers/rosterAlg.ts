@@ -55,8 +55,8 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
 
       const guestSpeaker = guestSpeakers.filter(user => user === bookings[i - 1].guestSpeaker)[0];
 
-      for (let j = 0; j < availableFacilitators.length; j++) {
-        const pair = pairTeams(availableFacilitators[j], guestSpeaker);
+      for (let f = 0; f < availableFacilitators.length; f++) {
+        const pair = pairTeams(availableFacilitators[f], guestSpeaker);
 
         if (pair !== null) {
           teams.push(pair);
@@ -68,8 +68,8 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
 
       const facilitator = facilitators.filter(user => user === bookings[i - 1].facilitator)[0];
 
-      for (let k = 0; k < availableGuestSpeakers.length; k++) {
-        const pair = pairTeams(facilitator, availableGuestSpeakers[k]);
+      for (let g = 0; g < availableGuestSpeakers.length; g++) {
+        const pair = pairTeams(facilitator, availableGuestSpeakers[g]);
 
         if (pair !== null) {
           teams.push(pair);

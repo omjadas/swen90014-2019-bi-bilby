@@ -122,7 +122,8 @@ export function getGuestSpeakers(file: Buffer): User[] {
             {
               date: getConversionDate(FAndGSO[i]["Specific Unavailability 6"]),
               notes: FAndGSO[i]["Notes"],
-            }]
+            }],
+          assignedTimes: []
         })
       }));
     }
@@ -216,7 +217,8 @@ export function getFacilitators(file: Buffer): User[] {
             {
               date: getConversionDate(FAndGSO[i]["Specific Unavailability 6"]),
               notes: FAndGSO[i]["Notes"],
-            }]
+            }],
+          assignedTimes: []
         })
       }));
     }
@@ -316,14 +318,14 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
             lastName: cityObject[i]["J"],
             userType: UserType.TEACHER,
             phoneNumber: cityObject[i]["M"],
-            _teacher: {
+            _teacher: new TeacherModel({
               school: new SchoolModel({
                 name: cityObject[i]["K"],
                 city: new CityModel({
                   city: cityName
                 })
               })
-            }
+            })
           }),
           firstTime: false, // Check This ..cant find any first time option in the excel sheet
         }));
