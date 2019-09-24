@@ -1,5 +1,5 @@
-import { prop, Typegoose, Ref } from '@hasezoey/typegoose';
-import { City } from './city.model';
+import { prop, Typegoose, Ref } from "@hasezoey/typegoose";
+import { City } from "./city.model";
 
 export class School extends Typegoose {
 

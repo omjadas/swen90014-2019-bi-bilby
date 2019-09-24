@@ -229,6 +229,6 @@ const afterRosterBookings2 = [{
   numberOfStudents: 25
 }];
 
-test('several back to back bookings for the same facilitator', () => {
+test("several back to back bookings for the same facilitator", () => {
   expect(rosterByPreferences(bookings2, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings2);
 });

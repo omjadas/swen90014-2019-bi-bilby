@@ -1,4 +1,4 @@
-import { prop, Typegoose } from '@hasezoey/typegoose';
+import { prop, Typegoose } from "@hasezoey/typegoose";
 
 export class City extends Typegoose {
 

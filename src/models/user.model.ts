@@ -1,7 +1,7 @@
-import { prop, Typegoose, Ref } from '@hasezoey/typegoose';
-import { Facilitator } from './facilitator.model';
-import { GuestSpeaker } from './guestSpeaker.model';
-import { Teacher } from './teacher.model';
+import { prop, Typegoose, Ref } from "@hasezoey/typegoose";
+import { Facilitator } from "./facilitator.model";
+import { GuestSpeaker } from "./guestSpeaker.model";
+import { Teacher } from "./teacher.model";
 
 export enum UserType {
   FACILITATOR = "facilitator",

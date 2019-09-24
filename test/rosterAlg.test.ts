@@ -196,6 +196,6 @@ const afterRosterBookings = [{
   numberOfStudents: 25
 }];
 
-test('assign facilitator and guest speaker to booking', () => {
+test("assign facilitator and guest speaker to booking", () => {
   expect(rosterByPreferences(bookings, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings);
 });
