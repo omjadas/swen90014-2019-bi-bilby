@@ -11,9 +11,9 @@ import { Location, LocationModel } from "../models/location.model";
  * Check if day matches with availability.
  *
  * @export
- * @param {number} day day to check against dayOW
- * @param {dayOfWeek} dayOW dayOfWeek to check agains day
- * @returns {boolean} are day and dayOW the same day
+ * @param {number} day - day to check against dayOW
+ * @param {dayOfWeek} dayOW - dayOfWeek to check against day
+ * @returns {boolean} - are day and dayOW the same day
  */
 export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
   if (day === 0 && dayOW === dayOfWeek.SUN) {
@@ -40,9 +40,9 @@ export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
  * workshop.
  *
  * @export
- * @param {User} user user to check eligibility for
- * @param {Ref<Workshop>} workshop workshop to check user against
- * @returns {boolean} is the user available for the workshop
+ * @param {User} user - user to check eligibility for
+ * @param {Ref<Workshop>} workshop - workshop to check user against
+ * @returns {boolean} - is the user available for the workshop
  */
 export function eligible(user: User, workshop: Ref<Workshop>): boolean {
   if (workshop instanceof WorkshopModel) {
@@ -60,9 +60,9 @@ export function eligible(user: User, workshop: Ref<Workshop>): boolean {
  * Check how many back to back workshops has the user done.
  *
  * @export
- * @param {Availability[]} assignedTimes
- * @param {Date} timeBegin
- * @returns {number}
+ * @param {Availability[]} assignedTimes - array of times to which the user has been assigned
+ * @param {Date} timeBegin - time for the booking we are currently trying to assign
+ * @returns {number} - count of back to back workshops this user has done before current booking time
  */
 export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Date): number {
   let counter = 0;
@@ -82,9 +82,9 @@ export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Da
  * Check if a facilitator can be rostered to a back to back booking.
  *
  * @export
- * @param {Booking} previousBooking
- * @param {Booking} currentBooking
- * @returns {boolean}
+ * @param {Booking} previousBooking - information from previously assigned booking
+ * @param {Booking} currentBooking - current booking in need of assignment
+ * @returns {boolean} - returns whether the facilitator from last booking can do this new booking or not
  */
 export function checkBackToBackFacilitator(previousBooking: Booking, currentBooking: Booking): boolean {
   let sameCity = false;
@@ -128,9 +128,9 @@ export function checkBackToBackFacilitator(previousBooking: Booking, currentBook
  * Check if a guest speaker can be rostered to a back to back booking.
  *
  * @export
- * @param {Booking} previousBooking
- * @param {Booking} currentBooking
- * @returns {boolean}
+ * @param {Booking} previousBooking - information from previously assigned booking
+ * @param {Booking} currentBooking - current booking in need of assignment
+ * @returns {boolean} - returns whether the guest speaker from last booking can do this new booking or not
  */
 export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBooking: Booking): boolean {
   let sameCity = false;
@@ -173,9 +173,10 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
 /**
  * Adjust availabilities when user is rostered for a booking.
  *
- * @param user
- * @param timeBegin
- * @param timeEnd
+ * @param {User} user - user to whom we want to change availabilities
+ * @param {Date} timeBegin - time from which we want to make user unavailable
+ * @param {Date} timeEnd - time until which we want to make user unavailable
+ * @returns {void} void
  */
 export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date): void {
   let availabilities: Availability[] = [];
@@ -221,10 +222,10 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
  * Check if user is available for specified time.
  *
  * @export
- * @param {User} user user to check
- * @param {Date} timeBegin start of time block
- * @param {Date} timeEnd end of time block
- * @returns {boolean} whether the user is available
+ * @param {User} user - user to check
+ * @param {Date} timeBegin - start of time block
+ * @param {Date} timeEnd - end of time block
+ * @returns {boolean} - whether the user is available
  */
 export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boolean {
   let availabilities: Availability[] = [];
@@ -253,10 +254,10 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
  * for booking.
  *
  * @export
- * @param {User} possibleFacilitator facilitator to check
- * @param {User} possibleGuestSpeaker guestSpeaker to check
- * @returns {(null | [User, User])} null if the users can't be paired, array
- *                                  containing users if the can be
+ * @param {User} possibleFacilitator - facilitator to check
+ * @param {User} possibleGuestSpeaker - guestSpeaker to check
+ * @returns {(null | [User, User])} - null if the users can't be paired, array
+ *                                    containing users if the can be
  */
 export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User): null | [User, User] {
   let team: [User, User];
