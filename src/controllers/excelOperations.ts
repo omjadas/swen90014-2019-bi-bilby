@@ -48,7 +48,7 @@ export function getGuestSpeakers(file: Buffer): User[] {
   const GSUsers: User[] = [];
 
   for (let i = 0; i < Object.keys(FAndGSO).length; i++) {
-    if (FAndGSO[i]["Type"] == "Guest Speaker") {
+    if (FAndGSO[i]["Type"] === "Guest Speaker") {
       GSUsers.push(new UserModel({
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
@@ -57,8 +57,8 @@ export function getGuestSpeakers(file: Buffer): User[] {
         userType: FAndGSO[i]["Type"],
         phoneNumber: FAndGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
-          trained: ((FAndGSO[i]["Trained"] == "Yes") ? true : false),
-          reliable: ((FAndGSO[i]["Reliable"] == "Yes") ? true : false),
+          trained: ((FAndGSO[i]["Trained"] === "Yes") ? true : false),
+          reliable: ((FAndGSO[i]["Reliable"] === "Yes") ? true : false),
           city: new CityModel({
             city: FAndGSO[i]["City"]
           }),
@@ -142,7 +142,7 @@ export function getFacilitators(file: Buffer): User[] {
 
   const facilitatorUsers: User[] = [];
   for (let i = 0; i < Object.keys(FAndGSO).length; i++) {
-    if (FAndGSO[i]["Type"] == "Facilitator") {
+    if (FAndGSO[i]["Type"] === "Facilitator") {
       facilitatorUsers.push(new UserModel({
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
@@ -151,8 +151,8 @@ export function getFacilitators(file: Buffer): User[] {
         userType: FAndGSO[i]["Type"],
         phoneNumber: FAndGSO[i]["Phone Number"],
         _facilitator: new FacilitatorModel({
-          trained: ((FAndGSO[i]["Trained"] == "Yes") ? true : false),
-          reliable: ((FAndGSO[i]["Reliable"] == "Yes") ? true : false),
+          trained: ((FAndGSO[i]["Trained"] === "Yes") ? true : false),
+          reliable: ((FAndGSO[i]["Reliable"] === "Yes") ? true : false),
           city: new CityModel({
             city: FAndGSO[i]["City"]
           }),

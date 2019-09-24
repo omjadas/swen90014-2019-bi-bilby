@@ -60,7 +60,7 @@ export function eligible(user: User, workshop: Ref<Workshop>): boolean {
  * Check how many back to back workshops has the user done.
  *
  * @export
- * @param {Availability[]} assignedTimes 
+ * @param {Availability[]} assignedTimes
  * @param {Date} timeBegin
  * @returns {number}
  */
@@ -68,7 +68,7 @@ export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Da
   let counter = 0;
 
   for (let i = 0; i < assignedTimes.length - 1; i++) {
-    while (assignedTimes[i].availableUntil == assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin) {
+    while (assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin) {
       counter++;
       continue;
     }
@@ -173,88 +173,48 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
 /**
  * Adjust availabilities when user is rostered for a booking.
  *
- * @param user 
- * @param timeBegin 
- * @param timeEnd 
+ * @param user
+ * @param timeBegin
+ * @param timeEnd
  */
 export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date): void {
+  let availabilities: Availability[] = [];
+  let assignedTimes: Availability[] = [];
+
   if (user._facilitator instanceof FacilitatorModel) {
     const facilitator = user._facilitator as Facilitator;
-    for (let i = 0; i < facilitator.availabilities.length; i++) {
-      if (checkDayOfWeek(timeBegin.getDay(), facilitator.availabilities[i].dayOfWeek)) {
-        const availableFrom = facilitator.availabilities[i].availableFrom;
-        const availableUntil = facilitator.availabilities[i].availableUntil;
-
-        if (availableFrom.toTimeString() === timeBegin.toTimeString() && timeEnd < availableUntil) { // If the booking starts at the same time as the beginning of the user's availability
-          facilitator.availabilities[i].availableFrom = timeEnd;
-        } else if (availableFrom < timeBegin && timeEnd.toTimeString() === availableUntil.toTimeString()) { // If the booking end at the same time as the end of the user's availability
-          facilitator.availabilities[i].availableUntil = timeBegin;
-        } else if (availableFrom < timeBegin && timeEnd < availableUntil) { // If the booking starts and ends in the middle of the user's availability
-          facilitator.availabilities[i].availableUntil = timeBegin;
-          facilitator.availabilities.splice(i + 1, 0, facilitator.availabilities[i]);
-          facilitator.availabilities[i + 1].availableFrom = timeEnd;
-        }
-
-        facilitator.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: facilitator.availabilities[i].dayOfWeek });
-      }
-    }
+    availabilities = facilitator.availabilities;
+    assignedTimes = facilitator.assignedTimes;
   } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
     const guestSpeaker = user._guestSpeaker as GuestSpeaker;
-    for (let j = 0; j < guestSpeaker.availabilities.length; j++) {
-      if (checkDayOfWeek(timeBegin.getDay(), guestSpeaker.availabilities[j].dayOfWeek)) {
-        const availableFrom = guestSpeaker.availabilities[j].availableFrom;
-        const availableUntil = guestSpeaker.availabilities[j].availableUntil;
+    availabilities = guestSpeaker.availabilities;
+    assignedTimes = guestSpeaker.assignedTimes;
+  }
 
-        if (availableFrom.toTimeString() === timeBegin.toTimeString() && timeEnd < availableUntil) { // If the booking starts at the same time as the beginning of the user's availability
-          guestSpeaker.availabilities[j].availableFrom = timeEnd;
-        } else if (availableFrom < timeBegin && timeEnd.toTimeString() === availableUntil.toTimeString()) { // If the booking end at the same time as the end of the user's availability
-          guestSpeaker.availabilities[j].availableUntil = timeBegin;
-        } else if (availableFrom < timeBegin && timeEnd < availableUntil) { // If the booking starts and ends in the middle of the user's availability
-          guestSpeaker.availabilities[j].availableUntil = timeBegin;
-          guestSpeaker.availabilities.splice(j + 1, 0, guestSpeaker.availabilities[j]);
-          guestSpeaker.availabilities[j + 1].availableFrom = timeEnd;
-        }
+  for (let i = 0; i < availabilities.length; i++) {
+    if (checkDayOfWeek(timeBegin.getDay(), availabilities[i].dayOfWeek)) {
+      const availableFrom = availabilities[i].availableFrom;
+      const availableUntil = availabilities[i].availableUntil;
 
-        guestSpeaker.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: guestSpeaker.availabilities[j].dayOfWeek });
+      const stringFrom = availableFrom.toTimeString().slice(0, 8);
+      const stringUntil = availableUntil.toTimeString().slice(0, 8);
+
+      const stringBegin = timeBegin.toTimeString().slice(0, 8);
+      const stringEnd = timeEnd.toTimeString().slice(0, 8);
+
+      if (stringFrom === stringBegin && stringEnd < stringUntil) { // If the booking starts at the same time as the beginning of the user's availability
+        availabilities[i].availableFrom = timeEnd;
+      } else if (stringFrom < stringEnd && stringEnd === stringUntil) { // If the booking end at the same time as the end of the user's availability
+        availabilities[i].availableUntil = timeBegin;
+      } else if (stringFrom < stringEnd && stringEnd < stringUntil) { // If the booking starts and ends in the middle of the user's availability
+        availabilities[i].availableUntil = timeBegin;
+        availabilities.splice(i + 1, 0, availabilities[i]);
+        availabilities[i + 1].availableFrom = timeEnd;
       }
+
+      assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: availabilities[i].dayOfWeek });
     }
   }
-}
-
-/**
- * Determine if the time of the first date is before or equal to the time of the
- * second date.
- *
- * @param {Date} d1 first date
- * @param {Date} d2 second date
- * @returns {boolean} is the time of the first date before or equal to the time
- *                    of the second date
- */
-function timeBefore(d1: Date, d2: Date): boolean {
-  if (d1.getHours() < d2.getHours()) {
-    return true;
-  } else if (d1.getHours() === d2.getHours() && d1.getMinutes() <= d2.getMinutes()) {
-    return true;
-  }
-  return false;
-}
-
-/**
- * Determine if the time of the first date is after or equal to the time of the
- * second date.
- *
- * @param {Date} d1 first date
- * @param {Date} d2 second date
- * @returns {boolean} is the time of the first date after or equal to the time
- *                    of the second date
- */
-function timeAfter(d1: Date, d2: Date): boolean {
-  if (d1.getHours() > d2.getHours()) {
-    return true;
-  } else if (d1.getHours() === d2.getHours() && d1.getMinutes() >= d2.getMinutes()) {
-    return true;
-  }
-  return false;
 }
 
 /**
@@ -279,8 +239,8 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
 
   for (let i = 0; i < availabilities.length; i++) {
     if (checkDayOfWeek(timeBegin.getDay(), availabilities[i].dayOfWeek)
-      && timeBefore(availabilities[i].availableFrom, timeBegin)
-      && timeAfter(availabilities[i].availableUntil, timeEnd)) {
+      && availabilities[i].availableFrom.toTimeString().slice(0, 8) <= timeBegin.toTimeString().slice(0, 8)
+      && availabilities[i].availableUntil.toTimeString().slice(0, 8) >= timeEnd.toTimeString().slice(0, 8)) {
       return true;
     }
   }
@@ -300,17 +260,17 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
  */
 export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User): null | [User, User] {
   let team: [User, User];
-  
+
   if (possibleFacilitator._facilitator instanceof FacilitatorModel && possibleGuestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
     const facilitator = possibleFacilitator._facilitator as Facilitator;
     const guestSpeaker = possibleGuestSpeaker._guestSpeaker as GuestSpeaker;
     if ((guestSpeaker.trained && facilitator.trained)
-    || (!(guestSpeaker.trained) && facilitator.trained)) {
+      || (!(guestSpeaker.trained) && facilitator.trained)) {
       team = [possibleFacilitator, possibleGuestSpeaker];
       return team;
     }
   }
-  
+
   return null;
 }
 
