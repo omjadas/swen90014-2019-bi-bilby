@@ -54,7 +54,7 @@ export function getGuestSpeakers(file: Buffer): User[] {
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
         email: FAndGSO[i]["email"],
-        userType: FAndGSO[i]["Type"],
+        userType: UserType.GUEST_SPEAKER,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
           trained: ((FAndGSO[i]["Trained"] === "Yes") ? true : false),
@@ -148,7 +148,7 @@ export function getFacilitators(file: Buffer): User[] {
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
         email: FAndGSO[i]["email"],
-        userType: FAndGSO[i]["Type"],
+        userType: UserType.FACILITATOR,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _facilitator: new FacilitatorModel({
           trained: ((FAndGSO[i]["Trained"] === "Yes") ? true : false),
@@ -306,6 +306,8 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
           }),
           workshop: new WorkshopModel({
             workshopName: cityObject[i]["G"],
+            requireFacilitator: true,
+            requireGuestSpeaker: true
           }),
           level: cityObject[i]["I"],
           teacher: new UserModel({

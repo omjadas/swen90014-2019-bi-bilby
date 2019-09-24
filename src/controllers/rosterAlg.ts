@@ -40,9 +40,9 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       availableGuestSpeakers = availableGuestSpeakers.filter(user => eligible(user, bookings[i].workshop));
 
       // Pair facilitators and guest speakers to follow the constraints
-      for (let e = 0; e < availableGuestSpeakers.length; e++) {
-        for (let f = 0; f < availableFacilitators.length; f++) {
-          const pair = pairTeams(availableFacilitators[e], availableGuestSpeakers[f]);
+      for (let f = 0; f < availableFacilitators.length; f++) {
+        for (let g = 0; g < availableGuestSpeakers.length; g++) {
+          const pair = pairTeams(availableFacilitators[f], availableGuestSpeakers[g]);
 
           if (pair !== null) {
             teams.push(pair);
