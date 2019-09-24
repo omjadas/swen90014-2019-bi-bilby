@@ -222,6 +222,42 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
 }
 
 /**
+ * Determine if the time of the first date is before or equal to the time of the
+ * second date.
+ *
+ * @param {Date} d1 first date
+ * @param {Date} d2 second date
+ * @returns {boolean} is the time of the first date before or equal to the time
+ *                    of the second date
+ */
+function timeBefore(d1: Date, d2: Date): boolean {
+  if (d1.getHours() < d2.getHours()) {
+    return true;
+  } else if (d1.getHours() === d2.getHours() && d1.getMinutes() <= d2.getMinutes()) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Determine if the time of the first date is after or equal to the time of the
+ * second date.
+ *
+ * @param {Date} d1 first date
+ * @param {Date} d2 second date
+ * @returns {boolean} is the time of the first date after or equal to the time
+ *                    of the second date
+ */
+function timeAfter(d1: Date, d2: Date): boolean {
+  if (d1.getHours() > d2.getHours()) {
+    return true;
+  } else if (d1.getHours() === d2.getHours() && d1.getMinutes() >= d2.getMinutes()) {
+    return true;
+  }
+  return false;
+}
+
+/**
  * Check if user is available for specified time.
  *
  * @export
@@ -253,64 +289,28 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
 }
 
 /**
- * Determine if the time of the first date is before or equal to the time of the
- * second date.
- *
- * @param {Date} d1 first date
- * @param {Date} d2 second date
- * @returns {boolean} is the time of the first date before or equal to the time
- *                    of the second date
- */
-function timeBefore(d1: Date, d2: Date): boolean {
-  if (d1.getHours() < d2.getHours()) {
-    return true;
-  } else if (d1.getHours() === d2.getHours() && d1.getMinutes() <= d2.getMinutes()) {
-    return true;
-  }
-  return false
-}
-
-/**
- * Determine if the time of the first date is after or equal to the time of the
- * second date.
- *
- * @param {Date} d1 first date
- * @param {Date} d2 second date
- * @returns {boolean} is the time of the first date after or equal to the time
- *                    of the second date
- */
-function timeAfter(d1: Date, d2: Date): boolean {
-  if (d1.getHours() > d2.getHours()) {
-    return true;
-  } else if (d1.getHours() === d2.getHours() && d1.getMinutes() >= d2.getMinutes()) {
-    return true;
-  }
-  return false
-}
-
-/**
  * Check if facilitator and guest speaker can work with each other and pair them
  * for booking.
  *
  * @export
  * @param {User} possibleFacilitator facilitator to check
- * @param {User} possibleGuestSpeaker
+ * @param {User} possibleGuestSpeaker guestSpeaker to check
  * @returns {(null | [User, User])} null if the users can't be paired, array
  *                                  containing users if the can be
  */
 export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User): null | [User, User] {
   let team: [User, User];
-
+  
   if (possibleFacilitator._facilitator instanceof FacilitatorModel && possibleGuestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
     const facilitator = possibleFacilitator._facilitator as Facilitator;
     const guestSpeaker = possibleGuestSpeaker._guestSpeaker as GuestSpeaker;
     if ((guestSpeaker.trained && facilitator.trained)
-      || (!(guestSpeaker.trained) && facilitator.trained)) {
+    || (!(guestSpeaker.trained) && facilitator.trained)) {
       team = [possibleFacilitator, possibleGuestSpeaker];
       return team;
     }
   }
-
+  
   return null;
 }
 
