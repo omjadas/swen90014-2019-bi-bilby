@@ -356,6 +356,7 @@ export function printBooking(b: Booking[]): void {
     const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
     const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
     const row: string[] = [];
+
     if (b[i].location instanceof LocationModel) {
       const location = b[i].location as Location;
       row.push(location.name);
@@ -365,25 +366,29 @@ export function printBooking(b: Booking[]): void {
         row.push("");
       }
     } else {
-      row.push("");
+      row.push("", "");
     }
+
     if (b[i].workshop instanceof WorkshopModel) {
       const Workshoptype = b[i].workshop as Workshop;
       row.push(Workshoptype.workshopName);
     } else {
       row.push("", "");
     }
+
     if (b[i].level) {
       row.push(b[i].level);
     } else {
       row.push("");
     }
+
     if (b[i].teacher instanceof UserModel) {
       const teacher = b[i].teacher as User;
       row.push(teacher.firstName, teacher.phoneNumber);
     } else {
       row.push("", "");
     }
+
     if (b[i].guestSpeaker instanceof UserModel) {
       const guestSpeaker = b[i].guestSpeaker as User;
       row.push(guestSpeaker.firstName, guestSpeaker.phoneNumber, guestSpeaker.email);
@@ -397,6 +402,7 @@ export function printBooking(b: Booking[]): void {
     } else {
       row.push("", "", "");
     }
+
     row.push(timeBegin, timeEnd);
     wsData.push(row);
   }
