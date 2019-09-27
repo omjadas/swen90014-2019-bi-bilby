@@ -30,7 +30,7 @@ export function upload(req: Request, res: Response): any {
   const guestSpeakers = getGuestSpeakers(file);
   const facilitators = getFacilitators(file);
   const roster = rosterByPreferences(bookings, guestSpeakers, facilitators);
-  const out = printBooking(file, "out", roster);
+  const out = printBooking(roster);
 
   const readStream = new stream.PassThrough();
   readStream.end(out);

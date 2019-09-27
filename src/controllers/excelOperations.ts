@@ -53,7 +53,7 @@ export function getGuestSpeakers(file: Buffer): User[] {
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
-        email: FAndGSO[i]["email"],
+        email: FAndGSO[i]["Email"],
         userType: UserType.GUEST_SPEAKER,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
@@ -147,7 +147,7 @@ export function getFacilitators(file: Buffer): User[] {
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
-        email: FAndGSO[i]["email"],
+        email: FAndGSO[i]["Email"],
         userType: UserType.FACILITATOR,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _facilitator: new FacilitatorModel({
@@ -354,6 +354,7 @@ export function printBooking(b: Booking[]): void {
     const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
     const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
     const row: string[] = [];
+
     if (b[i].location instanceof LocationModel) {
       const location = b[i].location as Location;
       row.push(location.name);
@@ -363,25 +364,29 @@ export function printBooking(b: Booking[]): void {
         row.push("");
       }
     } else {
-      row.push("");
+      row.push("", "");
     }
+
     if (b[i].workshop instanceof WorkshopModel) {
       const Workshoptype = b[i].workshop as Workshop;
       row.push(Workshoptype.workshopName);
     } else {
       row.push("", "");
     }
+
     if (b[i].level) {
       row.push(b[i].level);
     } else {
       row.push("");
     }
+
     if (b[i].teacher instanceof UserModel) {
       const teacher = b[i].teacher as User;
       row.push(teacher.firstName, teacher.phoneNumber);
     } else {
       row.push("", "");
     }
+
     if (b[i].guestSpeaker instanceof UserModel) {
       const guestSpeaker = b[i].guestSpeaker as User;
       row.push(guestSpeaker.firstName, guestSpeaker.phoneNumber, guestSpeaker.email);
@@ -395,6 +400,7 @@ export function printBooking(b: Booking[]): void {
     } else {
       row.push("", "", "");
     }
+
     row.push(timeBegin, timeEnd);
     wsData.push(row);
   }
