@@ -224,6 +224,7 @@ export function getFacilitators(file: Buffer): User[] {
   }
   return facilitatorUsers;
 }
+
 /**
  * Function for Getting all the School details
  * @param {Buffer} file - The excel sheet
@@ -274,6 +275,7 @@ export function getWorkshopTypes(file: Buffer): Workshop[] {
   }
   return workshops;
 }
+
 /**
  * Function for Getting all the Booking details
  * @param {Buffer} file - The excel sheet
