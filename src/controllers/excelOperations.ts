@@ -5,7 +5,7 @@ import { UserModel, User, UserType } from "../models/user.model";
 import { SchoolModel } from "../models/school.model";
 import { FacilitatorModel } from "../models/facilitator.model";
 import { GuestSpeakerModel } from "../models/guestSpeaker.model";
-import { LocationModel } from "../models/location.model";
+import { LocationModel, Location } from "../models/location.model";
 import { WorkshopModel, Workshop } from "../models/workshop.model";
 import { dayOfWeek } from "../models/availability";
 import { TeacherModel } from "../models/teacher.model";
@@ -53,7 +53,7 @@ export function getGuestSpeakers(file: Buffer): User[] {
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
-        email: FAndGSO[i]["email"],
+        email: FAndGSO[i]["Email"],
         userType: UserType.GUEST_SPEAKER,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
@@ -140,7 +140,6 @@ export function getFacilitators(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: "buffer" });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
   const FAndGSO: any[] = XLSX.utils.sheet_to_json(u);
-
   const facilitatorUsers: User[] = [];
   for (let i = 0; i < Object.keys(FAndGSO).length; i++) {
     if (FAndGSO[i]["Type"] === "Facilitator") {
@@ -148,7 +147,7 @@ export function getFacilitators(file: Buffer): User[] {
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
-        email: FAndGSO[i]["email"],
+        email: FAndGSO[i]["Email"],
         userType: UserType.FACILITATOR,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _facilitator: new FacilitatorModel({
@@ -264,11 +263,15 @@ export function getSchools(file: Buffer): User[] {
 export function getWorkshopTypes(file: Buffer): Workshop[] {
   const wb = XLSX.read(file, { type: "buffer" });
   const s = wb.Sheets["Locations | Workshops"];
-  const myDataCity: any[] = XLSX.utils.sheet_to_json(s);
+  const myDataCity: any[] = XLSX.utils.sheet_to_json(s, { header: "A" });
   const workshops: Workshop[] = [];
 
-  for (let i = 1; i < Object.keys(myDataCity).length; i++) {
-    workshops.push(new WorkshopModel({ workshopName: myDataCity[i]["Workshop Type"] }));
+  for (let i = 2; i < Object.keys(myDataCity).length; i++) {
+    workshops.push(new WorkshopModel({
+      workshopName: myDataCity[i]["E"],
+      requireFacilitator: (myDataCity[i]["F"]),
+      requireGuestSpeaker: (myDataCity[i]["G"])
+    }));
   }
   return workshops;
 }
@@ -339,21 +342,45 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
 
 /**
  * Function for Getting all the Booking details
- * @param {Buffer} file - The excel sheet
- * @param {string} sheetName - Name of the sheet to be exported
  * @param {Booking} b - The Booking array
  * @returns {void}
  */
-export function printBooking(file: Buffer, sheetName: string, b: Booking[]): void {
-  const wb = XLSX.read(file, { type: "buffer" });
+export function printBooking(b: Booking[]): void {
+  const sheetName = "Roster";
+  const wb = XLSX.utils.book_new();
   const wsData = [
-    ["Teacher", "Phone", "GuestSpeaker", "Facilitator", "TimeBegin", "TimeEnd"],
+    ["Location", "Pax", "Workshop", "Level", "Teacher", "Phone", "GuestSpeaker", "Guest Speaker Mobile", "Guest Speaker Email", "Facilitator", "Facilitator Mobile", "Facilitator Email", "TimeBegin", "TimeEnd"],
   ];
 
   for (let i = 0; i < Object.keys(b).length; i++) {
     const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
     const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
     const row: string[] = [];
+
+    if (b[i].location instanceof LocationModel) {
+      const location = b[i].location as Location;
+      row.push(location.name);
+      if (location.capacity) {
+        row.push(location.capacity.toString());
+      } else {
+        row.push("");
+      }
+    } else {
+      row.push("", "");
+    }
+
+    if (b[i].workshop instanceof WorkshopModel) {
+      const Workshoptype = b[i].workshop as Workshop;
+      row.push(Workshoptype.workshopName);
+    } else {
+      row.push("", "");
+    }
+
+    if (b[i].level) {
+      row.push(b[i].level);
+    } else {
+      row.push("");
+    }
 
     if (b[i].teacher instanceof UserModel) {
       const teacher = b[i].teacher as User;
@@ -362,25 +389,41 @@ export function printBooking(file: Buffer, sheetName: string, b: Booking[]): voi
       row.push("", "");
     }
 
-    if (b[i].facilitator instanceof UserModel) {
-      const facilitator = b[i].facilitator as User;
-      row.push(facilitator.firstName);
-    } else {
-      row.push("");
-    }
-
     if (b[i].guestSpeaker instanceof UserModel) {
       const guestSpeaker = b[i].guestSpeaker as User;
-      row.push(guestSpeaker.firstName);
+      row.push(guestSpeaker.firstName, guestSpeaker.phoneNumber, guestSpeaker.email);
     } else {
-      row.push("");
+      row.push("", "", "");
+    }
+
+    if (b[i].facilitator instanceof UserModel) {
+      const facilitator = b[i].facilitator as User;
+      row.push(facilitator.firstName, facilitator.phoneNumber, facilitator.email);
+    } else {
+      row.push("", "", "");
     }
 
     row.push(timeBegin, timeEnd);
     wsData.push(row);
   }
-
   const ws = XLSX.utils.aoa_to_sheet(wsData);
+  const wscols = [
+    { width: 15 },
+    { width: 10 },
+    { width: 11 },
+    { width: 6 },
+    { width: 18 },
+    { width: 10 },
+    { width: 18 },
+    { width: 18 },
+    { width: 18 },
+    { width: 18 },
+    { width: 18 },
+    { width: 18 },
+    { width: 11 },
+    { width: 11 },
+  ];
+  ws["!cols"] = wscols;
   wb.SheetNames.push(sheetName);
   wb.Sheets[sheetName] = ws;
   const content = XLSX.write(wb, { type: "buffer", bookType: "xlsx", bookSST: false });
