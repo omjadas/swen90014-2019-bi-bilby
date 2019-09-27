@@ -405,23 +405,6 @@ export function printBooking(b: Booking[]): void {
     wsData.push(row);
   }
   const ws = XLSX.utils.aoa_to_sheet(wsData);
-  const wscols = [
-    { width: 15 },
-    { width: 10 },
-    { width: 11 },
-    { width: 6 },
-    { width: 18 },
-    { width: 10 },
-    { width: 18 },
-    { width: 18 },
-    { width: 18 },
-    { width: 18 },
-    { width: 18 },
-    { width: 18 },
-    { width: 11 },
-    { width: 11 },
-  ];
-  ws["!cols"] = wscols;
   wb.SheetNames.push(sheetName);
   wb.Sheets[sheetName] = ws;
   const content = XLSX.write(wb, { type: "buffer", bookType: "xlsx", bookSST: false });
