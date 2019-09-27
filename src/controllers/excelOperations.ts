@@ -276,9 +276,6 @@ export function getWorkshopTypes(file: Buffer): Workshop[] {
   }
   return workshops;
 }
-import fs from "fs";
-const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
-console.log(getWorkshopTypes(buf));
 /**
  * Function for Getting all the Booking details
  * @param {Buffer} file - The excel sheet
