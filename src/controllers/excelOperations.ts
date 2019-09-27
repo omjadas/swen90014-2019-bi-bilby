@@ -53,7 +53,7 @@ export function getGuestSpeakers(file: Buffer): User[] {
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
-        email: FAndGSO[i]["email"],
+        email: FAndGSO[i]["Email"],
         userType: UserType.GUEST_SPEAKER,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
@@ -148,7 +148,7 @@ export function getFacilitators(file: Buffer): User[] {
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
-        email: FAndGSO[i]["email"],
+        email: FAndGSO[i]["Email"],
         userType: UserType.FACILITATOR,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _facilitator: new FacilitatorModel({
