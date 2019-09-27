@@ -264,15 +264,22 @@ export function getSchools(file: Buffer): User[] {
 export function getWorkshopTypes(file: Buffer): Workshop[] {
   const wb = XLSX.read(file, { type: "buffer" });
   const s = wb.Sheets["Locations | Workshops"];
-  const myDataCity: any[] = XLSX.utils.sheet_to_json(s);
+  const myDataCity: any[] = XLSX.utils.sheet_to_json(s, { header: "A" });
   const workshops: Workshop[] = [];
 
-  for (let i = 1; i < Object.keys(myDataCity).length; i++) {
-    workshops.push(new WorkshopModel({ workshopName: myDataCity[i]["Workshop Type"] }));
+  for (let i = 2; i < Object.keys(myDataCity).length; i++) {
+    console.log(myDataCity[i]["F"]);
+    workshops.push(new WorkshopModel({
+      workshopName: myDataCity[i]["E"],
+      requireFacilitator: ((myDataCity[i]["F"] === "FALSE") ? true : false),
+      requireGuestSpeaker: ((myDataCity[i]["G"] === "FALSE") ? true : false),
+    }));
   }
   return workshops;
 }
-
+import fs from "fs";
+const buf = fs.readFileSync("src/ExcelSheetIO/BigIssueRostering.xlsx");
+console.log(getWorkshopTypes(buf));
 /**
  * Function for Getting all the Booking details
  * @param {Buffer} file - The excel sheet
