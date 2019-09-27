@@ -140,7 +140,6 @@ export function getFacilitators(file: Buffer): User[] {
   const wb = XLSX.read(file, { type: "buffer" });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
   const FAndGSO: any[] = XLSX.utils.sheet_to_json(u);
-
   const facilitatorUsers: User[] = [];
   for (let i = 0; i < Object.keys(FAndGSO).length; i++) {
     if (FAndGSO[i]["Type"] === "Facilitator") {
@@ -225,7 +224,6 @@ export function getFacilitators(file: Buffer): User[] {
   }
   return facilitatorUsers;
 }
-
 /**
  * Function for Getting all the School details
  * @param {Buffer} file - The excel sheet
@@ -349,7 +347,7 @@ export function printBooking(b: Booking[]): void {
   const sheetName = "Roster";
   const wb = XLSX.utils.book_new();
   const wsData = [
-    ["Location", "Pax", "Workshop", "Level", "Teacher", "Phone", "GuestSpeaker", "GS_MNobile", "GS_Email", "Facilitator", "F_Mobile", "F_Email", "TimeBegin", "TimeEnd"],
+    ["Location", "Pax", "Workshop", "Level", "Teacher", "Phone", "GuestSpeaker", "Guest Speaker Mobile", "Guest Speaker Email", "Facilitator", "Facilitator Mobile", "Facilitator Email", "TimeBegin", "TimeEnd"],
   ];
 
   for (let i = 0; i < Object.keys(b).length; i++) {
@@ -409,10 +407,10 @@ export function printBooking(b: Booking[]): void {
     { width: 18 },
     { width: 10 },
     { width: 18 },
-    { width: 10 },
     { width: 18 },
     { width: 18 },
-    { width: 10 },
+    { width: 18 },
+    { width: 18 },
     { width: 18 },
     { width: 11 },
     { width: 11 },
