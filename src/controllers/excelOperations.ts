@@ -268,11 +268,10 @@ export function getWorkshopTypes(file: Buffer): Workshop[] {
   const workshops: Workshop[] = [];
 
   for (let i = 2; i < Object.keys(myDataCity).length; i++) {
-    console.log(myDataCity[i]["F"]);
     workshops.push(new WorkshopModel({
       workshopName: myDataCity[i]["E"],
-      requireFacilitator: ((myDataCity[i]["F"] === "FALSE") ? true : false),
-      requireGuestSpeaker: ((myDataCity[i]["G"] === "FALSE") ? true : false),
+      requireFacilitator: (myDataCity[i]["F"]),
+      requireGuestSpeaker: (myDataCity[i]["G"])
     }));
   }
   return workshops;
