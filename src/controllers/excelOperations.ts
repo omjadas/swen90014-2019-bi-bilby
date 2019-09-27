@@ -48,17 +48,17 @@ export function getGuestSpeakers(file: Buffer): User[] {
   const GSUsers: User[] = [];
 
   for (let i = 0; i < Object.keys(FAndGSO).length; i++) {
-    if (FAndGSO[i]["Type"] == "Guest Speaker") {
+    if (FAndGSO[i]["Type"] === "Guest Speaker") {
       GSUsers.push(new UserModel({
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
         email: FAndGSO[i]["email"],
-        userType: FAndGSO[i]["Type"],
+        userType: UserType.GUEST_SPEAKER,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
-          trained: ((FAndGSO[i]["Trained"] == "Yes") ? true : false),
-          reliable: ((FAndGSO[i]["Reliable"] == "Yes") ? true : false),
+          trained: ((FAndGSO[i]["Trained"] === "Yes") ? true : false),
+          reliable: ((FAndGSO[i]["Reliable"] === "Yes") ? true : false),
           city: new CityModel({
             city: FAndGSO[i]["City"]
           }),
@@ -122,7 +122,8 @@ export function getGuestSpeakers(file: Buffer): User[] {
             {
               date: getConversionDate(FAndGSO[i]["Specific Unavailability 6"]),
               notes: FAndGSO[i]["Notes"],
-            }]
+            }],
+          assignedTimes: []
         })
       }));
     }
@@ -142,17 +143,17 @@ export function getFacilitators(file: Buffer): User[] {
 
   const facilitatorUsers: User[] = [];
   for (let i = 0; i < Object.keys(FAndGSO).length; i++) {
-    if (FAndGSO[i]["Type"] == "Facilitator") {
+    if (FAndGSO[i]["Type"] === "Facilitator") {
       facilitatorUsers.push(new UserModel({
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
         address: FAndGSO[i]["Address"],
         email: FAndGSO[i]["email"],
-        userType: FAndGSO[i]["Type"],
+        userType: UserType.FACILITATOR,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _facilitator: new FacilitatorModel({
-          trained: ((FAndGSO[i]["Trained"] == "Yes") ? true : false),
-          reliable: ((FAndGSO[i]["Reliable"] == "Yes") ? true : false),
+          trained: ((FAndGSO[i]["Trained"] === "Yes") ? true : false),
+          reliable: ((FAndGSO[i]["Reliable"] === "Yes") ? true : false),
           city: new CityModel({
             city: FAndGSO[i]["City"]
           }),
@@ -216,7 +217,8 @@ export function getFacilitators(file: Buffer): User[] {
             {
               date: getConversionDate(FAndGSO[i]["Specific Unavailability 6"]),
               notes: FAndGSO[i]["Notes"],
-            }]
+            }],
+          assignedTimes: []
         })
       }));
     }
@@ -294,8 +296,8 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
           facilitator: undefined,
           guestSpeaker: undefined,
           sessionTime: {
-            timeBegin: getConversionDate(cityObject[i]["C"]),
-            timeEnd: getConversionDate(cityObject[i]["D"]),
+            timeBegin: new Date(getConversionDate(cityObject[i]["C"]).setFullYear(da.getFullYear(), da.getMonth(), da.getDate())),
+            timeEnd: new Date(getConversionDate(cityObject[i]["D"]).setFullYear(da.getFullYear(), da.getMonth(), da.getDate())),
           },
           city: new CityModel({
             city: cityName
@@ -306,6 +308,8 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
           }),
           workshop: new WorkshopModel({
             workshopName: cityObject[i]["G"],
+            requireFacilitator: true,
+            requireGuestSpeaker: true
           }),
           level: cityObject[i]["I"],
           teacher: new UserModel({
@@ -314,14 +318,14 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
             lastName: cityObject[i]["J"],
             userType: UserType.TEACHER,
             phoneNumber: cityObject[i]["M"],
-            _teacher: {
+            _teacher: new TeacherModel({
               school: new SchoolModel({
                 name: cityObject[i]["K"],
                 city: new CityModel({
                   city: cityName
                 })
               })
-            }
+            })
           }),
           firstTime: false, // Check This ..cant find any first time option in the excel sheet
         }));

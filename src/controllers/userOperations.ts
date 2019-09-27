@@ -1,6 +1,6 @@
 import { Facilitator, FacilitatorModel } from "../models/facilitator.model";
 import { GuestSpeaker, GuestSpeakerModel } from "../models/guestSpeaker.model";
-import { Workshop, WorkshopModel } from '../models/workshop.model';
+import { Workshop, WorkshopModel } from "../models/workshop.model";
 import { User, UserModel, UserType } from "../models/user.model";
 import { Ref } from "@hasezoey/typegoose";
 import { Availability, dayOfWeek } from "../models/availability";
@@ -8,8 +8,13 @@ import { Booking } from "../models/booking.model";
 import { Location, LocationModel } from "../models/location.model";
 
 /**
-  * Check if day matches with availability.
-  */
+ * Check if day matches with availability.
+ *
+ * @export
+ * @param {number} day - day to check against dayOW
+ * @param {dayOfWeek} dayOW - dayOfWeek to check against day
+ * @returns {boolean} - are day and dayOW the same day
+ */
 export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
   if (day === 0 && dayOW === dayOfWeek.SUN) {
     return true;
@@ -31,7 +36,13 @@ export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
 }
 
 /**
- * Check if user (facilitator or guest speaker) are eligible for a particular workshop.
+ * Check if user (facilitator or guest speaker) are eligible for a particular
+ * workshop.
+ *
+ * @export
+ * @param {User} user - user to check eligibility for
+ * @param {Ref<Workshop>} workshop - workshop to check user against
+ * @returns {boolean} - is the user available for the workshop
  */
 export function eligible(user: User, workshop: Ref<Workshop>): boolean {
   if (workshop instanceof WorkshopModel) {
@@ -47,12 +58,17 @@ export function eligible(user: User, workshop: Ref<Workshop>): boolean {
 
 /**
  * Check how many back to back workshops has the user done.
+ *
+ * @export
+ * @param {Availability[]} assignedTimes - array of times to which the user has been assigned
+ * @param {Date} timeBegin - time for the booking we are currently trying to assign
+ * @returns {number} - count of back to back workshops this user has done before current booking time
  */
 export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Date): number {
   let counter = 0;
 
   for (let i = 0; i < assignedTimes.length - 1; i++) {
-    while (assignedTimes[i].availableUntil == assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin) {
+    while (assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin) {
       counter++;
       continue;
     }
@@ -64,6 +80,11 @@ export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Da
 
 /**
  * Check if a facilitator can be rostered to a back to back booking.
+ *
+ * @export
+ * @param {Booking} previousBooking - information from previously assigned booking
+ * @param {Booking} currentBooking - current booking in need of assignment
+ * @returns {boolean} - returns whether the facilitator from last booking can do this new booking or not
  */
 export function checkBackToBackFacilitator(previousBooking: Booking, currentBooking: Booking): boolean {
   let sameCity = false;
@@ -105,6 +126,11 @@ export function checkBackToBackFacilitator(previousBooking: Booking, currentBook
 
 /**
  * Check if a guest speaker can be rostered to a back to back booking.
+ *
+ * @export
+ * @param {Booking} previousBooking - information from previously assigned booking
+ * @param {Booking} currentBooking - current booking in need of assignment
+ * @returns {boolean} - returns whether the guest speaker from last booking can do this new booking or not
  */
 export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBooking: Booking): boolean {
   let sameCity = false;
@@ -146,72 +172,77 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
 
 /**
  * Adjust availabilities when user is rostered for a booking.
+ *
+ * @param {User} user - user to whom we want to change availabilities
+ * @param {Date} timeBegin - time from which we want to make user unavailable
+ * @param {Date} timeEnd - time until which we want to make user unavailable
+ * @returns {void} void
  */
 export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date): void {
+  let availabilities: Availability[] = [];
+  let assignedTimes: Availability[] = [];
+
   if (user._facilitator instanceof FacilitatorModel) {
     const facilitator = user._facilitator as Facilitator;
-    for (let i = 0; i < facilitator.availabilities.length; i++) {
-      if (checkDayOfWeek(timeBegin.getDay(), facilitator.availabilities[i].dayOfWeek)) {
-        const availableFrom = facilitator.availabilities[i].availableFrom;
-        const availableUntil = facilitator.availabilities[i].availableUntil;
-
-        if (availableFrom.toTimeString() === timeBegin.toTimeString() && timeEnd < availableUntil) { // If the booking starts at the same time as the beginning of the user's availability
-          facilitator.availabilities[i].availableFrom = timeEnd;
-        } else if (availableFrom < timeBegin && timeEnd.toTimeString() === availableUntil.toTimeString()) { // If the booking end at the same time as the end of the user's availability
-          facilitator.availabilities[i].availableUntil = timeBegin;
-        } else if (availableFrom < timeBegin && timeEnd < availableUntil) { // If the booking starts and ends in the middle of the user's availability
-          facilitator.availabilities[i].availableUntil = timeBegin;
-          facilitator.availabilities.splice(i + 1, 0, facilitator.availabilities[i]);
-          facilitator.availabilities[i + 1].availableFrom = timeEnd;
-        }
-
-        facilitator.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: facilitator.availabilities[i].dayOfWeek });
-      }
-    }
+    availabilities = facilitator.availabilities;
+    assignedTimes = facilitator.assignedTimes;
   } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
     const guestSpeaker = user._guestSpeaker as GuestSpeaker;
-    for (let j = 0; j < guestSpeaker.availabilities.length; j++) {
-      if (checkDayOfWeek(timeBegin.getDay(), guestSpeaker.availabilities[j].dayOfWeek)) {
-        const availableFrom = guestSpeaker.availabilities[j].availableFrom;
-        const availableUntil = guestSpeaker.availabilities[j].availableUntil;
+    availabilities = guestSpeaker.availabilities;
+    assignedTimes = guestSpeaker.assignedTimes;
+  }
 
-        if (availableFrom.toTimeString() === timeBegin.toTimeString() && timeEnd < availableUntil) { // If the booking starts at the same time as the beginning of the user's availability
-          guestSpeaker.availabilities[j].availableFrom = timeEnd;
-        } else if (availableFrom < timeBegin && timeEnd.toTimeString() === availableUntil.toTimeString()) { // If the booking end at the same time as the end of the user's availability
-          guestSpeaker.availabilities[j].availableUntil = timeBegin;
-        } else if (availableFrom < timeBegin && timeEnd < availableUntil) { // If the booking starts and ends in the middle of the user's availability
-          guestSpeaker.availabilities[j].availableUntil = timeBegin;
-          guestSpeaker.availabilities.splice(j + 1, 0, guestSpeaker.availabilities[j]);
-          guestSpeaker.availabilities[j + 1].availableFrom = timeEnd;
-        }
+  for (let i = 0; i < availabilities.length; i++) {
+    if (checkDayOfWeek(timeBegin.getDay(), availabilities[i].dayOfWeek)) {
+      const availableFrom = availabilities[i].availableFrom;
+      const availableUntil = availabilities[i].availableUntil;
 
-        guestSpeaker.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: guestSpeaker.availabilities[j].dayOfWeek });
+      const stringFrom = availableFrom.toTimeString().slice(0, 8);
+      const stringUntil = availableUntil.toTimeString().slice(0, 8);
+
+      const stringBegin = timeBegin.toTimeString().slice(0, 8);
+      const stringEnd = timeEnd.toTimeString().slice(0, 8);
+
+      if (stringFrom === stringBegin && stringEnd < stringUntil) { // If the booking starts at the same time as the beginning of the user's availability
+        availabilities[i].availableFrom = timeEnd;
+      } else if (stringFrom < stringEnd && stringEnd === stringUntil) { // If the booking end at the same time as the end of the user's availability
+        availabilities[i].availableUntil = timeBegin;
+      } else if (stringFrom < stringEnd && stringEnd < stringUntil) { // If the booking starts and ends in the middle of the user's availability
+        availabilities[i].availableUntil = timeBegin;
+        availabilities.splice(i + 1, 0, availabilities[i]);
+        availabilities[i + 1].availableFrom = timeEnd;
       }
+
+      assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: availabilities[i].dayOfWeek });
     }
   }
 }
 
 /**
-  * Check if user is available for specified time.
-  */
+ * Check if user is available for specified time.
+ *
+ * @export
+ * @param {User} user - user to check
+ * @param {Date} timeBegin - start of time block
+ * @param {Date} timeEnd - end of time block
+ * @returns {boolean} - whether the user is available
+ */
 export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boolean {
+  let availabilities: Availability[] = [];
+
   if (user._facilitator instanceof FacilitatorModel) {
     const facilitator = user._facilitator as Facilitator;
-    for (let i = 0; i < facilitator.availabilities.length; i++) {
-      if (checkDayOfWeek(timeBegin.getDay(), facilitator.availabilities[i].dayOfWeek)) {
-        if ((facilitator.availabilities[i].availableFrom <= timeBegin && facilitator.availabilities[i].availableUntil >= timeEnd)) {
-          return true;
-        }
-      }
-    }
+    availabilities = facilitator.availabilities;
   } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
     const guestSpeaker = user._guestSpeaker as GuestSpeaker;
-    for (let k = 0; k < guestSpeaker.availabilities.length; k++) {
-      if (checkDayOfWeek(timeBegin.getDay(), guestSpeaker.availabilities[k].dayOfWeek)) {
-        if ((guestSpeaker.availabilities[k].availableFrom <= timeBegin && guestSpeaker.availabilities[k].availableUntil >= timeEnd)) {
-          return true;
-        }
-      }
+    availabilities = guestSpeaker.availabilities;
+  }
+
+  for (let i = 0; i < availabilities.length; i++) {
+    if (checkDayOfWeek(timeBegin.getDay(), availabilities[i].dayOfWeek)
+      && availabilities[i].availableFrom.toTimeString().slice(0, 8) <= timeBegin.toTimeString().slice(0, 8)
+      && availabilities[i].availableUntil.toTimeString().slice(0, 8) >= timeEnd.toTimeString().slice(0, 8)) {
+      return true;
     }
   }
 
@@ -219,8 +250,15 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
 }
 
 /**
-  * Check if facilitator and guest speaker can work with each other and pair them for booking.
-  */
+ * Check if facilitator and guest speaker can work with each other and pair them
+ * for booking.
+ *
+ * @export
+ * @param {User} possibleFacilitator - facilitator to check
+ * @param {User} possibleGuestSpeaker - guestSpeaker to check
+ * @returns {(null | [User, User])} - null if the users can't be paired, array
+ *                                    containing users if the can be
+ */
 export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User): null | [User, User] {
   let team: [User, User];
 
