@@ -35,7 +35,7 @@ export function upload(req: Request, res: Response): any {
   const readStream = new stream.PassThrough();
   readStream.end(out);
 
-  res.set("Content-disposition", "attachment; filename=out.xlsx");
+  res.set("Content-disposition", `attachment; filename=roster_${req.body.from}_${req.body.to}.xlsx`);
   res.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
   readStream.pipe(res);
