@@ -74,18 +74,18 @@ class Upload extends React.Component<{}, MyState> {
             <Form.Group>
               <InputGroup>
                 <div className="custom-file">
-                  <input className="custom-file-input" id="fileUpload" type="file" accept=".xlsx" name="excel" />
+                  <input className="custom-file-input" id="fileUpload" type="file" accept=".xlsx" name="excel" required />
                   <label className="custom-file-label" htmlFor="fileUpload">Choose file</label>
                 </div>
               </InputGroup>
             </Form.Group>
             <Form.Group>
               <Form.Label>From Date</Form.Label>
-              <Form.Control type="date" name="from" />
+              <Form.Control type="date" name="from" required />
             </Form.Group>
             <Form.Group>
               <Form.Label>To Date</Form.Label>
-              <Form.Control type="date" name="to" />
+              <Form.Control type="date" name="to" required />
             </Form.Group>
             <Button type="submit">
               Roster
