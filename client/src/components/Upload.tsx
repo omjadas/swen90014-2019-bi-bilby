@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Container, Form, InputGroup } from "react-bootstrap";
 import bsCustomFileInput from "bs-custom-file-input";
-import "../stylesheets/Upload.css";
+import "../css/Upload.css";
 
 interface MyState {
   style: React.CSSProperties,

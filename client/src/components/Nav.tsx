@@ -1,6 +1,6 @@
 import React from "react";
 import { Navbar } from "react-bootstrap";
-import "../stylesheets/Nav.css";
+import "../css/Nav.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 class Nav extends React.Component {
