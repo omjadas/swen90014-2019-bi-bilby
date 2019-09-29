@@ -1,7 +1,7 @@
 import React from "react";
-import logo from "../images/logo.svg";
-import "../stylesheets/App.css";
+import "../css/App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Nav from "./Nav";
 import Upload from "./Upload";
 
 class App extends React.Component {
@@ -14,8 +14,9 @@ class App extends React.Component {
    */
   public render(): JSX.Element {
     return (
-      <div className="App">
-        <Upload></Upload>
+      <div className="App h-100">
+        <Nav />
+        <Upload />
       </div>
     );
   }
