@@ -36,6 +36,24 @@ export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
 }
 
 /**
+ * Check if day matches with availability.
+ *
+ * @export
+ * @param {Date} availableFrom - time the user is available from
+ * @param {Date} timeBegin - time for the beginning of the workshop
+ * @returns {boolean} - whether they are in the same day of the year
+ */
+export function checkDay(availableFrom: Date, timeBegin: Date): boolean {
+  if (availableFrom.getFullYear() === timeBegin.getFullYear()
+    && availableFrom.getMonth() === timeBegin.getMonth()
+    && availableFrom.getDate() === timeBegin.getDate()) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * Check if user (facilitator or guest speaker) are eligible for a particular
  * workshop.
  *
@@ -158,7 +176,7 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
 
     if (guestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
       const _guestSpeaker = guestSpeaker._guestSpeaker as GuestSpeaker;
-      if (checkBackToBackTime(_guestSpeaker.availabilities, currentBooking.sessionTime.timeBegin) >= 3) {
+      if (checkBackToBackTime(_guestSpeaker.availabilities, currentBooking.sessionTime.timeBegin) >= 2) {
         maxAmount = true;
       }
     }
@@ -239,7 +257,7 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
   }
 
   for (let i = 0; i < availabilities.length; i++) {
-    if (checkDayOfWeek(timeBegin.getDay(), availabilities[i].dayOfWeek)
+    if (checkDay(availabilities[i].availableFrom, timeBegin)
       && availabilities[i].availableFrom.toTimeString().slice(0, 8) <= timeBegin.toTimeString().slice(0, 8)
       && availabilities[i].availableUntil.toTimeString().slice(0, 8) >= timeEnd.toTimeString().slice(0, 8)) {
       return true;
