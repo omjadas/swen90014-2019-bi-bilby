@@ -213,11 +213,13 @@ export function getFacilitators(file: Buffer, from: Date, to: Date): User[] {
         const availableUntil = new Date(times.availableUntil);
         const dayOfWeek = times.dayOfWeek;
 
-        availabilities.push({
-          availableFrom: new Date(new Date(d).setHours(availableFrom.getHours(), availableFrom.getMinutes(), availableFrom.getSeconds())),
-          availableUntil: new Date(new Date(d).setHours(availableUntil.getHours(), availableUntil.getMinutes(), availableUntil.getSeconds())),
-          dayOfWeek: dayOfWeek
-        });
+        if (!isNaN(availableFrom.getTime()) && !isNaN(availableUntil.getTime())) {
+          availabilities.push({
+            availableFrom: new Date(new Date(d).setHours(availableFrom.getHours(), availableFrom.getMinutes(), availableFrom.getSeconds())),
+            availableUntil: new Date(new Date(d).setHours(availableUntil.getHours(), availableUntil.getMinutes(), availableUntil.getSeconds())),
+            dayOfWeek: dayOfWeek
+          });
+        }
       }
 
       facilitatorUsers.push(new UserModel({
