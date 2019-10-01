@@ -66,6 +66,26 @@ const facilitators = [new UserModel({
     specificUnavailabilities: [],
     assignedTimes: []
   })
+}),
+new UserModel({
+  firstName: "April",
+  lastName: "",
+  email: "",
+  address: "",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "",
+  _facilitator: new FacilitatorModel({
+    city: cities[0],
+    trained: true,
+    reliable: true,
+    availabilities: [{
+      availableFrom: new Date(2018, 8, 6, 12, 0),
+      availableUntil: new Date(2018, 8, 6, 14, 0),
+      dayOfWeek: dayOfWeek.THU,
+    }],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
 })];
 
 const guestSpeakers = [new UserModel({
@@ -107,8 +127,27 @@ new UserModel({
     specificUnavailabilities: [],
     assignedTimes: []
   })
-})
-];
+}),
+new UserModel({
+  firstName: "Murphy",
+  lastName: "",
+  email: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: cities[0],
+    trained: true,
+    reliable: true,
+    availabilities: [{
+      availableFrom: new Date(2018, 8, 6, 13, 0),
+      availableUntil: new Date(2018, 8, 6, 15, 0),
+      dayOfWeek: dayOfWeek.THU,
+    }],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
+})];
 
 const locations = [new LocationModel({
   name: "DWH",
@@ -164,6 +203,28 @@ new BookingModel({
   teacher: teachers[0],
   firstTime: true,
   numberOfStudents: 25
+}),
+new BookingModel({
+  state: BookingState.PENDING,
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 12, 0), timeEnd: new Date(2018, 8, 6, 13, 0) },
+  city: cities[0],
+  location: locations[0],
+  workshop: workshops[1],
+  level: "9",
+  teacher: teachers[0],
+  firstTime: true,
+  numberOfStudents: 25
+}),
+new BookingModel({
+  state: BookingState.PENDING,
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 13, 0), timeEnd: new Date(2018, 8, 6, 14, 0) },
+  city: cities[0],
+  location: locations[0],
+  workshop: workshops[1],
+  level: "9",
+  teacher: teachers[0],
+  firstTime: true,
+  numberOfStudents: 25
 })];
 
 const facilitators2 = [{
@@ -196,6 +257,31 @@ const facilitators2 = [{
     {
       availableFrom: new Date(2018, 8, 6, 11, 0),
       availableUntil: new Date(2018, 8, 6, 12, 0),
+      dayOfWeek: dayOfWeek.THU,
+    }]
+  }
+},
+{
+  firstName: "April",
+  lastName: "",
+  email: "",
+  address: "",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "",
+  _facilitator: {
+    city: cities[0],
+    trained: true,
+    reliable: true,
+    availabilities: [],
+    specificUnavailabilities: [],
+    assignedTimes: [{
+      availableFrom: new Date(2018, 8, 6, 12, 0),
+      availableUntil: new Date(2018, 8, 6, 13, 0),
+      dayOfWeek: dayOfWeek.THU,
+    },
+    {
+      availableFrom: new Date(2018, 8, 6, 13, 0),
+      availableUntil: new Date(2018, 8, 6, 14, 0),
       dayOfWeek: dayOfWeek.THU,
     }]
   }
@@ -251,6 +337,36 @@ const guestSpeakers2 = [{
       availableFrom: new Date(2018, 8, 6, 11, 0),
       availableUntil: new Date(2018, 8, 6, 12, 0),
       dayOfWeek: dayOfWeek.THU,
+    },
+    {
+      availableFrom: new Date(2018, 8, 6, 12, 0),
+      availableUntil: new Date(2018, 8, 6, 13, 0),
+      dayOfWeek: dayOfWeek.THU,
+    }
+    ]
+  }
+},
+{
+  firstName: "Murphy",
+  lastName: "",
+  email: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: {
+    city: cities[0],
+    trained: true,
+    reliable: true,
+    availabilities: [{
+      availableFrom: new Date(2018, 8, 6, 14, 0),
+      availableUntil: new Date(2018, 8, 6, 15, 0),
+      dayOfWeek: dayOfWeek.THU,
+    }],
+    specificUnavailabilities: [],
+    assignedTimes: [{
+      availableFrom: new Date(2018, 8, 6, 13, 0),
+      availableUntil: new Date(2018, 8, 6, 14, 0),
+      dayOfWeek: dayOfWeek.THU,
     }]
   }
 }];
@@ -293,9 +409,35 @@ const afterRosterBookings = [{
   teacher: teachers[0],
   firstTime: true,
   numberOfStudents: 25
+},
+{
+  state: BookingState.UNCONFIRMED,
+  facilitator: facilitators2[1],
+  guestSpeaker: guestSpeakers2[1],
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 12, 0), timeEnd: new Date(2018, 8, 6, 13, 0) },
+  city: cities[0],
+  location: locations[0],
+  workshop: workshops[1],
+  level: "9",
+  teacher: teachers[0],
+  firstTime: true,
+  numberOfStudents: 25
+},
+{
+  state: BookingState.UNCONFIRMED,
+  facilitator: facilitators2[1],
+  guestSpeaker: guestSpeakers2[2],
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 13, 0), timeEnd: new Date(2018, 8, 6, 14, 0) },
+  city: cities[0],
+  location: locations[0],
+  workshop: workshops[1],
+  level: "9",
+  teacher: teachers[0],
+  firstTime: true,
+  numberOfStudents: 25
 }
 ];
 
-test("3 back to back for facilitator and 2 back to back guest speaker plus another guest speaker", () => {
+test("3 back to back for facilitator plus 2 back to back for second facilitator and 2 back to back guest speaker plus another guest speaker", () => {
   expect(rosterByPreferences(bookings, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings);
 });

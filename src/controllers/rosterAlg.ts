@@ -29,11 +29,18 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       backToBackFacilitator = checkBackToBackFacilitator(bookings[i - 1], bookings[i]);
       backToBackGuestSpeaker = checkBackToBackGuestSpeaker(bookings[i - 1], bookings[i]);
     }
+    console.log(backToBackFacilitator, backToBackGuestSpeaker);
 
     if (!backToBackFacilitator && !backToBackGuestSpeaker) { // Neither facilitator nor guest speaker can do back to back.
       // From the user pool we select facilitators and guest speakers and check their availability for a specific booking
+
       availableFacilitators = facilitators.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
       availableGuestSpeakers = guestSpeakers.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
+
+      if (i > 0) {
+        availableFacilitators = availableFacilitators.filter(user => (user !== bookings[i - 1].facilitator));
+        availableGuestSpeakers = availableGuestSpeakers.filter(user => (user !== bookings[i - 1].guestSpeaker));
+      }
 
       // Crosscheck the workshop's constraints with user's attributes
       availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));
@@ -51,6 +58,7 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       }
     } else if (!backToBackFacilitator && backToBackGuestSpeaker) { // Facilitator from previous booking can't do back to back but guest speaker can.
       availableFacilitators = facilitators.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
+      availableFacilitators = availableFacilitators.filter(user => (user !== bookings[i - 1].facilitator));
       availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));
 
       const guestSpeaker = guestSpeakers.filter(user => user === bookings[i - 1].guestSpeaker)[0];
@@ -64,6 +72,7 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       }
     } else if (backToBackFacilitator && !backToBackGuestSpeaker) { // Facilitator from previous booking can do back to back but guest speaker can't.
       availableGuestSpeakers = guestSpeakers.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
+      availableGuestSpeakers = availableGuestSpeakers.filter(user => (user !== bookings[i - 1].guestSpeaker));
       availableGuestSpeakers = availableGuestSpeakers.filter(user => eligible(user, bookings[i].workshop));
 
       const facilitator = facilitators.filter(user => user === bookings[i - 1].facilitator)[0];
