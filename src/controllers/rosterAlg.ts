@@ -29,18 +29,16 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       backToBackFacilitator = checkBackToBackFacilitator(bookings[i - 1], bookings[i]);
       backToBackGuestSpeaker = checkBackToBackGuestSpeaker(bookings[i - 1], bookings[i]);
     }
-    console.log(backToBackFacilitator, backToBackGuestSpeaker);
 
     if (!backToBackFacilitator && !backToBackGuestSpeaker) { // Neither facilitator nor guest speaker can do back to back.
       // From the user pool we select facilitators and guest speakers and check their availability for a specific booking
-
       availableFacilitators = facilitators.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
       availableGuestSpeakers = guestSpeakers.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
-
+      /*
       if (i > 0) {
         availableFacilitators = availableFacilitators.filter(user => (user !== bookings[i - 1].facilitator));
         availableGuestSpeakers = availableGuestSpeakers.filter(user => (user !== bookings[i - 1].guestSpeaker));
-      }
+      }*/
 
       // Crosscheck the workshop's constraints with user's attributes
       availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));
@@ -99,12 +97,11 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       bookings[i].guestSpeaker = teams[index][1];
       bookings[i].state = BookingState.UNCONFIRMED;
 
-      adjustAvailabilities((facilitators.filter(user => user === bookings[i].facilitator)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
-      adjustAvailabilities((guestSpeakers.filter(user => user === bookings[i].guestSpeaker)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
-    } else {
-      continue;
+      adjustAvailabilities(teams[index][0], bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
+      adjustAvailabilities(teams[index][1], bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
     }
   }
 
+  console.log(bookings);
   return bookings;
 }

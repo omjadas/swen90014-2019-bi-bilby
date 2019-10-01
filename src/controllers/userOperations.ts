@@ -87,13 +87,15 @@ export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Da
 
   if (assignedTimes.length > 1) {
     for (let i = 0; i < (assignedTimes.length - 1); i++) {
-      if (!checkDay(assignedTimes[i].availableFrom, assignedTimes[i + 1].availableFrom)
-        && (!(assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin))) {
+      if ((!checkDay(assignedTimes[i].availableFrom, assignedTimes[i + 1].availableFrom)
+        && (!(assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin)))
+        || (!checkDay(assignedTimes[i + 1].availableFrom, timeBegin))) {
         counter = 0;
+      } else {
+        counter++;
       }
-      counter++;
     }
-  } else if (assignedTimes.length === 1 && assignedTimes[0].availableUntil <= timeBegin) {
+  } else if (assignedTimes.length === 1 && assignedTimes[0].availableUntil <= timeBegin && checkDay(assignedTimes[0].availableUntil, timeBegin)) {
     counter = 1;
   } else if (assignedTimes.length === 0) {
     counter = 0;
@@ -138,7 +140,8 @@ export function checkBackToBackFacilitator(previousBooking: Booking, currentBook
 
     if (facilitator._facilitator instanceof FacilitatorModel) {
       const _facilitator = facilitator._facilitator as Facilitator;
-      if (checkBackToBackTime(_facilitator.assignedTimes, currentBooking.sessionTime.timeBegin) >= 3) {
+      const counter = checkBackToBackTime(_facilitator.assignedTimes, currentBooking.sessionTime.timeBegin);
+      if (counter >= 3 || counter === 0) {
         maxAmount = true;
       }
     }
@@ -184,7 +187,8 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
 
     if (guestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
       const _guestSpeaker = guestSpeaker._guestSpeaker as GuestSpeaker;
-      if (checkBackToBackTime(_guestSpeaker.assignedTimes, currentBooking.sessionTime.timeBegin) >= 2) {
+      const counter = checkBackToBackTime(_guestSpeaker.assignedTimes, currentBooking.sessionTime.timeBegin);
+      if (counter >= 2 || counter === 0) {
         maxAmount = true;
       }
     }
@@ -222,24 +226,26 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
     const availableFrom = availabilities[i].availableFrom;
     const availableUntil = availabilities[i].availableUntil;
 
-    const stringFrom = availableFrom.toTimeString().slice(0, 8);
-    const stringUntil = availableUntil.toTimeString().slice(0, 8);
+    if (checkDay(availableFrom, timeBegin)) {
+      const stringFrom = availableFrom.toTimeString().slice(0, 8);
+      const stringUntil = availableUntil.toTimeString().slice(0, 8);
 
-    const stringBegin = timeBegin.toTimeString().slice(0, 8);
-    const stringEnd = timeEnd.toTimeString().slice(0, 8);
+      const stringBegin = timeBegin.toTimeString().slice(0, 8);
+      const stringEnd = timeEnd.toTimeString().slice(0, 8);
 
-    assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: availabilities[i].dayOfWeek });
+      assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: availabilities[i].dayOfWeek });
 
-    if (stringFrom === stringBegin && stringUntil === stringEnd) { //If the availability is just a 1 hour block
-      availabilities.splice(i, 1);
-    } else if (stringFrom === stringBegin && stringEnd < stringUntil) { // If the booking starts at the same time as the beginning of the user's availability
-      availabilities[i].availableFrom = timeEnd;
-    } else if (stringFrom < stringEnd && stringEnd === stringUntil) { // If the booking end at the same time as the end of the user's availability
-      availabilities[i].availableUntil = timeBegin;
-    } else if (stringFrom < stringEnd && stringEnd < stringUntil) { // If the booking starts and ends in the middle of the user's availability
-      availabilities[i].availableUntil = timeBegin;
-      availabilities.splice(i + 1, 0, availabilities[i]);
-      availabilities[i + 1].availableFrom = timeEnd;
+      if (stringFrom === stringBegin && stringUntil === stringEnd) { //If the availability is just a 1 hour block
+        availabilities.splice(i, 1);
+      } else if (stringFrom === stringBegin && stringEnd < stringUntil) { // If the booking starts at the same time as the beginning of the user's availability
+        availabilities[i].availableFrom = timeEnd;
+      } else if (stringFrom < stringEnd && stringEnd === stringUntil) { // If the booking end at the same time as the end of the user's availability
+        availabilities[i].availableUntil = timeBegin;
+      } else if (stringFrom < stringEnd && stringEnd < stringUntil) { // If the booking starts and ends in the middle of the user's availability
+        availabilities[i].availableUntil = timeBegin;
+        availabilities.splice(i + 1, 0, availabilities[i]);
+        availabilities[i + 1].availableFrom = timeEnd;
+      }
     }
   }
 }
@@ -300,4 +306,3 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User)
 
   return null;
 }
-
