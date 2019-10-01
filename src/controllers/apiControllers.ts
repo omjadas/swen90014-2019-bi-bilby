@@ -21,14 +21,17 @@ export function upload(req: Request, res: Response): any {
     return res.status(400).send("Only one file is allowed to be uploaded.");
   }
 
+  const from = new Date(req.body.from);
+  const to = new Date(req.body.to);
+
   const file = req.files.excel.data;
   const cities = getCities(file);
   let bookings: Booking[] = [];
   cities.forEach(city => {
-    bookings = bookings.concat(getBookings(file, city.city, new Date(req.body.from), new Date(req.body.to)));
+    bookings = bookings.concat(getBookings(file, city.city, new Date(from), new Date(to)));
   });
-  const guestSpeakers = getGuestSpeakers(file);
-  const facilitators = getFacilitators(file);
+  const guestSpeakers = getGuestSpeakers(file, new Date(from), new Date(to));
+  const facilitators = getFacilitators(file, new Date(from), new Date(to));
   const roster = rosterByPreferences(bookings, guestSpeakers, facilitators);
   const out = printBooking(roster);
 

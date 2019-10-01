@@ -7,7 +7,7 @@ import { FacilitatorModel } from "../models/facilitator.model";
 import { GuestSpeakerModel } from "../models/guestSpeaker.model";
 import { LocationModel, Location } from "../models/location.model";
 import { WorkshopModel, Workshop } from "../models/workshop.model";
-import { dayOfWeek } from "../models/availability";
+import { dayOfWeek, Availability } from "../models/availability";
 import { TeacherModel } from "../models/teacher.model";
 
 /**
@@ -38,16 +38,71 @@ export function getCities(file: Buffer): City[] {
 
 /**
  * Function for Getting all the Guest Speakers
- * @param {Buffer} file - The excel sheet
- * @returns {User} Users array
+ *
+ * @export
+ * @param {Buffer} file The excel sheet
+ * @param {Date} from from date
+ * @param {Date} to to date
+ * @returns {User[]} Users array
  */
-export function getGuestSpeakers(file: Buffer): User[] {
+export function getGuestSpeakers(file: Buffer, from: Date, to: Date): User[] {
   const wb = XLSX.read(file, { type: "buffer" });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
   const FAndGSO: any[] = XLSX.utils.sheet_to_json(u);
   const GSUsers: User[] = [];
 
   for (let i = 0; i < Object.keys(FAndGSO).length; i++) {
+    const days = [{
+      availableFrom: getConversionDate(FAndGSO[i]["Sunday Available From"]),
+      availableUntil: getConversionDate(FAndGSO[i]["Sunday Available Until"]),
+      dayOfWeek: dayOfWeek.SUN
+    },
+    {
+      availableFrom: getConversionDate(FAndGSO[i]["Monday Available From"]),
+      availableUntil: getConversionDate(FAndGSO[i]["Monday Available Until"]),
+      dayOfWeek: dayOfWeek.MON
+    },
+    {
+      availableFrom: getConversionDate(FAndGSO[i]["Tuesday Available From"]),
+      availableUntil: getConversionDate(FAndGSO[i]["Tuesday Available Until"]),
+      dayOfWeek: dayOfWeek.TUE
+    },
+    {
+      availableFrom: getConversionDate(FAndGSO[i]["Wednesday Available From"]),
+      availableUntil: getConversionDate(FAndGSO[i]["Wednesday Available Until"]),
+      dayOfWeek: dayOfWeek.WED
+    },
+    {
+      availableFrom: getConversionDate(FAndGSO[i]["Thursday Available From"]),
+      availableUntil: getConversionDate(FAndGSO[i]["Thursday Available Until"]),
+      dayOfWeek: dayOfWeek.THU
+    },
+    {
+      availableFrom: getConversionDate(FAndGSO[i]["Friday Available From"]),
+      availableUntil: getConversionDate(FAndGSO[i]["Friday Available Until"]),
+      dayOfWeek: dayOfWeek.FRI
+    },
+    {
+      availableFrom: getConversionDate(FAndGSO[i]["Saturday Available From"]),
+      availableUntil: getConversionDate(FAndGSO[i]["Saturday Available Until"]),
+      dayOfWeek: dayOfWeek.SAT
+    }];
+
+    const availabilities: Availability[] = [];
+
+    for (let d = new Date(from); d <= to; d.setDate(d.getDate() + 1)) {
+      const times = days[d.getDay()];
+      const availableFrom = new Date(times.availableFrom);
+      const availableUntil = new Date(times.availableUntil);
+      const dayOfWeek = times.dayOfWeek;
+
+      availabilities.push({
+        availableFrom: new Date(new Date(d).setHours(availableFrom.getHours(), availableFrom.getMinutes(), availableFrom.getSeconds())),
+        availableUntil: new Date(new Date(d).setHours(availableUntil.getHours(), availableUntil.getMinutes(), availableUntil.getSeconds())),
+        dayOfWeek: dayOfWeek
+      });
+    }
+
     if (FAndGSO[i]["Type"] === "Guest Speaker") {
       GSUsers.push(new UserModel({
         firstName: FAndGSO[i]["First Name"],
@@ -62,42 +117,7 @@ export function getGuestSpeakers(file: Buffer): User[] {
           city: new CityModel({
             city: FAndGSO[i]["City"]
           }),
-          availabilities: [
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Monday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Monday Available Until"]),
-              dayOfWeek: dayOfWeek.MON
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Tuesday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Tuesday Available Until"]),
-              dayOfWeek: dayOfWeek.TUE
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Wednesday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Wednesday Available Until"]),
-              dayOfWeek: dayOfWeek.WED
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Thursday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Thursday Available Until"]),
-              dayOfWeek: dayOfWeek.THU
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Friday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Friday Available Until"]),
-              dayOfWeek: dayOfWeek.FRI
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Saturday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Saturday Available Until"]),
-              dayOfWeek: dayOfWeek.SAT
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Sunday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Sunday Available Until"]),
-              dayOfWeek: dayOfWeek.SUN
-            }],
+          availabilities: availabilities,
           specificUnavailabilities: [
             {
               date: getConversionDate(FAndGSO[i]["Specific Unavailability 1"]),
@@ -133,16 +153,71 @@ export function getGuestSpeakers(file: Buffer): User[] {
 
 /**
  * Function for Getting all the facilitators
- * @param {Buffer} file - The excel sheet
- * @returns {User} Users array
+ *
+ * @export
+ * @param {Buffer} file The excel sheet
+ * @param {Date} from from date
+ * @param {Date} to to date
+ * @returns {User[]} Users array
  */
-export function getFacilitators(file: Buffer): User[] {
+export function getFacilitators(file: Buffer, from: Date, to: Date): User[] {
   const wb = XLSX.read(file, { type: "buffer" });
   const u = wb.Sheets["Facilitators | GuestSpeakers"];
   const FAndGSO: any[] = XLSX.utils.sheet_to_json(u);
   const facilitatorUsers: User[] = [];
   for (let i = 0; i < Object.keys(FAndGSO).length; i++) {
     if (FAndGSO[i]["Type"] === "Facilitator") {
+      const days = [{
+        availableFrom: getConversionDate(FAndGSO[i]["Sunday Available From"]),
+        availableUntil: getConversionDate(FAndGSO[i]["Sunday Available Until"]),
+        dayOfWeek: dayOfWeek.SUN
+      },
+      {
+        availableFrom: getConversionDate(FAndGSO[i]["Monday Available From"]),
+        availableUntil: getConversionDate(FAndGSO[i]["Monday Available Until"]),
+        dayOfWeek: dayOfWeek.MON
+      },
+      {
+        availableFrom: getConversionDate(FAndGSO[i]["Tuesday Available From"]),
+        availableUntil: getConversionDate(FAndGSO[i]["Tuesday Available Until"]),
+        dayOfWeek: dayOfWeek.TUE
+      },
+      {
+        availableFrom: getConversionDate(FAndGSO[i]["Wednesday Available From"]),
+        availableUntil: getConversionDate(FAndGSO[i]["Wednesday Available Until"]),
+        dayOfWeek: dayOfWeek.WED
+      },
+      {
+        availableFrom: getConversionDate(FAndGSO[i]["Thursday Available From"]),
+        availableUntil: getConversionDate(FAndGSO[i]["Thursday Available Until"]),
+        dayOfWeek: dayOfWeek.THU
+      },
+      {
+        availableFrom: getConversionDate(FAndGSO[i]["Friday Available From"]),
+        availableUntil: getConversionDate(FAndGSO[i]["Friday Available Until"]),
+        dayOfWeek: dayOfWeek.FRI
+      },
+      {
+        availableFrom: getConversionDate(FAndGSO[i]["Saturday Available From"]),
+        availableUntil: getConversionDate(FAndGSO[i]["Saturday Available Until"]),
+        dayOfWeek: dayOfWeek.SAT
+      }];
+
+      const availabilities: Availability[] = [];
+
+      for (let d = new Date(from); d <= to; d.setDate(d.getDate() + 1)) {
+        const times = days[d.getDay()];
+        const availableFrom = new Date(times.availableFrom);
+        const availableUntil = new Date(times.availableUntil);
+        const dayOfWeek = times.dayOfWeek;
+
+        availabilities.push({
+          availableFrom: new Date(new Date(d).setHours(availableFrom.getHours(), availableFrom.getMinutes(), availableFrom.getSeconds())),
+          availableUntil: new Date(new Date(d).setHours(availableUntil.getHours(), availableUntil.getMinutes(), availableUntil.getSeconds())),
+          dayOfWeek: dayOfWeek
+        });
+      }
+
       facilitatorUsers.push(new UserModel({
         firstName: FAndGSO[i]["First Name"],
         lastName: FAndGSO[i]["Last Name"],
@@ -156,42 +231,7 @@ export function getFacilitators(file: Buffer): User[] {
           city: new CityModel({
             city: FAndGSO[i]["City"]
           }),
-          availabilities: [
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Monday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Monday Available Until"]),
-              dayOfWeek: dayOfWeek.MON
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Tuesday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Tuesday Available Until"]),
-              dayOfWeek: dayOfWeek.TUE
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Wednesday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Wednesday Available Until"]),
-              dayOfWeek: dayOfWeek.WED
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Thursday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Thursday Available Until"]),
-              dayOfWeek: dayOfWeek.THU
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Friday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Friday Available Until"]),
-              dayOfWeek: dayOfWeek.FRI
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Saturday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Saturday Available Until"]),
-              dayOfWeek: dayOfWeek.SAT
-            },
-            {
-              availableFrom: getConversionDate(FAndGSO[i]["Sunday Available From"]),
-              availableUntil: getConversionDate(FAndGSO[i]["Sunday Available Until"]),
-              dayOfWeek: dayOfWeek.SUN
-            }],
+          availabilities: availabilities,
           specificUnavailabilities: [
             {
               date: getConversionDate(FAndGSO[i]["Specific Unavailability 1"]),
