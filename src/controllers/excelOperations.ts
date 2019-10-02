@@ -337,7 +337,7 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
     toDate.setDate(toDate.getDate() + 1);
     for (let i = 2; i < Object.keys(cityObject).length; i++) {
       const da = getConversionDate(cityObject[i]["B"]);
-      if (da > fromDate && da < toDate) {
+      if (da >= fromDate && da <= toDate) {
         booking.push(new BookingModel({
           state: BookingState.PENDING,
           facilitator: undefined,
@@ -397,6 +397,8 @@ export function printBooking(b: Booking[]): void {
   ];
 
   for (let i = 0; i < Object.keys(b).length; i++) {
+    b[i].sessionTime.timeBegin.setHours(b[i].sessionTime.timeBegin.getHours() - 10);
+    b[i].sessionTime.timeEnd.setHours(b[i].sessionTime.timeEnd.getHours() - 10);
     const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
     const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
     const row: string[] = [];
