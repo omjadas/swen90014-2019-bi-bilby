@@ -102,6 +102,5 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
     }
   }
 
-  console.log(bookings.length);
   return bookings;
 }
