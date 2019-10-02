@@ -428,6 +428,5 @@ export function printBooking(b: Booking[]): void {
   wb.SheetNames.push(sheetName);
   wb.Sheets[sheetName] = ws;
   const content = XLSX.write(wb, { type: "buffer", bookType: "xlsx", bookSST: false });
-  XLSX.writeFile(wb, "/Users/Muzamil/Desktop/swen90014-2019-bi-bilby/src/ExcelSheetIO/mmm.xlsx");
   return content;
 }
