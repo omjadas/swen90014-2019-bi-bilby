@@ -356,7 +356,7 @@ export function printBooking(b: Booking[]): void {
     const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
     const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
     const row: string[] = [];
-    row.push(b[i].sessionTime.timeBegin.toDateString().toString());
+    row.push(b[i].sessionTime.timeBegin.toDateString());
     if (b[i].location instanceof LocationModel) {
       const location = b[i].location as Location;
       row.push(location.name);
