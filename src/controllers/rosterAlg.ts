@@ -4,7 +4,9 @@ import {
   pairTeams,
   adjustAvailabilities,
   checkBackToBackFacilitator,
-  checkBackToBackGuestSpeaker
+  checkBackToBackGuestSpeaker,
+  NA_FACILITATOR,
+  NA_GUESTSPEAKER
 } from "./userOperations";
 import { Booking, BookingState } from "../models/booking.model";
 import { User } from "../models/user.model";
@@ -44,6 +46,12 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));
       availableGuestSpeakers = availableGuestSpeakers.filter(user => eligible(user, bookings[i].workshop));
 
+      if (availableFacilitators.length === 0) {
+        availableFacilitators.push(NA_FACILITATOR);
+      } else if (availableGuestSpeakers.length === 0) {
+        availableGuestSpeakers.push(NA_GUESTSPEAKER);
+      }
+
       // Pair facilitators and guest speakers to follow the constraints
       for (let f = 0; f < availableFacilitators.length; f++) {
         for (let g = 0; g < availableGuestSpeakers.length; g++) {
@@ -61,6 +69,10 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
 
       const guestSpeaker = guestSpeakers.filter(user => user === bookings[i - 1].guestSpeaker)[0];
 
+      if (availableFacilitators.length === 0) {
+        availableFacilitators.push(NA_FACILITATOR);
+      }
+
       for (let f = 0; f < availableFacilitators.length; f++) {
         const pair = pairTeams(availableFacilitators[f], guestSpeaker);
 
@@ -74,6 +86,10 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       availableGuestSpeakers = availableGuestSpeakers.filter(user => eligible(user, bookings[i].workshop));
 
       const facilitator = facilitators.filter(user => user === bookings[i - 1].facilitator)[0];
+
+      if (availableGuestSpeakers.length === 0) {
+        availableGuestSpeakers.push(NA_GUESTSPEAKER);
+      }
 
       for (let g = 0; g < availableGuestSpeakers.length; g++) {
         const pair = pairTeams(facilitator, availableGuestSpeakers[g]);

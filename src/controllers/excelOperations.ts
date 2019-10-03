@@ -333,9 +333,11 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
   if (wb.Sheets[cityName]) {
     const m = wb.Sheets[cityName];
     const cityObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
+    const workshops = getWorkshopTypes(file);
     const booking: Booking[] = [];
     toDate.setDate(toDate.getDate() + 1);
     for (let i = 2; i < Object.keys(cityObject).length; i++) {
+      const workshop = workshops.filter(workshop => workshop.workshopName === cityObject[i]["G"]);
       const da = getConversionDate(cityObject[i]["B"]);
       if (da >= fromDate && da <= toDate) {
         booking.push(new BookingModel({
@@ -355,8 +357,8 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
           }),
           workshop: new WorkshopModel({
             workshopName: cityObject[i]["G"],
-            requireFacilitator: true,
-            requireGuestSpeaker: true
+            requireFacilitator: workshop[0].requireFacilitator,
+            requireGuestSpeaker: workshop[0].requireGuestSpeaker
           }),
           level: cityObject[i]["I"],
           teacher: new UserModel({

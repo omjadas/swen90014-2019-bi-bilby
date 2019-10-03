@@ -6,6 +6,41 @@ import { Ref } from "@hasezoey/typegoose";
 import { Availability, dayOfWeek } from "../models/availability";
 import { Booking } from "../models/booking.model";
 import { Location, LocationModel } from "../models/location.model";
+import { CityModel } from "../models/city.model";
+
+export const NA_FACILITATOR = new UserModel({
+  firstName: "N/A",
+  lastName: "N/A",
+  email: "N/A",
+  address: "N/A",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "N/A",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: new CityModel({ city: "N/A" }),
+    trained: false,
+    reliable: false,
+    availabilities: [],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
+});
+
+export const NA_GUESTSPEAKER = new UserModel({
+  firstName: "N/A",
+  lastName: "N/A",
+  email: "N/A",
+  address: "N/A",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "N/A",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: new CityModel({ city: "N/A" }),
+    trained: false,
+    reliable: false,
+    availabilities: [],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
+});
 
 /**
  * Check if day matches with availability.
