@@ -395,7 +395,7 @@ export function printBooking(b: Booking[]): void {
   const sheetName = "Roster";
   const wb = XLSX.utils.book_new();
   const wsData = [
-    ["Location", "Pax", "Workshop", "Level", "Teacher", "Phone", "GuestSpeaker", "Guest Speaker Mobile", "Guest Speaker Email", "Facilitator", "Facilitator Mobile", "Facilitator Email", "TimeBegin", "TimeEnd"],
+    ["Booking Date", "Location", "Pax", "Workshop", "Level", "Teacher", "Phone", "GuestSpeaker", "Guest Speaker Mobile", "Guest Speaker Email", "Facilitator", "Facilitator Mobile", "Facilitator Email", "TimeBegin", "TimeEnd"],
   ];
 
   for (let i = 0; i < Object.keys(b).length; i++) {
@@ -404,7 +404,7 @@ export function printBooking(b: Booking[]): void {
     const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
     const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
     const row: string[] = [];
-
+    row.push(b[i].sessionTime.timeBegin.toDateString());
     if (b[i].location instanceof LocationModel) {
       const location = b[i].location as Location;
       row.push(location.name);
@@ -457,13 +457,14 @@ export function printBooking(b: Booking[]): void {
   const ws = XLSX.utils.aoa_to_sheet(wsData);
   const wscols = [
     { width: 15 },
-    { width: 10 },
-    { width: 11 },
+    { width: 15 },
+    { width: 5 },
+    { width: 9 },
     { width: 6 },
     { width: 18 },
     { width: 10 },
     { width: 18 },
-    { width: 18 },
+    { width: 19 },
     { width: 18 },
     { width: 18 },
     { width: 18 },
