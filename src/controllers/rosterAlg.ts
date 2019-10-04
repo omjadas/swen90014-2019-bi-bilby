@@ -4,7 +4,9 @@ import {
   pairTeams,
   adjustAvailabilities,
   checkBackToBackFacilitator,
-  checkBackToBackGuestSpeaker
+  checkBackToBackGuestSpeaker,
+  NA_FACILITATOR,
+  NA_GUESTSPEAKER
 } from "./userOperations";
 import { Booking, BookingState } from "../models/booking.model";
 import { User } from "../models/user.model";
@@ -34,10 +36,21 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       // From the user pool we select facilitators and guest speakers and check their availability for a specific booking
       availableFacilitators = facilitators.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
       availableGuestSpeakers = guestSpeakers.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
+      /*
+      if (i > 0) {
+        availableFacilitators = availableFacilitators.filter(user => (user !== bookings[i - 1].facilitator));
+        availableGuestSpeakers = availableGuestSpeakers.filter(user => (user !== bookings[i - 1].guestSpeaker));
+      }*/
 
       // Crosscheck the workshop's constraints with user's attributes
       availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));
       availableGuestSpeakers = availableGuestSpeakers.filter(user => eligible(user, bookings[i].workshop));
+
+      if (availableFacilitators.length === 0) {
+        availableFacilitators.push(NA_FACILITATOR);
+      } else if (availableGuestSpeakers.length === 0) {
+        availableGuestSpeakers.push(NA_GUESTSPEAKER);
+      }
 
       // Pair facilitators and guest speakers to follow the constraints
       for (let f = 0; f < availableFacilitators.length; f++) {
@@ -51,9 +64,14 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       }
     } else if (!backToBackFacilitator && backToBackGuestSpeaker) { // Facilitator from previous booking can't do back to back but guest speaker can.
       availableFacilitators = facilitators.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
+      availableFacilitators = availableFacilitators.filter(user => (user !== bookings[i - 1].facilitator));
       availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));
 
       const guestSpeaker = guestSpeakers.filter(user => user === bookings[i - 1].guestSpeaker)[0];
+
+      if (availableFacilitators.length === 0) {
+        availableFacilitators.push(NA_FACILITATOR);
+      }
 
       for (let f = 0; f < availableFacilitators.length; f++) {
         const pair = pairTeams(availableFacilitators[f], guestSpeaker);
@@ -64,9 +82,14 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       }
     } else if (backToBackFacilitator && !backToBackGuestSpeaker) { // Facilitator from previous booking can do back to back but guest speaker can't.
       availableGuestSpeakers = guestSpeakers.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
+      availableGuestSpeakers = availableGuestSpeakers.filter(user => (user !== bookings[i - 1].guestSpeaker));
       availableGuestSpeakers = availableGuestSpeakers.filter(user => eligible(user, bookings[i].workshop));
 
       const facilitator = facilitators.filter(user => user === bookings[i - 1].facilitator)[0];
+
+      if (availableGuestSpeakers.length === 0) {
+        availableGuestSpeakers.push(NA_GUESTSPEAKER);
+      }
 
       for (let g = 0; g < availableGuestSpeakers.length; g++) {
         const pair = pairTeams(facilitator, availableGuestSpeakers[g]);
@@ -90,10 +113,8 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       bookings[i].guestSpeaker = teams[index][1];
       bookings[i].state = BookingState.UNCONFIRMED;
 
-      adjustAvailabilities((facilitators.filter(user => user === bookings[i].facilitator)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
-      adjustAvailabilities((guestSpeakers.filter(user => user === bookings[i].guestSpeaker)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
-    } else {
-      continue;
+      adjustAvailabilities(teams[index][0], bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
+      adjustAvailabilities(teams[index][1], bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
     }
   }
 

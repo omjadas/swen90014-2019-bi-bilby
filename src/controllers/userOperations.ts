@@ -6,6 +6,41 @@ import { Ref } from "@hasezoey/typegoose";
 import { Availability, dayOfWeek } from "../models/availability";
 import { Booking } from "../models/booking.model";
 import { Location, LocationModel } from "../models/location.model";
+import { CityModel } from "../models/city.model";
+
+export const NA_FACILITATOR = new UserModel({
+  firstName: "N/A",
+  lastName: "N/A",
+  email: "N/A",
+  address: "N/A",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "N/A",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: new CityModel({ city: "N/A" }),
+    trained: false,
+    reliable: false,
+    availabilities: [],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
+});
+
+export const NA_GUESTSPEAKER = new UserModel({
+  firstName: "N/A",
+  lastName: "N/A",
+  email: "N/A",
+  address: "N/A",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "N/A",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: new CityModel({ city: "N/A" }),
+    trained: false,
+    reliable: false,
+    availabilities: [],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
+});
 
 /**
  * Check if day matches with availability.
@@ -33,6 +68,24 @@ export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
   } else {
     return false;
   }
+}
+
+/**
+ * Check if day matches with availability.
+ *
+ * @export
+ * @param {Date} availableFrom - time the user is available from
+ * @param {Date} timeBegin - time for the beginning of the workshop
+ * @returns {boolean} - whether they are in the same day of the year
+ */
+export function checkDay(availableFrom: Date, timeBegin: Date): boolean {
+  if (availableFrom.getFullYear() === timeBegin.getFullYear()
+    && availableFrom.getMonth() === timeBegin.getMonth()
+    && availableFrom.getDate() === timeBegin.getDate()) {
+    return true;
+  }
+
+  return false;
 }
 
 /**
@@ -65,13 +118,23 @@ export function eligible(user: User, workshop: Ref<Workshop>): boolean {
  * @returns {number} - count of back to back workshops this user has done before current booking time
  */
 export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Date): number {
-  let counter = 0;
+  let counter = 1;
 
-  for (let i = 0; i < assignedTimes.length - 1; i++) {
-    while (assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin) {
-      counter++;
-      continue;
+  if (assignedTimes.length > 1) {
+    for (let i = 0; i < (assignedTimes.length - 1); i++) {
+      if ((!checkDay(assignedTimes[i].availableFrom, assignedTimes[i + 1].availableFrom)
+        && (!(assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin)))
+        || (!checkDay(assignedTimes[i + 1].availableFrom, timeBegin))) {
+        counter = 0;
+      } else {
+        counter++;
+      }
     }
+  } else if (assignedTimes.length === 1 && assignedTimes[0].availableUntil <= timeBegin && checkDay(assignedTimes[0].availableUntil, timeBegin)) {
+    counter = 1;
+  } else if (assignedTimes.length === 0) {
+    counter = 0;
+  } else {
     counter = 0;
   }
 
@@ -112,7 +175,8 @@ export function checkBackToBackFacilitator(previousBooking: Booking, currentBook
 
     if (facilitator._facilitator instanceof FacilitatorModel) {
       const _facilitator = facilitator._facilitator as Facilitator;
-      if (checkBackToBackTime(_facilitator.availabilities, currentBooking.sessionTime.timeBegin) >= 3) {
+      const counter = checkBackToBackTime(_facilitator.assignedTimes, currentBooking.sessionTime.timeBegin);
+      if (counter >= 3 || counter === 0) {
         maxAmount = true;
       }
     }
@@ -158,7 +222,8 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
 
     if (guestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
       const _guestSpeaker = guestSpeaker._guestSpeaker as GuestSpeaker;
-      if (checkBackToBackTime(_guestSpeaker.availabilities, currentBooking.sessionTime.timeBegin) >= 3) {
+      const counter = checkBackToBackTime(_guestSpeaker.assignedTimes, currentBooking.sessionTime.timeBegin);
+      if (counter >= 2 || counter === 0) {
         maxAmount = true;
       }
     }
@@ -193,17 +258,21 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
   }
 
   for (let i = 0; i < availabilities.length; i++) {
-    if (checkDayOfWeek(timeBegin.getDay(), availabilities[i].dayOfWeek)) {
-      const availableFrom = availabilities[i].availableFrom;
-      const availableUntil = availabilities[i].availableUntil;
+    const availableFrom = availabilities[i].availableFrom;
+    const availableUntil = availabilities[i].availableUntil;
 
+    if (checkDay(availableFrom, timeBegin)) {
       const stringFrom = availableFrom.toTimeString().slice(0, 8);
       const stringUntil = availableUntil.toTimeString().slice(0, 8);
 
       const stringBegin = timeBegin.toTimeString().slice(0, 8);
       const stringEnd = timeEnd.toTimeString().slice(0, 8);
 
-      if (stringFrom === stringBegin && stringEnd < stringUntil) { // If the booking starts at the same time as the beginning of the user's availability
+      assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: availabilities[i].dayOfWeek });
+
+      if (stringFrom === stringBegin && stringUntil === stringEnd) { //If the availability is just a 1 hour block
+        availabilities.splice(i, 1);
+      } else if (stringFrom === stringBegin && stringEnd < stringUntil) { // If the booking starts at the same time as the beginning of the user's availability
         availabilities[i].availableFrom = timeEnd;
       } else if (stringFrom < stringEnd && stringEnd === stringUntil) { // If the booking end at the same time as the end of the user's availability
         availabilities[i].availableUntil = timeBegin;
@@ -212,8 +281,6 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
         availabilities.splice(i + 1, 0, availabilities[i]);
         availabilities[i + 1].availableFrom = timeEnd;
       }
-
-      assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: availabilities[i].dayOfWeek });
     }
   }
 }
@@ -239,7 +306,7 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
   }
 
   for (let i = 0; i < availabilities.length; i++) {
-    if (checkDayOfWeek(timeBegin.getDay(), availabilities[i].dayOfWeek)
+    if (checkDay(availabilities[i].availableFrom, timeBegin)
       && availabilities[i].availableFrom.toTimeString().slice(0, 8) <= timeBegin.toTimeString().slice(0, 8)
       && availabilities[i].availableUntil.toTimeString().slice(0, 8) >= timeEnd.toTimeString().slice(0, 8)) {
       return true;
@@ -274,4 +341,3 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User)
 
   return null;
 }
-
