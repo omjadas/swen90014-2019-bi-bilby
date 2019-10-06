@@ -14,7 +14,8 @@ export interface Availability {
   dayOfWeek: dayOfWeek,
 }
 
-export interface SpecificUnavailability {
-  date: Date,
+export interface Unavailability {
+  notAvailableFrom: Date,
+  notAvailableUntil: Date,
   notes: string,
 }

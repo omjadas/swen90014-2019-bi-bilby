@@ -7,7 +7,7 @@ import { FacilitatorModel } from "../models/facilitator.model";
 import { GuestSpeakerModel } from "../models/guestSpeaker.model";
 import { LocationModel, Location } from "../models/location.model";
 import { WorkshopModel, Workshop } from "../models/workshop.model";
-import { dayOfWeek, Availability } from "../models/availability";
+import { dayOfWeek, Availability, Unavailability } from "../models/availability";
 import { TeacherModel } from "../models/teacher.model";
 
 /**
@@ -114,7 +114,7 @@ export function getGuestSpeakers(file: Buffer, from: Date, to: Date): User[] {
         userType: UserType.GUEST_SPEAKER,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
-          trained: ((FAndGSO[i]["Trained"] === "Yes") ? true : false),
+          trained: ((FAndGSO[i]["Trained"]) ? FAndGSO[i]["Trained"].split(",") : " "),
           reliable: ((FAndGSO[i]["Reliable"] === "Yes") ? true : false),
           city: new CityModel({
             city: FAndGSO[i]["City"]
@@ -122,28 +122,34 @@ export function getGuestSpeakers(file: Buffer, from: Date, to: Date): User[] {
           availabilities: availabilities,
           specificUnavailabilities: [
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 1"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 1 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 1 To"]),
+              notes: FAndGSO[i]["Notes 1"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 2"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 2 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 2 To"]),
+              notes: FAndGSO[i]["Notes 2"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 3"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 3 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 3 To"]),
+              notes: FAndGSO[i]["Notes 3"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 4"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 4 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 4 To"]),
+              notes: FAndGSO[i]["Notes 4"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 5"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 5 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 5 To"]),
+              notes: FAndGSO[i]["Notes 5"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 6"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 6 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 6 To"]),
+              notes: FAndGSO[i]["Notes 6"],
             }],
           assignedTimes: []
         })
@@ -152,7 +158,6 @@ export function getGuestSpeakers(file: Buffer, from: Date, to: Date): User[] {
   }
   return GSUsers;
 }
-
 /**
  * Function for Getting all the facilitators
  *
@@ -230,7 +235,7 @@ export function getFacilitators(file: Buffer, from: Date, to: Date): User[] {
         userType: UserType.FACILITATOR,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _facilitator: new FacilitatorModel({
-          trained: ((FAndGSO[i]["Trained"] === "Yes") ? true : false),
+          trained: ((FAndGSO[i]["Trained"]) ? FAndGSO[i]["Trained"].split(",") : " "),
           reliable: ((FAndGSO[i]["Reliable"] === "Yes") ? true : false),
           city: new CityModel({
             city: FAndGSO[i]["City"]
@@ -238,28 +243,34 @@ export function getFacilitators(file: Buffer, from: Date, to: Date): User[] {
           availabilities: availabilities,
           specificUnavailabilities: [
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 1"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 1 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 1 To"]),
+              notes: FAndGSO[i]["Notes 1"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 2"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 2 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 2 To"]),
+              notes: FAndGSO[i]["Notes 2"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 3"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 3 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 3 To"]),
+              notes: FAndGSO[i]["Notes 3"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 4"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 4 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 4 To"]),
+              notes: FAndGSO[i]["Notes 4"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 5"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 5 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 5 To"]),
+              notes: FAndGSO[i]["Notes 5"],
             },
             {
-              date: getConversionDate(FAndGSO[i]["Specific Unavailability 6"]),
-              notes: FAndGSO[i]["Notes"],
+              notAvailableFrom: getConversionDate(FAndGSO[i]["Specific Unavailability 6 From"]),
+              notAvailableUntil: getConversionDate(FAndGSO[i]["Specific Unavailability 6 To"]),
+              notes: FAndGSO[i]["Notes 6"],
             }],
           assignedTimes: []
         })
@@ -268,7 +279,6 @@ export function getFacilitators(file: Buffer, from: Date, to: Date): User[] {
   }
   return facilitatorUsers;
 }
-
 /**
  * Function for Getting all the School details
  * @param {Buffer} file - The excel sheet
