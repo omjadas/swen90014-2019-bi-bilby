@@ -7,8 +7,8 @@ export class GuestSpeaker extends Typegoose {
   @prop({ required: true, ref: City })
   public city!: Ref<City>;
 
-  @prop({ required: true })
-  public trained!: string[];
+  @arrayProp({ required: true })
+  public trained!: string;
 
   @prop({ required: true })
   public reliable!: boolean;

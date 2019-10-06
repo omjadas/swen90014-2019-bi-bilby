@@ -114,7 +114,7 @@ export function getGuestSpeakers(file: Buffer, from: Date, to: Date): User[] {
         userType: UserType.GUEST_SPEAKER,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _guestSpeaker: new GuestSpeakerModel({
-          trained: ((FAndGSO[i]["Trained"]) ? FAndGSO[i]["Trained"].split(",") : " "),
+          trained: ((FAndGSO[i]["Trained"]) ? FAndGSO[i]["Trained"].split(",") : ""),
           reliable: ((FAndGSO[i]["Reliable"] === "Yes") ? true : false),
           city: new CityModel({
             city: FAndGSO[i]["City"]
@@ -235,7 +235,7 @@ export function getFacilitators(file: Buffer, from: Date, to: Date): User[] {
         userType: UserType.FACILITATOR,
         phoneNumber: FAndGSO[i]["Phone Number"],
         _facilitator: new FacilitatorModel({
-          trained: ((FAndGSO[i]["Trained"]) ? FAndGSO[i]["Trained"].split(",") : " "),
+          trained: ((FAndGSO[i]["Trained"]) ? FAndGSO[i]["Trained"].split(",") : ""),
           reliable: ((FAndGSO[i]["Reliable"] === "Yes") ? true : false),
           city: new CityModel({
             city: FAndGSO[i]["City"]
