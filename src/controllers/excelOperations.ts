@@ -7,7 +7,7 @@ import { FacilitatorModel } from "../models/facilitator.model";
 import { GuestSpeakerModel } from "../models/guestSpeaker.model";
 import { LocationModel, Location } from "../models/location.model";
 import { WorkshopModel, Workshop } from "../models/workshop.model";
-import { dayOfWeek, Availability, Unavailability } from "../models/availability";
+import { Availability, Unavailability } from "../models/availability";
 import { TeacherModel } from "../models/teacher.model";
 
 /**
