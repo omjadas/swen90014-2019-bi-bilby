@@ -8,7 +8,6 @@ import { LocationModel } from "../src/models/location.model";
 import { WorkshopModel } from "../src/models/workshop.model";
 import { BookingModel, BookingState } from "../src/models/booking.model";
 import { TeacherModel } from "../src/models/teacher.model";
-import { dayOfWeek } from "../src/models/availability";
 
 // We want to pass in all the PENDING bookings
 // rosterByPreferences(teacherPreferences, guestSpeakers:, facilitators, locations)
@@ -56,15 +55,16 @@ const facilitators = [new UserModel({
   phoneNumber: "",
   _facilitator: new FacilitatorModel({
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 13, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 13, 0)
     }],
     specificUnavailabilities: [{
-      date: new Date(2018, 8, 7, 11, 0),
+      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
+      notes: "On holiday"
     }],
     assignedTimes: []
   })
@@ -78,15 +78,16 @@ new UserModel({
   phoneNumber: "",
   _facilitator: new FacilitatorModel({
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 13, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 13, 0)
     }],
     specificUnavailabilities: [{
-      date: new Date(2018, 8, 7, 11, 0),
+      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
+      notes: "On holiday"
     }],
     assignedTimes: []
   })
@@ -101,15 +102,16 @@ const guestSpeakers = [new UserModel({
   phoneNumber: "",
   _guestSpeaker: new GuestSpeakerModel({
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     }],
     specificUnavailabilities: [{
-      date: new Date(2018, 8, 7, 11, 0),
+      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
+      notes: "On holiday"
     }],
     assignedTimes: []
   })
@@ -123,15 +125,16 @@ new UserModel({
   phoneNumber: "",
   _guestSpeaker: new GuestSpeakerModel({
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     }],
     specificUnavailabilities: [{
-      date: new Date(2018, 8, 7, 11, 0),
+      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
+      notes: "On holiday"
     }],
     assignedTimes: []
   })
@@ -191,20 +194,20 @@ const facilitators2 = [{
   phoneNumber: "",
   _facilitator: {
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 13, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 13, 0)
     }],
     specificUnavailabilities: [{
-      date: new Date(2018, 8, 7, 11, 0),
+      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
+      notes: "On holiday"
     }],
     assignedTimes: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 10, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 10, 0)
     }]
   }
 },
@@ -217,20 +220,20 @@ const facilitators2 = [{
   phoneNumber: "",
   _facilitator: {
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 13, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 13, 0)
     }],
     specificUnavailabilities: [{
-      date: new Date(2018, 8, 7, 11, 0),
+      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
+      notes: "On holiday"
     }],
     assignedTimes: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 10, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 10, 0)
     }]
   }
 }];
@@ -244,20 +247,20 @@ const guestSpeakers2 = [{
   phoneNumber: "",
   _guestSpeaker: {
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     }],
     specificUnavailabilities: [{
-      date: new Date(2018, 8, 7, 11, 0),
+      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
+      notes: "On holiday"
     }],
     assignedTimes: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 10, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 10, 0)
     }],
   }
 },
@@ -269,20 +272,20 @@ const guestSpeakers2 = [{
   userType: UserType.GUEST_SPEAKER,
   phoneNumber: "",
   _guestSpeaker: { city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     }],
     specificUnavailabilities: [{
-      date: new Date(2018, 8, 7, 11, 0),
+      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
+      notes: "On holiday"
     }],
     assignedTimes: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 10, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 10, 0)
     }],
   }
 }];
