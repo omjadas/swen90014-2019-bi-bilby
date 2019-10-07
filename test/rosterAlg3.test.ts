@@ -244,8 +244,8 @@ const guestSpeakers2 = [{
 
 const afterRosterBookings = [{
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[0],
-  guestSpeaker: guestSpeakers2[0],
+  facilitator: facilitators[0],
+  guestSpeaker: guestSpeakers[0],
   sessionTime: { timeBegin: new Date(2018, 8, 6, 9, 0), timeEnd: new Date(2018, 8, 6, 10, 0) },
   city: cities[0],
   location: locations[0],
@@ -257,8 +257,8 @@ const afterRosterBookings = [{
 },
 {
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[0],
-  guestSpeaker: guestSpeakers2[0],
+  facilitator: facilitators[0],
+  guestSpeaker: guestSpeakers[0],
   sessionTime: { timeBegin: new Date(2018, 8, 6, 10, 0), timeEnd: new Date(2018, 8, 6, 11, 0) },
   city: cities[0],
   location: locations[0],
@@ -270,8 +270,8 @@ const afterRosterBookings = [{
 },
 {
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[0],
-  guestSpeaker: guestSpeakers2[1],
+  facilitator: facilitators[0],
+  guestSpeaker: guestSpeakers[1],
   sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
   city: cities[0],
   location: locations[0],

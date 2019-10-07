@@ -159,7 +159,7 @@ const facilitators2 = [{
 // Expected result for input bookings. Facilitator and guest speaker should be assigned and state should be UNCONFIRMED.
 const afterRosterBookings = [{
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[0],
+  facilitator: facilitators[0],
   guestSpeaker: NA_GUESTSPEAKER,
   sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
   city: cities[0],
@@ -172,5 +172,6 @@ const afterRosterBookings = [{
 }];
 
 test("workshop does not require guest speaker", () => {
+  // console.log(JSON.stringify(rosterByPreferences(bookings, guestSpeakers, facilitators)));
   expect(rosterByPreferences(bookings, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings);
 });

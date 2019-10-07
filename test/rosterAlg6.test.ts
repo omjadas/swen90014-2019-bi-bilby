@@ -204,8 +204,8 @@ const guestSpeakers2 = [{
 // Expected result for input bookings. Facilitator and guest speaker should be assigned and state should be UNCONFIRMED.
 const afterRosterBookings = [{
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[0],
-  guestSpeaker: guestSpeakers2[0],
+  facilitator: facilitators[0],
+  guestSpeaker: guestSpeakers[0],
   sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
   city: cities[0],
   location: locations[0],
@@ -217,8 +217,8 @@ const afterRosterBookings = [{
 },
 {
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[0],
-  guestSpeaker: guestSpeakers2[0],
+  facilitator: facilitators[0],
+  guestSpeaker: guestSpeakers[0],
   sessionTime: { timeBegin: new Date(2018, 8, 7, 11, 0), timeEnd: new Date(2018, 8, 7, 12, 0) },
   city: cities[0],
   location: locations[0],
