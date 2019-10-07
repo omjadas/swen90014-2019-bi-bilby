@@ -7,8 +7,8 @@ export class Facilitator extends Typegoose {
   @prop({ required: true, ref: City })
   public city!: Ref<City>;
 
-  @arrayProp({ required: true })
-  public trained!: string;
+  @arrayProp({ required: true, items: String })
+  public trained!: string[];
 
   @prop({ required: true })
   public reliable!: boolean;
