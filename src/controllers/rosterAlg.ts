@@ -36,11 +36,11 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       // From the user pool we select facilitators and guest speakers and check their availability for a specific booking
       availableFacilitators = facilitators.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
       availableGuestSpeakers = guestSpeakers.filter(user => userAvailable(user, bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd));
-      /*
+
       if (i > 0) {
         availableFacilitators = availableFacilitators.filter(user => (user !== bookings[i - 1].facilitator));
         availableGuestSpeakers = availableGuestSpeakers.filter(user => (user !== bookings[i - 1].guestSpeaker));
-      }*/
+      }
 
       // Crosscheck the workshop's constraints with user's attributes
       availableFacilitators = availableFacilitators.filter(user => eligible(user, bookings[i].workshop));

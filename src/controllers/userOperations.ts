@@ -6,7 +6,7 @@ import { Ref } from "@hasezoey/typegoose";
 import { Availability } from "../models/availability";
 import { Booking } from "../models/booking.model";
 import { Location, LocationModel } from "../models/location.model";
-import { CityModel } from "../models/city.model";
+import { City, CityModel } from "../models/city.model";
 
 export const NA_FACILITATOR = new UserModel({
   firstName: "N/A",
@@ -102,12 +102,17 @@ export function trainedUser(user: User, workshopName: string): boolean {
 export function eligible(user: User, workshop: Ref<Workshop>): boolean {
   if (workshop instanceof WorkshopModel) {
     const workshop1 = workshop as Workshop;
-    if (user.userType === UserType.FACILITATOR && workshop1.requireFacilitator && trainedUser(user, workshop1.workshopName)) {
-      return true;
-    } else if (user.userType === UserType.GUEST_SPEAKER && workshop1.requireGuestSpeaker && trainedUser(user, workshop1.workshopName)) {
-      return true;
+    if (user.userType === UserType.FACILITATOR) {
+      if (workshop1.requireFacilitator && trainedUser(user, workshop1.workshopName)) {
+        return true;
+      }
+    } else if (user.userType === UserType.GUEST_SPEAKER) {
+      if (workshop1.requireGuestSpeaker && trainedUser(user, workshop1.workshopName)) {
+        return true;
+      }
     }
   }
+
   return false;
 }
 
@@ -157,14 +162,18 @@ export function checkBackToBackFacilitator(previousBooking: Booking, currentBook
   let eligibleForWorkshop = false;
   let maxAmount = false;
 
-  if (previousBooking.city === currentBooking.city) {
-    sameCity = true;
+  if (previousBooking.city instanceof CityModel && currentBooking.city instanceof CityModel) {
+    const previousCity = previousBooking.city as City;
+    const currentCity = currentBooking.city as City;
+    if (previousCity.city === currentCity.city) {
+      sameCity = true;
+    }
   }
 
   if (previousBooking.location instanceof LocationModel && currentBooking.location instanceof LocationModel) {
     const previousLocation = previousBooking.location as Location;
     const currentLocation = currentBooking.location as Location;
-    if (previousLocation.address === currentLocation.address) {
+    if (previousLocation.name === currentLocation.name) {
       sameLocation = true;
     }
   }
@@ -204,14 +213,18 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
   let eligibleForWorkshop = false;
   let maxAmount = false;
 
-  if (previousBooking.city === currentBooking.city) {
-    sameCity = true;
+  if (previousBooking.city instanceof CityModel && currentBooking.city instanceof CityModel) {
+    const previousCity = previousBooking.city as City;
+    const currentCity = currentBooking.city as City;
+    if (previousCity.city === currentCity.city) {
+      sameCity = true;
+    }
   }
 
   if (previousBooking.location instanceof LocationModel && currentBooking.location instanceof LocationModel) {
     const previousLocation = previousBooking.location as Location;
     const currentLocation = currentBooking.location as Location;
-    if (previousLocation.address === currentLocation.address) {
+    if (previousLocation.name === currentLocation.name) {
       sameLocation = true;
     }
   }
