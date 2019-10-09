@@ -391,8 +391,8 @@ export function printBooking(b: Booking[]): void {
   ];
 
   for (let i = 0; i < Object.keys(b).length; i++) {
-    b[i].sessionTime.timeBegin.setHours(b[i].sessionTime.timeBegin.getHours() - 10);
-    b[i].sessionTime.timeEnd.setHours(b[i].sessionTime.timeEnd.getHours() - 10);
+    b[i].sessionTime.timeBegin.setHours(b[i].sessionTime.timeBegin.getUTCHours());
+    b[i].sessionTime.timeEnd.setHours(b[i].sessionTime.timeEnd.getUTCHours());
     const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
     const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
     const row: string[] = [];

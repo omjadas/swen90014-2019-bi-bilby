@@ -42,6 +42,4 @@ export function upload(req: Request, res: Response): any {
   res.set("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
   readStream.pipe(res);
-
-  // return res.send(out);
 }
