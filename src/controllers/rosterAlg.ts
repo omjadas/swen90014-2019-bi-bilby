@@ -5,8 +5,8 @@ import {
   adjustAvailabilities,
   checkBackToBackFacilitator,
   checkBackToBackGuestSpeaker,
-  NA_FACILITATOR,
-  NA_GUESTSPEAKER
+  EMPTY_GUESTSPEAKER,
+  EMPTY_FACILITATOR, filterTeams,
 } from "./userOperations";
 import { Booking, BookingState } from "../models/booking.model";
 import { User } from "../models/user.model";
@@ -23,7 +23,7 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
   for (let i = 0; i < bookings.length; i++) {
     let availableFacilitators: User[] = [];
     let availableGuestSpeakers: User[] = [];
-    const teams = [];
+    let teams: any = [];
     let backToBackFacilitator = false;
     let backToBackGuestSpeaker = false;
 
@@ -47,9 +47,9 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       availableGuestSpeakers = availableGuestSpeakers.filter(user => eligible(user, bookings[i].workshop));
 
       if (availableFacilitators.length === 0) {
-        availableFacilitators.push(NA_FACILITATOR);
-      } else if (availableGuestSpeakers.length === 0) {
-        availableGuestSpeakers.push(NA_GUESTSPEAKER);
+        availableFacilitators.push(EMPTY_FACILITATOR);
+      } if (availableGuestSpeakers.length === 0) {
+        availableGuestSpeakers.push(EMPTY_GUESTSPEAKER);
       }
 
       // Pair facilitators and guest speakers to follow the constraints
@@ -70,7 +70,9 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       const guestSpeaker = guestSpeakers.filter(user => user === bookings[i - 1].guestSpeaker)[0];
 
       if (availableFacilitators.length === 0) {
-        availableFacilitators.push(NA_FACILITATOR);
+        availableFacilitators.push(EMPTY_FACILITATOR);
+      } if (availableGuestSpeakers.length === 0) {
+        availableGuestSpeakers.push(EMPTY_GUESTSPEAKER);
       }
 
       for (let f = 0; f < availableFacilitators.length; f++) {
@@ -87,8 +89,10 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
 
       const facilitator = facilitators.filter(user => user === bookings[i - 1].facilitator)[0];
 
-      if (availableGuestSpeakers.length === 0) {
-        availableGuestSpeakers.push(NA_GUESTSPEAKER);
+      if (availableFacilitators.length === 0) {
+        availableFacilitators.push(EMPTY_FACILITATOR);
+      } if (availableGuestSpeakers.length === 0) {
+        availableGuestSpeakers.push(EMPTY_GUESTSPEAKER);
       }
 
       for (let g = 0; g < availableGuestSpeakers.length; g++) {
@@ -106,6 +110,8 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       adjustAvailabilities((facilitators.filter(user => user === bookings[i].facilitator)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
       adjustAvailabilities((guestSpeakers.filter(user => user === bookings[i].guestSpeaker)[0]), bookings[i].sessionTime.timeBegin, bookings[i].sessionTime.timeEnd);
     }
+    // Filter the pairs of users as to remove all accuracies of empty users whenever possible.
+    teams = filterTeams(teams);
 
     if (!(backToBackFacilitator && backToBackGuestSpeaker) && teams.length > 0) {
       const index = Math.floor(Math.random() * teams.length);

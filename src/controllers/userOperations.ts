@@ -8,6 +8,40 @@ import { Booking } from "../models/booking.model";
 import { Location, LocationModel } from "../models/location.model";
 import { City, CityModel } from "../models/city.model";
 
+export const EMPTY_FACILITATOR = new UserModel({
+  firstName: "No Solution",
+  lastName: "",
+  email: "",
+  address: "",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "",
+  _facilitator: new FacilitatorModel({
+    city: new CityModel({ city: "" }),
+    trained: [],
+    reliable: false,
+    availabilities: [],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
+});
+
+export const EMPTY_GUESTSPEAKER = new UserModel({
+  firstName: "No Solution",
+  lastName: "",
+  email: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: new CityModel({ city: "" }),
+    trained: [],
+    reliable: false,
+    availabilities: [],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
+});
+
 export const NA_FACILITATOR = new UserModel({
   firstName: "N/A",
   lastName: "N/A",
@@ -15,7 +49,7 @@ export const NA_FACILITATOR = new UserModel({
   address: "N/A",
   userType: UserType.FACILITATOR,
   phoneNumber: "N/A",
-  _guestSpeaker: new GuestSpeakerModel({
+  _facilitator: new GuestSpeakerModel({
     city: new CityModel({ city: "N/A" }),
     trained: [],
     reliable: false,
@@ -102,14 +136,8 @@ export function trainedUser(user: User, workshopName: string): boolean {
 export function eligible(user: User, workshop: Ref<Workshop>): boolean {
   if (workshop instanceof WorkshopModel) {
     const workshop1 = workshop as Workshop;
-    if (user.userType === UserType.FACILITATOR) {
-      if (workshop1.requireFacilitator && trainedUser(user, workshop1.workshopName)) {
-        return true;
-      }
-    } else if (user.userType === UserType.GUEST_SPEAKER) {
-      if (workshop1.requireGuestSpeaker && trainedUser(user, workshop1.workshopName)) {
-        return true;
-      }
+    if (trainedUser(user, workshop1.workshopName)) {
+      return true;
     }
   }
 
@@ -129,19 +157,15 @@ export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Da
 
   if (assignedTimes.length > 1) {
     for (let i = 0; i < (assignedTimes.length - 1); i++) {
-      if ((!checkDay(assignedTimes[i].availableFrom, assignedTimes[i + 1].availableFrom)
-        && (!(assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin)))
-        || (!checkDay(assignedTimes[i + 1].availableFrom, timeBegin))) {
-        counter = 0;
-      } else {
-        counter++;
+      if (checkDay(assignedTimes[i].availableFrom, timeBegin)) {
+        if (checkDay(assignedTimes[i].availableUntil, assignedTimes[i + 1].availableFrom)) {
+          if (assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin) {
+            counter = counter + 1;
+          }
+        }
       }
     }
-  } else if (assignedTimes.length === 1 && assignedTimes[0].availableUntil <= timeBegin && checkDay(assignedTimes[0].availableUntil, timeBegin)) {
-    counter = 1;
   } else if (assignedTimes.length === 0) {
-    counter = 0;
-  } else {
     counter = 0;
   }
 
@@ -187,7 +211,7 @@ export function checkBackToBackFacilitator(previousBooking: Booking, currentBook
     if (facilitator._facilitator instanceof FacilitatorModel) {
       const _facilitator = facilitator._facilitator as Facilitator;
       const counter = checkBackToBackTime(_facilitator.assignedTimes, currentBooking.sessionTime.timeBegin);
-      if (counter >= 3 || counter === 0) {
+      if (counter >= 3) {
         maxAmount = true;
       }
     }
@@ -238,7 +262,7 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
     if (guestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
       const _guestSpeaker = guestSpeaker._guestSpeaker as GuestSpeaker;
       const counter = checkBackToBackTime(_guestSpeaker.assignedTimes, currentBooking.sessionTime.timeBegin);
-      if (counter >= 2 || counter === 0) {
+      if (counter >= 2) {
         maxAmount = true;
       }
     }
@@ -348,12 +372,89 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
   if (possibleFacilitator._facilitator instanceof FacilitatorModel && possibleGuestSpeaker._guestSpeaker instanceof GuestSpeakerModel && workshop instanceof WorkshopModel) {
     const workshop1 = workshop as Workshop;
     const workshopName = workshop1.workshopName;
-    if ((trainedUser(possibleGuestSpeaker, workshopName) && trainedUser(possibleFacilitator, workshopName))
-      || (!(trainedUser(possibleGuestSpeaker, workshopName)) && trainedUser(possibleFacilitator, workshopName))) {
-      team = [possibleFacilitator, possibleGuestSpeaker];
-      return team;
+
+    if (workshop1.requireFacilitator && workshop1.requireGuestSpeaker) {
+      if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUESTSPEAKER) {
+        if (trainedUser(possibleFacilitator, workshopName) && trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [possibleFacilitator, possibleGuestSpeaker];
+          return team;
+        } else if (trainedUser(possibleFacilitator, workshopName) && !trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [possibleFacilitator, EMPTY_GUESTSPEAKER];
+          return team;
+        } else if (!trainedUser(possibleFacilitator, workshopName) && trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [EMPTY_FACILITATOR, possibleGuestSpeaker];
+          return team;
+        } else if (!trainedUser(possibleFacilitator, workshopName) && !trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [EMPTY_FACILITATOR, EMPTY_GUESTSPEAKER];
+          return team;
+        }
+      } else if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUESTSPEAKER) {
+        if (trainedUser(possibleFacilitator, workshopName)) {
+          team = [possibleFacilitator, possibleGuestSpeaker];
+          return team;
+        } else if (!trainedUser(possibleFacilitator, workshopName)) {
+          team = [EMPTY_FACILITATOR, possibleGuestSpeaker];
+          return team;
+        }
+      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUESTSPEAKER) {
+        if (trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [possibleFacilitator, possibleGuestSpeaker];
+          return team;
+        } else if (!trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [possibleFacilitator, EMPTY_GUESTSPEAKER];
+          return team;
+        }
+      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUESTSPEAKER) {
+        team = [possibleFacilitator, possibleGuestSpeaker];
+        return team;
+      }
+    } else if (workshop1.requireFacilitator && !workshop1.requireGuestSpeaker) {
+      if (possibleFacilitator !== EMPTY_FACILITATOR && trainedUser(possibleFacilitator, workshopName)) {
+        team = [possibleFacilitator, NA_GUESTSPEAKER];
+        return team;
+      } else {
+        team = [EMPTY_FACILITATOR, NA_GUESTSPEAKER];
+        return team;
+      }
+    } else if (!workshop1.requireFacilitator && workshop1.requireGuestSpeaker) {
+      if (possibleGuestSpeaker !== EMPTY_GUESTSPEAKER && trainedUser(possibleGuestSpeaker, workshopName)) {
+        team = [NA_FACILITATOR, possibleGuestSpeaker];
+        return team;
+      } else {
+        team = [NA_FACILITATOR, EMPTY_GUESTSPEAKER];
+        return team;
+      }
     }
   }
 
   return null;
+}
+
+/**
+ * Check if facilitator and guest speaker can work with each other and pair them
+ * for booking.
+ *
+ * @export
+ * @param {[User, User][]} teams - array of possible teams
+ * @returns {[User, User][]} - array of most suitable teams
+ */
+export function filterTeams(teams: [User, User][]): [User, User][] {
+  const noEmptyUsers = teams.filter(team => team[0] !== EMPTY_FACILITATOR && team[1] !== EMPTY_GUESTSPEAKER);
+  let noEmptyFacilitators: [User, User][];
+  let noEmptyGuestSpeakers: [User, User][];
+
+  if (noEmptyUsers.length > 0) {
+    return noEmptyUsers;
+  } else if (noEmptyUsers.length === 0) {
+    noEmptyFacilitators = teams.filter(team => team[0] !== EMPTY_FACILITATOR);
+    noEmptyGuestSpeakers = teams.filter(team => team[1] !== EMPTY_GUESTSPEAKER);
+
+    if (noEmptyFacilitators.length > 0) {
+      return noEmptyFacilitators;
+    } else if (noEmptyGuestSpeakers.length > 0) {
+      return noEmptyGuestSpeakers;
+    }
+  }
+
+  return teams;
 }

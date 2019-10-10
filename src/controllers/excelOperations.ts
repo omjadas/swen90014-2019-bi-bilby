@@ -387,7 +387,7 @@ export function printBooking(b: Booking[]): void {
   const sheetName = "Roster";
   const wb = XLSX.utils.book_new();
   const wsData = [
-    ["Booking Date", "Location", "Pax", "Workshop", "Level", "Teacher", "Phone", "GuestSpeaker", "Guest Speaker Mobile", "Guest Speaker Email", "Facilitator", "Facilitator Mobile", "Facilitator Email", "TimeBegin", "TimeEnd"],
+    ["Booking Date", "Location", "Pax", "Workshop", "Level", "Teacher", "Phone", "Facilitator", "Facilitator Mobile", "Facilitator Email", "GuestSpeaker", "Guest Speaker Mobile", "Guest Speaker Email", "TimeBegin", "TimeEnd"],
   ];
 
   for (let i = 0; i < Object.keys(b).length; i++) {
@@ -429,16 +429,16 @@ export function printBooking(b: Booking[]): void {
       row.push("", "");
     }
 
-    if (b[i].guestSpeaker instanceof UserModel) {
-      const guestSpeaker = b[i].guestSpeaker as User;
-      row.push(guestSpeaker.firstName, guestSpeaker.phoneNumber, guestSpeaker.email);
+    if (b[i].facilitator instanceof UserModel) {
+      const facilitator = b[i].facilitator as User;
+      row.push(facilitator.firstName, facilitator.phoneNumber, facilitator.email);
     } else {
       row.push("", "", "");
     }
 
-    if (b[i].facilitator instanceof UserModel) {
-      const facilitator = b[i].facilitator as User;
-      row.push(facilitator.firstName, facilitator.phoneNumber, facilitator.email);
+    if (b[i].guestSpeaker instanceof UserModel) {
+      const guestSpeaker = b[i].guestSpeaker as User;
+      row.push(guestSpeaker.firstName, guestSpeaker.phoneNumber, guestSpeaker.email);
     } else {
       row.push("", "", "");
     }
@@ -448,7 +448,7 @@ export function printBooking(b: Booking[]): void {
   }
   const ws = XLSX.utils.aoa_to_sheet(wsData);
   const wscols = [
-    { width: 15 },
+    { width: 30 },
     { width: 15 },
     { width: 5 },
     { width: 9 },
@@ -457,12 +457,12 @@ export function printBooking(b: Booking[]): void {
     { width: 10 },
     { width: 18 },
     { width: 19 },
+    { width: 30 },
     { width: 18 },
-    { width: 18 },
-    { width: 18 },
-    { width: 18 },
-    { width: 11 },
-    { width: 11 },
+    { width: 20 },
+    { width: 30 },
+    { width: 20 },
+    { width: 20 },
   ];
   ws["!cols"] = wscols;
   wb.SheetNames.push(sheetName);
