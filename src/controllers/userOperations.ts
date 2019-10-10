@@ -157,12 +157,8 @@ export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Da
 
   if (assignedTimes.length > 1) {
     for (let i = 0; i < (assignedTimes.length - 1); i++) {
-      if (checkDay(assignedTimes[i].availableFrom, timeBegin)) {
-        if (checkDay(assignedTimes[i].availableUntil, assignedTimes[i + 1].availableFrom)) {
-          if (assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin) {
-            counter = counter + 1;
-          }
-        }
+      if(assignedTimes[i].availableUntil.getTime() == assignedTimes[i+1].availableFrom.getTime() && assignedTimes[i+1].availableUntil.getTime() <= timeBegin.getTime()) {
+        counter++;
       }
     }
   } else if (assignedTimes.length === 0) {
