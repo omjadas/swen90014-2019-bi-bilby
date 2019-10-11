@@ -85,13 +85,13 @@ export function getGuestSpeakers(file: Buffer, from: Date, to: Date): User[] {
 
     for (let d = new Date(from); d <= to; d.setUTCDate(d.getUTCDate() + 1)) {
       const times = days[d.getUTCDay()];
-      const availableFrom = new Date(times.availableFrom.getTime());
-      const availableUntil = new Date(times.availableUntil.getTime());
+      const availableFrom = new Date(times.availableFrom);
+      const availableUntil = new Date(times.availableUntil);
 
       if (!isNaN(availableFrom.getTime()) && !isNaN(availableUntil.getTime())) {
         availabilities.push({
-          availableFrom: new Date(new Date(d.getTime()).setUTCHours(availableFrom.getUTCHours(), availableFrom.getUTCMinutes(), availableFrom.getUTCSeconds())),
-          availableUntil: new Date(new Date(d.getTime()).setUTCHours(availableUntil.getUTCHours(), availableUntil.getUTCMinutes(), availableUntil.getUTCSeconds()))
+          availableFrom: new Date(new Date(d).setUTCHours(availableFrom.getUTCHours(), availableFrom.getUTCMinutes(), availableFrom.getUTCSeconds())),
+          availableUntil: new Date(new Date(d).setUTCHours(availableUntil.getUTCHours(), availableUntil.getUTCMinutes(), availableUntil.getUTCSeconds()))
         });
       }
     }
@@ -198,13 +198,13 @@ export function getFacilitators(file: Buffer, from: Date, to: Date): User[] {
 
       for (let d = new Date(from); d <= to; d.setUTCDate(d.getUTCDate() + 1)) {
         const times = days[d.getUTCDay()];
-        const availableFrom = new Date(times.availableFrom.getTime());
-        const availableUntil = new Date(times.availableUntil.getTime());
+        const availableFrom = new Date(times.availableFrom);
+        const availableUntil = new Date(times.availableUntil);
 
         if (!isNaN(availableFrom.getTime()) && !isNaN(availableUntil.getTime())) {
           availabilities.push({
-            availableFrom: new Date(new Date(d.getTime()).setUTCHours(availableFrom.getUTCHours(), availableFrom.getUTCMinutes(), availableFrom.getUTCSeconds())),
-            availableUntil: new Date(new Date(d.getTime()).setUTCHours(availableUntil.getUTCHours(), availableUntil.getUTCMinutes(), availableUntil.getUTCSeconds()))
+            availableFrom: new Date(new Date(d).setUTCHours(availableFrom.getUTCHours(), availableFrom.getUTCMinutes(), availableFrom.getUTCSeconds())),
+            availableUntil: new Date(new Date(d).setUTCHours(availableUntil.getUTCHours(), availableUntil.getUTCMinutes(), availableUntil.getUTCSeconds()))
           });
         }
       }

@@ -264,8 +264,8 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
   let availabilities: Availability[] = [];
   const buffer: any = [];
 
-  const formatedTimeBegin = new Date(timeBegin.setUTCFullYear(timeBegin.getUTCFullYear(), timeBegin.getUTCMonth(), timeBegin.getUTCDate()));
-  const formatedTimeEnd = new Date(timeEnd.setUTCFullYear(timeEnd.getUTCFullYear(), timeEnd.getUTCMonth(), timeEnd.getUTCDate()));
+  const formatedTimeBegin = new Date(timeBegin);
+  const formatedTimeEnd = new Date(timeEnd);
 
   if (user._facilitator instanceof FacilitatorModel) {
     const facilitator = user._facilitator as Facilitator;
