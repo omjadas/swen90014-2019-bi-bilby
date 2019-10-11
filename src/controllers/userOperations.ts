@@ -287,8 +287,7 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
       availabilities[i].availableFrom = formatedTimeEnd;
     } else if (availableFrom < timeBegin && timeEnd === availableUntil) { // If the booking end at the same time as the end of the user's availability
       availabilities[i].availableUntil = formatedTimeBegin;
-    } else if (availableFrom < timeBegin && timeEnd < availableUntil && availableFrom.getDate() === formatedTimeBegin.getDate()
-      && availableUntil.getDate() === formatedTimeEnd.getDate()) { // If the booking starts and ends in the middle of the user's availability
+    } else if (availableFrom < timeBegin && timeEnd < availableUntil) { // If the booking starts and ends in the middle of the user's availability
       availabilities[i].availableFrom = formatedTimeEnd;
       const tuple = [i, { availableFrom: availableFrom, availableUntil: formatedTimeBegin }];
       buffer.push(tuple);
@@ -321,7 +320,8 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
   }
 
   for (let i = 0; i < availabilities.length; i++) {
-    if (availabilities[i].availableFrom <= timeBegin && availabilities[i].availableUntil >= timeEnd) {
+    if (availabilities[i].availableFrom <= timeBegin && availabilities[i].availableUntil >= timeEnd
+      && availabilities[i].availableFrom.getDate() === timeBegin.getDate() && availabilities[i].availableUntil.getDate() === timeEnd.getDate()) {
       return true;
     }
   }

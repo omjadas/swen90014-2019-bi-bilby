@@ -31,10 +31,12 @@ export function upload(req: Request, res: Response): any {
     bookings = bookings.concat(getBookings(file, city.city, new Date(from), new Date(to)));
   });
   const guestSpeakers = getGuestSpeakers(file, new Date(from), new Date(to));
+  //console.log(JSON.stringify(bookings));
+  console.log(JSON.stringify(guestSpeakers));
   const facilitators = getFacilitators(file, new Date(from), new Date(to));
   const roster = rosterByPreferences(bookings, guestSpeakers, facilitators);
   const out = printBooking(roster);
-
+  console.log(JSON.stringify(guestSpeakers));
   const readStream = new stream.PassThrough();
   readStream.end(out);
 
