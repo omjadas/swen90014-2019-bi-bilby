@@ -25,7 +25,7 @@ export const EMPTY_FACILITATOR = new UserModel({
   })
 });
 
-export const EMPTY_GUESTSPEAKER = new UserModel({
+export const EMPTY_GUEST_SPEAKER = new UserModel({
   firstName: "No Solution",
   lastName: "",
   email: "",
@@ -348,21 +348,21 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
     const workshopName = workshop1.workshopName;
 
     if (workshop1.requireFacilitator && workshop1.requireGuestSpeaker) {
-      if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUESTSPEAKER) {
+      if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER) {
         if (trainedUser(possibleFacilitator, workshopName) && trainedUser(possibleGuestSpeaker, workshopName)) {
           team = [possibleFacilitator, possibleGuestSpeaker];
           return team;
         } else if (trainedUser(possibleFacilitator, workshopName) && !trainedUser(possibleGuestSpeaker, workshopName)) {
-          team = [possibleFacilitator, EMPTY_GUESTSPEAKER];
+          team = [possibleFacilitator, EMPTY_GUEST_SPEAKER];
           return team;
         } else if (!trainedUser(possibleFacilitator, workshopName) && trainedUser(possibleGuestSpeaker, workshopName)) {
           team = [EMPTY_FACILITATOR, possibleGuestSpeaker];
           return team;
         } else if (!trainedUser(possibleFacilitator, workshopName) && !trainedUser(possibleGuestSpeaker, workshopName)) {
-          team = [EMPTY_FACILITATOR, EMPTY_GUESTSPEAKER];
+          team = [EMPTY_FACILITATOR, EMPTY_GUEST_SPEAKER];
           return team;
         }
-      } else if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUESTSPEAKER) {
+      } else if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUEST_SPEAKER) {
         if (trainedUser(possibleFacilitator, workshopName)) {
           team = [possibleFacilitator, possibleGuestSpeaker];
           return team;
@@ -370,15 +370,15 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
           team = [EMPTY_FACILITATOR, possibleGuestSpeaker];
           return team;
         }
-      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUESTSPEAKER) {
+      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER) {
         if (trainedUser(possibleGuestSpeaker, workshopName)) {
           team = [possibleFacilitator, possibleGuestSpeaker];
           return team;
         } else if (!trainedUser(possibleGuestSpeaker, workshopName)) {
-          team = [possibleFacilitator, EMPTY_GUESTSPEAKER];
+          team = [possibleFacilitator, EMPTY_GUEST_SPEAKER];
           return team;
         }
-      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUESTSPEAKER) {
+      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUEST_SPEAKER) {
         team = [possibleFacilitator, possibleGuestSpeaker];
         return team;
       }
@@ -391,11 +391,11 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
         return team;
       }
     } else if (!workshop1.requireFacilitator && workshop1.requireGuestSpeaker) {
-      if (possibleGuestSpeaker !== EMPTY_GUESTSPEAKER && trainedUser(possibleGuestSpeaker, workshopName)) {
+      if (possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER && trainedUser(possibleGuestSpeaker, workshopName)) {
         team = [NA_FACILITATOR, possibleGuestSpeaker];
         return team;
       } else {
-        team = [NA_FACILITATOR, EMPTY_GUESTSPEAKER];
+        team = [NA_FACILITATOR, EMPTY_GUEST_SPEAKER];
         return team;
       }
     }
@@ -413,7 +413,7 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
  * @returns {[User, User][]} - array of most suitable teams
  */
 export function filterTeams(teams: [User, User][]): [User, User][] {
-  const noEmptyUsers = teams.filter(team => team[0] !== EMPTY_FACILITATOR && team[1] !== EMPTY_GUESTSPEAKER);
+  const noEmptyUsers = teams.filter(team => team[0] !== EMPTY_FACILITATOR && team[1] !== EMPTY_GUEST_SPEAKER);
   let noEmptyFacilitators: [User, User][];
   let noEmptyGuestSpeakers: [User, User][];
 
@@ -421,7 +421,7 @@ export function filterTeams(teams: [User, User][]): [User, User][] {
     return noEmptyUsers;
   } else if (noEmptyUsers.length === 0) {
     noEmptyFacilitators = teams.filter(team => team[0] !== EMPTY_FACILITATOR);
-    noEmptyGuestSpeakers = teams.filter(team => team[1] !== EMPTY_GUESTSPEAKER);
+    noEmptyGuestSpeakers = teams.filter(team => team[1] !== EMPTY_GUEST_SPEAKER);
 
     if (noEmptyFacilitators.length > 0) {
       return noEmptyFacilitators;

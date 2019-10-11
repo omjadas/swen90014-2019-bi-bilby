@@ -5,7 +5,7 @@ import {
   adjustAvailabilities,
   checkBackToBackFacilitator,
   checkBackToBackGuestSpeaker,
-  EMPTY_GUESTSPEAKER,
+  EMPTY_GUEST_SPEAKER,
   EMPTY_FACILITATOR, filterTeams,
 } from "./userOperations";
 import { Booking, BookingState } from "../models/booking.model";
@@ -53,7 +53,7 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       if (availableFacilitators.length === 0) {
         availableFacilitators.push(EMPTY_FACILITATOR);
       } if (availableGuestSpeakers.length === 0) {
-        availableGuestSpeakers.push(EMPTY_GUESTSPEAKER);
+        availableGuestSpeakers.push(EMPTY_GUEST_SPEAKER);
       }
 
       // Pair facilitators and guest speakers to follow the constraints
@@ -92,7 +92,7 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
       const facilitator = facilitators.filter(user => user === bookings[i - 1].facilitator)[0];
 
       if (availableGuestSpeakers.length === 0) {
-        availableGuestSpeakers.push(EMPTY_GUESTSPEAKER);
+        availableGuestSpeakers.push(EMPTY_GUEST_SPEAKER);
       }
 
       for (let g = 0; g < availableGuestSpeakers.length; g++) {
