@@ -83,8 +83,8 @@ export function getGuestSpeakers(file: Buffer, from: Date, to: Date): User[] {
 
     const availabilities: Availability[] = [];
 
-    for (let d = new Date(from); d <= to; d.setDate(d.getDate() + 1)) {
-      const times = days[d.getDay()];
+    for (let d = new Date(from); d <= to; d.setUTCDate(d.getUTCDate() + 1)) {
+      const times = days[d.getUTCDay()];
       const availableFrom = new Date(times.availableFrom.getTime());
       const availableUntil = new Date(times.availableUntil.getTime());
 
@@ -196,8 +196,8 @@ export function getFacilitators(file: Buffer, from: Date, to: Date): User[] {
 
       const availabilities: Availability[] = [];
 
-      for (let d = new Date(from); d <= to; d.setDate(d.getDate() + 1)) {
-        const times = days[d.getDay()];
+      for (let d = new Date(from); d <= to; d.setUTCDate(d.getUTCDate() + 1)) {
+        const times = days[d.getUTCDay()];
         const availableFrom = new Date(times.availableFrom.getTime());
         const availableUntil = new Date(times.availableUntil.getTime());
 
@@ -327,7 +327,7 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
     const cityObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
     const workshops = getWorkshopTypes(file);
     const booking: Booking[] = [];
-    toDate.setDate(toDate.getDate() + 1);
+    toDate.setUTCDate(toDate.getUTCDate() + 1);
     for (let i = 2; i < Object.keys(cityObject).length; i++) {
       const workshop = workshops.filter(workshop => workshop.workshopName === cityObject[i]["G"]);
       const da = getConversionDate(cityObject[i]["B"]);
@@ -337,8 +337,8 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
           facilitator: undefined,
           guestSpeaker: undefined,
           sessionTime: {
-            timeBegin: new Date(getConversionDate(cityObject[i]["C"]).setFullYear(da.getFullYear(), da.getMonth(), da.getDate())),
-            timeEnd: new Date(getConversionDate(cityObject[i]["D"]).setFullYear(da.getFullYear(), da.getMonth(), da.getDate()))
+            timeBegin: new Date(getConversionDate(cityObject[i]["C"]).setUTCFullYear(da.getUTCFullYear(), da.getUTCMonth(), da.getUTCDate())),
+            timeEnd: new Date(getConversionDate(cityObject[i]["D"]).setUTCFullYear(da.getUTCFullYear(), da.getUTCMonth(), da.getUTCDate()))
           },
           city: new CityModel({
             city: cityName

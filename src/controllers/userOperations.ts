@@ -264,8 +264,8 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
   let availabilities: Availability[] = [];
   const buffer: any = [];
 
-  const formatedTimeBegin = new Date(timeBegin.setFullYear(timeBegin.getFullYear(), timeBegin.getMonth(), timeBegin.getDate()));
-  const formatedTimeEnd = new Date(timeEnd.setFullYear(timeEnd.getFullYear(), timeEnd.getMonth(), timeEnd.getDate()));
+  const formatedTimeBegin = new Date(timeBegin.setUTCFullYear(timeBegin.getUTCFullYear(), timeBegin.getUTCMonth(), timeBegin.getUTCDate()));
+  const formatedTimeEnd = new Date(timeEnd.setUTCFullYear(timeEnd.getUTCFullYear(), timeEnd.getUTCMonth(), timeEnd.getUTCDate()));
 
   if (user._facilitator instanceof FacilitatorModel) {
     const facilitator = user._facilitator as Facilitator;
@@ -321,7 +321,7 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
 
   for (let i = 0; i < availabilities.length; i++) {
     if (availabilities[i].availableFrom <= timeBegin && availabilities[i].availableUntil >= timeEnd
-      && availabilities[i].availableFrom.getDate() === timeBegin.getDate() && availabilities[i].availableUntil.getDate() === timeEnd.getDate()) {
+      && availabilities[i].availableFrom.getUTCDate() === timeBegin.getUTCDate() && availabilities[i].availableUntil.getUTCDate() === timeEnd.getUTCDate()) {
       return true;
     }
   }
