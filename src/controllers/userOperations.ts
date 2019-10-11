@@ -77,6 +77,27 @@ export const NA_GUESTSPEAKER = new UserModel({
 });
 
 /**
+ * Check if dates are the same.
+ *
+ * @export
+ * @param {Date} time1 - first date
+ * @param {Date} time2 - second date
+ * @returns {boolean} - whether the dates are the same
+ */
+export function checkSameTime(time1: Date, time2: Date): boolean {
+  if (time1.getUTCFullYear() === time2.getUTCFullYear()
+    && time1.getUTCMonth() === time2.getUTCMonth()
+    && time1.getUTCDate() === time2.getUTCDate()
+    && time1.getUTCHours() === time2.getUTCHours()
+    && time1.getUTCMinutes() === time2.getUTCMinutes()
+    && time1.getUTCMilliseconds() === time2.getUTCMilliseconds()) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * Check if day matches with availability.
  *
  * @export
@@ -135,11 +156,12 @@ export function eligible(user: User, workshop: Ref<Workshop>): boolean {
  * @returns {number} - count of back to back workshops this user has done before current booking time
  */
 export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Date): number {
+  const formatedTimeBegin = new Date(timeBegin);
   let counter = 1;
 
   if (assignedTimes.length > 1) {
     for (let i = 0; i < (assignedTimes.length - 1); i++) {
-      if (assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin) {
+      if (checkSameTime(assignedTimes[i].availableUntil, assignedTimes[i + 1].availableFrom) && assignedTimes[i + 1].availableUntil <= formatedTimeBegin) {
         counter++;
       }
     }
@@ -278,14 +300,14 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
   }
 
   for (let i = 0; i < availabilities.length; i++) {
-    const availableFrom = availabilities[i].availableFrom;
-    const availableUntil = availabilities[i].availableUntil;
+    const availableFrom = new Date(availabilities[i].availableFrom);
+    const availableUntil = new Date(availabilities[i].availableUntil);
 
-    if (availableFrom === timeBegin && availableUntil === timeEnd) { //If the availability is just a 1 hour block
+    if (checkSameTime(availableFrom, timeBegin) && checkSameTime(availableUntil, timeEnd)) { //If the availability is just a 1 hour block
       availabilities.splice(i, 1);
-    } else if (availableFrom === timeBegin && timeEnd < availableUntil) { // If the booking starts at the same time as the beginning of the user's availability
+    } else if (checkSameTime(availableFrom, timeBegin) && timeEnd < availableUntil) { // If the booking starts at the same time as the beginning of the user's availability
       availabilities[i].availableFrom = formatedTimeEnd;
-    } else if (availableFrom < timeBegin && timeEnd === availableUntil) { // If the booking end at the same time as the end of the user's availability
+    } else if (availableFrom < timeBegin && checkSameTime(timeEnd, availableUntil)) { // If the booking end at the same time as the end of the user's availability
       availabilities[i].availableUntil = formatedTimeBegin;
     } else if (availableFrom < timeBegin && timeEnd < availableUntil) { // If the booking starts and ends in the middle of the user's availability
       availabilities[i].availableFrom = formatedTimeEnd;
@@ -319,9 +341,12 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
     availabilities = guestSpeaker.availabilities;
   }
 
+  const formatedTimeBegin = new Date(timeBegin);
+  const formatedTimeEnd = new Date(timeEnd);
+
   for (let i = 0; i < availabilities.length; i++) {
-    if (availabilities[i].availableFrom <= timeBegin && availabilities[i].availableUntil >= timeEnd
-      && availabilities[i].availableFrom.getUTCDate() === timeBegin.getUTCDate() && availabilities[i].availableUntil.getUTCDate() === timeEnd.getUTCDate()) {
+    if (availabilities[i].availableFrom <= formatedTimeBegin && availabilities[i].availableUntil >= formatedTimeEnd
+      && availabilities[i].availableFrom.getUTCDate() === formatedTimeBegin.getUTCDate() && availabilities[i].availableUntil.getUTCDate() === formatedTimeEnd.getUTCDate()) {
       return true;
     }
   }
