@@ -5,6 +5,27 @@ import { getCities, getBookings, getGuestSpeakers, getFacilitators, printBooking
 import { Booking } from "../models/booking.model";
 
 /**
+ * Roster a file between two Dates
+ *
+ * @export
+ * @param {Date} from date to roster from
+ * @param {Date} to date to roster to
+ * @param {Buffer} file excel file to roster
+ * @returns {Buffer} output file
+ */
+export function rosterFile(from: Date, to: Date, file: Buffer): Buffer {
+  const cities = getCities(file);
+  let bookings: Booking[] = [];
+  cities.forEach(city => {
+    bookings = bookings.concat(getBookings(file, city.city, new Date(from), new Date(to)));
+  });
+  const guestSpeakers = getGuestSpeakers(file, new Date(from), new Date(to));
+  const facilitators = getFacilitators(file, new Date(from), new Date(to));
+  const roster = rosterByPreferences(bookings, guestSpeakers, facilitators);
+  return printBooking(roster);
+}
+
+/**
  * Function to handle uploading an excel file and generate a roster.
  *
  * @export
@@ -23,20 +44,9 @@ export function upload(req: Request, res: Response): any {
 
   const from = new Date(req.body.from);
   const to = new Date(req.body.to);
-
   const file = req.files.excel.data;
-  const cities = getCities(file);
-  let bookings: Booking[] = [];
-  cities.forEach(city => {
-    bookings = bookings.concat(getBookings(file, city.city, new Date(from), new Date(to)));
-  });
-  const guestSpeakers = getGuestSpeakers(file, new Date(from), new Date(to));
-  //console.log(JSON.stringify(bookings));
-  console.log(JSON.stringify(guestSpeakers));
-  const facilitators = getFacilitators(file, new Date(from), new Date(to));
-  const roster = rosterByPreferences(bookings, guestSpeakers, facilitators);
-  const out = printBooking(roster);
-  console.log(JSON.stringify(guestSpeakers));
+  const out = rosterFile(from, to, file);
+
   const readStream = new stream.PassThrough();
   readStream.end(out);
 

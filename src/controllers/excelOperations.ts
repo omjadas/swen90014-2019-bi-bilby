@@ -381,9 +381,9 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
 /**
  * Function for Getting all the Booking details
  * @param {Booking} b - The Booking array
- * @returns {void}
+ * @returns {Buffer} output file
  */
-export function printBooking(b: Booking[]): void {
+export function printBooking(b: Booking[]): Buffer {
   const sheetName = "Roster";
   const wb = XLSX.utils.book_new();
   const wsData = [
