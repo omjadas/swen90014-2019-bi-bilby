@@ -16,7 +16,8 @@ import { TeacherModel } from "../models/teacher.model";
  * @returns {Date} converted Date
  */
 function getConversionDate(excelDate: number): Date {
-  return new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+  const date = new Date((excelDate - (25567 + 2)) * 86400 * 1000);
+  return new Date(date.getTime() + (date.getTimezoneOffset() * 60 * 1000));
 }
 
 /**
@@ -83,15 +84,15 @@ export function getGuestSpeakers(file: Buffer, from: Date, to: Date): User[] {
 
     const availabilities: Availability[] = [];
 
-    for (let d = new Date(from); d <= to; d.setUTCDate(d.getUTCDate() + 1)) {
-      const times = days[d.getUTCDay()];
+    for (let d = new Date(from); d <= to; d.setDate(d.getDate() + 1)) {
+      const times = days[d.getDay()];
       const availableFrom = new Date(times.availableFrom);
       const availableUntil = new Date(times.availableUntil);
 
       if (!isNaN(availableFrom.getTime()) && !isNaN(availableUntil.getTime())) {
         availabilities.push({
-          availableFrom: new Date(new Date(d).setUTCHours(availableFrom.getUTCHours(), availableFrom.getUTCMinutes(), availableFrom.getUTCSeconds())),
-          availableUntil: new Date(new Date(d).setUTCHours(availableUntil.getUTCHours(), availableUntil.getUTCMinutes(), availableUntil.getUTCSeconds()))
+          availableFrom: new Date(new Date(d).setHours(availableFrom.getHours(), availableFrom.getMinutes(), availableFrom.getSeconds())),
+          availableUntil: new Date(new Date(d).setHours(availableUntil.getHours(), availableUntil.getMinutes(), availableUntil.getSeconds()))
         });
       }
     }
@@ -196,15 +197,15 @@ export function getFacilitators(file: Buffer, from: Date, to: Date): User[] {
 
       const availabilities: Availability[] = [];
 
-      for (let d = new Date(from); d <= to; d.setUTCDate(d.getUTCDate() + 1)) {
-        const times = days[d.getUTCDay()];
+      for (let d = new Date(from); d <= to; d.setDate(d.getDate() + 1)) {
+        const times = days[d.getDay()];
         const availableFrom = new Date(times.availableFrom);
         const availableUntil = new Date(times.availableUntil);
 
         if (!isNaN(availableFrom.getTime()) && !isNaN(availableUntil.getTime())) {
           availabilities.push({
-            availableFrom: new Date(new Date(d).setUTCHours(availableFrom.getUTCHours(), availableFrom.getUTCMinutes(), availableFrom.getUTCSeconds())),
-            availableUntil: new Date(new Date(d).setUTCHours(availableUntil.getUTCHours(), availableUntil.getUTCMinutes(), availableUntil.getUTCSeconds()))
+            availableFrom: new Date(new Date(d).setHours(availableFrom.getHours(), availableFrom.getMinutes(), availableFrom.getSeconds())),
+            availableUntil: new Date(new Date(d).setHours(availableUntil.getHours(), availableUntil.getMinutes(), availableUntil.getSeconds()))
           });
         }
       }
@@ -327,7 +328,7 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
     const cityObject: any[] = XLSX.utils.sheet_to_json(m, { header: "A" });
     const workshops = getWorkshopTypes(file);
     const booking: Booking[] = [];
-    toDate.setUTCDate(toDate.getUTCDate() + 1);
+    toDate.setDate(toDate.getDate() + 1);
     for (let i = 2; i < Object.keys(cityObject).length; i++) {
       const workshop = workshops.filter(workshop => workshop.workshopName === cityObject[i]["G"]);
       const da = getConversionDate(cityObject[i]["B"]);
@@ -337,8 +338,8 @@ export function getBookings(file: Buffer, cityName: string, fromDate: Date, toDa
           facilitator: undefined,
           guestSpeaker: undefined,
           sessionTime: {
-            timeBegin: new Date(getConversionDate(cityObject[i]["C"]).setUTCFullYear(da.getUTCFullYear(), da.getUTCMonth(), da.getUTCDate())),
-            timeEnd: new Date(getConversionDate(cityObject[i]["D"]).setUTCFullYear(da.getUTCFullYear(), da.getUTCMonth(), da.getUTCDate()))
+            timeBegin: new Date(getConversionDate(cityObject[i]["C"]).setFullYear(da.getFullYear(), da.getMonth(), da.getDate())),
+            timeEnd: new Date(getConversionDate(cityObject[i]["D"]).setFullYear(da.getFullYear(), da.getMonth(), da.getDate()))
           },
           city: new CityModel({
             city: cityName
@@ -391,12 +392,12 @@ export function printBooking(b: Booking[]): Buffer {
   ];
 
   for (let i = 0; i < Object.keys(b).length; i++) {
-    b[i].sessionTime.timeBegin.setHours(b[i].sessionTime.timeBegin.getUTCHours());
-    b[i].sessionTime.timeEnd.setHours(b[i].sessionTime.timeEnd.getUTCHours());
+    b[i].sessionTime.timeBegin.setHours(b[i].sessionTime.timeBegin.getHours());
+    b[i].sessionTime.timeEnd.setHours(b[i].sessionTime.timeEnd.getHours());
     const timeBegin = b[i].sessionTime.timeBegin.toLocaleTimeString();
     const timeEnd = b[i].sessionTime.timeEnd.toLocaleTimeString();
     const row: string[] = [];
-    row.push(b[i].sessionTime.timeBegin.toDateString());
+    row.push(b[i].sessionTime.timeBegin.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "short", day: "2-digit" }));
     if (b[i].location instanceof LocationModel) {
       const location = b[i].location as Location;
       row.push(location.name);
