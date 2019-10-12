@@ -42,8 +42,12 @@ export function upload(req: Request, res: Response): any {
     return res.status(400).send("Only one file is allowed to be uploaded.");
   }
 
-  const from = new Date(req.body.from);
-  const to = new Date(req.body.to);
+  let from = new Date(req.body.from);
+  let to = new Date(req.body.to);
+
+  from = new Date(from.getTime() + (from.getTimezoneOffset() * 60 * 1000));
+  to = new Date(to.getTime() + (to.getTimezoneOffset() * 60 * 1000));
+
   const file = req.files.excel.data;
   const out = rosterFile(from, to, file);
 
