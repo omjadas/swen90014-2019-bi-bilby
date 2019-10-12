@@ -8,7 +8,6 @@ import { LocationModel } from "../src/models/location.model";
 import { WorkshopModel } from "../src/models/workshop.model";
 import { BookingModel, BookingState } from "../src/models/booking.model";
 import { TeacherModel } from "../src/models/teacher.model";
-import { dayOfWeek } from "../src/models/availability";
 
 // We want to pass in all the PENDING bookings
 // rosterByPreferences(teacherPreferences, guestSpeakers:, facilitators, locations)
@@ -56,12 +55,11 @@ const facilitators = [new UserModel({
   phoneNumber: "",
   _facilitator: new FacilitatorModel({
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 13, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 13, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: []
@@ -76,12 +74,11 @@ new UserModel({
   phoneNumber: "",
   _facilitator: new FacilitatorModel({
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 12, 0),
-      availableUntil: new Date(2018, 8, 6, 14, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 14, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: []
@@ -97,12 +94,11 @@ const guestSpeakers = [new UserModel({
   phoneNumber: "",
   _guestSpeaker: new GuestSpeakerModel({
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: []
@@ -117,12 +113,11 @@ new UserModel({
   phoneNumber: "",
   _guestSpeaker: new GuestSpeakerModel({
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: []
@@ -137,12 +132,11 @@ new UserModel({
   phoneNumber: "",
   _guestSpeaker: new GuestSpeakerModel({
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 13, 0),
-      availableUntil: new Date(2018, 8, 6, 15, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 15, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: []
@@ -187,7 +181,7 @@ new BookingModel({
   sessionTime: { timeBegin: new Date(2018, 8, 6, 10, 0), timeEnd: new Date(2018, 8, 6, 11, 0) },
   city: cities[0],
   location: locations[0],
-  workshop: workshops[1],
+  workshop: workshops[0],
   level: "9",
   teacher: teachers[0],
   firstTime: true,
@@ -198,7 +192,7 @@ new BookingModel({
   sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
   city: cities[0],
   location: locations[0],
-  workshop: workshops[1],
+  workshop: workshops[0],
   level: "9",
   teacher: teachers[0],
   firstTime: true,
@@ -209,7 +203,7 @@ new BookingModel({
   sessionTime: { timeBegin: new Date(2018, 8, 6, 12, 0), timeEnd: new Date(2018, 8, 6, 13, 0) },
   city: cities[0],
   location: locations[0],
-  workshop: workshops[1],
+  workshop: workshops[0],
   level: "9",
   teacher: teachers[0],
   firstTime: true,
@@ -220,7 +214,7 @@ new BookingModel({
   sessionTime: { timeBegin: new Date(2018, 8, 6, 13, 0), timeEnd: new Date(2018, 8, 6, 14, 0) },
   city: cities[0],
   location: locations[0],
-  workshop: workshops[1],
+  workshop: workshops[0],
   level: "9",
   teacher: teachers[0],
   firstTime: true,
@@ -236,28 +230,24 @@ const facilitators2 = [{
   phoneNumber: "",
   _facilitator: {
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 12, 0),
-      availableUntil: new Date(2018, 8, 6, 13, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 13, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 10, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 10, 0)
     },
     {
       availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 11, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 11, 0)
     },
     {
       availableFrom: new Date(2018, 8, 6, 11, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     }]
   }
 },
@@ -270,19 +260,17 @@ const facilitators2 = [{
   phoneNumber: "",
   _facilitator: {
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [],
     specificUnavailabilities: [],
     assignedTimes: [{
       availableFrom: new Date(2018, 8, 6, 12, 0),
-      availableUntil: new Date(2018, 8, 6, 13, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 13, 0)
     },
     {
       availableFrom: new Date(2018, 8, 6, 13, 0),
-      availableUntil: new Date(2018, 8, 6, 14, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 14, 0)
     }]
   }
 }];
@@ -296,23 +284,20 @@ const guestSpeakers2 = [{
   phoneNumber: "",
   _guestSpeaker: {
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 11, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: [{
       availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 10, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 10, 0)
     },
     {
       availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 11, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 11, 0)
     }]
   }
 },
@@ -325,25 +310,21 @@ const guestSpeakers2 = [{
   phoneNumber: "",
   _guestSpeaker: {
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 11, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 11, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: [{
       availableFrom: new Date(2018, 8, 6, 11, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     },
     {
       availableFrom: new Date(2018, 8, 6, 12, 0),
-      availableUntil: new Date(2018, 8, 6, 13, 0),
-      dayOfWeek: dayOfWeek.THU,
-    }
-    ]
+      availableUntil: new Date(2018, 8, 6, 13, 0)
+    }]
   }
 },
 {
@@ -355,26 +336,24 @@ const guestSpeakers2 = [{
   phoneNumber: "",
   _guestSpeaker: {
     city: cities[0],
-    trained: true,
+    trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 14, 0),
-      availableUntil: new Date(2018, 8, 6, 15, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 15, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: [{
       availableFrom: new Date(2018, 8, 6, 13, 0),
-      availableUntil: new Date(2018, 8, 6, 14, 0),
-      dayOfWeek: dayOfWeek.THU,
+      availableUntil: new Date(2018, 8, 6, 14, 0)
     }]
   }
 }];
 
 const afterRosterBookings = [{
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[0],
-  guestSpeaker: guestSpeakers2[0],
+  facilitator: facilitators[0],
+  guestSpeaker: guestSpeakers[0],
   sessionTime: { timeBegin: new Date(2018, 8, 6, 9, 0), timeEnd: new Date(2018, 8, 6, 10, 0) },
   city: cities[0],
   location: locations[0],
@@ -386,12 +365,12 @@ const afterRosterBookings = [{
 },
 {
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[0],
-  guestSpeaker: guestSpeakers2[0],
+  facilitator: facilitators[0],
+  guestSpeaker: guestSpeakers[0],
   sessionTime: { timeBegin: new Date(2018, 8, 6, 10, 0), timeEnd: new Date(2018, 8, 6, 11, 0) },
   city: cities[0],
   location: locations[0],
-  workshop: workshops[1],
+  workshop: workshops[0],
   level: "9",
   teacher: teachers[0],
   firstTime: true,
@@ -399,12 +378,12 @@ const afterRosterBookings = [{
 },
 {
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[0],
-  guestSpeaker: guestSpeakers2[1],
+  facilitator: facilitators[0],
+  guestSpeaker: guestSpeakers[1],
   sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
   city: cities[0],
   location: locations[0],
-  workshop: workshops[1],
+  workshop: workshops[0],
   level: "9",
   teacher: teachers[0],
   firstTime: true,
@@ -412,12 +391,12 @@ const afterRosterBookings = [{
 },
 {
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[1],
-  guestSpeaker: guestSpeakers2[1],
+  facilitator: facilitators[1],
+  guestSpeaker: guestSpeakers[1],
   sessionTime: { timeBegin: new Date(2018, 8, 6, 12, 0), timeEnd: new Date(2018, 8, 6, 13, 0) },
   city: cities[0],
   location: locations[0],
-  workshop: workshops[1],
+  workshop: workshops[0],
   level: "9",
   teacher: teachers[0],
   firstTime: true,
@@ -425,12 +404,12 @@ const afterRosterBookings = [{
 },
 {
   state: BookingState.UNCONFIRMED,
-  facilitator: facilitators2[1],
-  guestSpeaker: guestSpeakers2[2],
+  facilitator: facilitators[1],
+  guestSpeaker: guestSpeakers[2],
   sessionTime: { timeBegin: new Date(2018, 8, 6, 13, 0), timeEnd: new Date(2018, 8, 6, 14, 0) },
   city: cities[0],
   location: locations[0],
-  workshop: workshops[1],
+  workshop: workshops[0],
   level: "9",
   teacher: teachers[0],
   firstTime: true,

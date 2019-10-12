@@ -3,10 +3,44 @@ import { GuestSpeaker, GuestSpeakerModel } from "../models/guestSpeaker.model";
 import { Workshop, WorkshopModel } from "../models/workshop.model";
 import { User, UserModel, UserType } from "../models/user.model";
 import { Ref } from "@hasezoey/typegoose";
-import { Availability, dayOfWeek } from "../models/availability";
+import { Availability } from "../models/availability";
 import { Booking } from "../models/booking.model";
 import { Location, LocationModel } from "../models/location.model";
-import { CityModel } from "../models/city.model";
+import { City, CityModel } from "../models/city.model";
+
+export const EMPTY_FACILITATOR = new UserModel({
+  firstName: "No Solution",
+  lastName: "",
+  email: "",
+  address: "",
+  userType: UserType.FACILITATOR,
+  phoneNumber: "",
+  _facilitator: new FacilitatorModel({
+    city: new CityModel({ city: "" }),
+    trained: [],
+    reliable: false,
+    availabilities: [],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
+});
+
+export const EMPTY_GUEST_SPEAKER = new UserModel({
+  firstName: "No Solution",
+  lastName: "",
+  email: "",
+  address: "",
+  userType: UserType.GUEST_SPEAKER,
+  phoneNumber: "",
+  _guestSpeaker: new GuestSpeakerModel({
+    city: new CityModel({ city: "" }),
+    trained: [],
+    reliable: false,
+    availabilities: [],
+    specificUnavailabilities: [],
+    assignedTimes: []
+  })
+});
 
 export const NA_FACILITATOR = new UserModel({
   firstName: "N/A",
@@ -15,9 +49,9 @@ export const NA_FACILITATOR = new UserModel({
   address: "N/A",
   userType: UserType.FACILITATOR,
   phoneNumber: "N/A",
-  _guestSpeaker: new GuestSpeakerModel({
+  _facilitator: new GuestSpeakerModel({
     city: new CityModel({ city: "N/A" }),
-    trained: false,
+    trained: [],
     reliable: false,
     availabilities: [],
     specificUnavailabilities: [],
@@ -34,7 +68,7 @@ export const NA_GUESTSPEAKER = new UserModel({
   phoneNumber: "N/A",
   _guestSpeaker: new GuestSpeakerModel({
     city: new CityModel({ city: "N/A" }),
-    trained: false,
+    trained: [],
     reliable: false,
     availabilities: [],
     specificUnavailabilities: [],
@@ -43,46 +77,45 @@ export const NA_GUESTSPEAKER = new UserModel({
 });
 
 /**
- * Check if day matches with availability.
+ * Check if dates are the same.
  *
  * @export
- * @param {number} day - day to check against dayOW
- * @param {dayOfWeek} dayOW - dayOfWeek to check against day
- * @returns {boolean} - are day and dayOW the same day
+ * @param {Date} time1 - first date
+ * @param {Date} time2 - second date
+ * @returns {boolean} - whether the dates are the same
  */
-export function checkDayOfWeek(day: number, dayOW: dayOfWeek): boolean {
-  if (day === 0 && dayOW === dayOfWeek.SUN) {
+export function checkSameTime(time1: Date, time2: Date): boolean {
+  if (time1.getTime() === time2.getTime()) {
     return true;
-  } else if (day === 1 && dayOW === dayOfWeek.MON) {
-    return true;
-  } else if (day === 2 && dayOW === dayOfWeek.TUE) {
-    return true;
-  } else if (day === 3 && dayOW === dayOfWeek.WED) {
-    return true;
-  } else if (day === 4 && dayOW === dayOfWeek.THU) {
-    return true;
-  } else if (day === 5 && dayOW === dayOfWeek.FRI) {
-    return true;
-  } else if (day === 6 && dayOW === dayOfWeek.SAT) {
-    return true;
-  } else {
-    return false;
   }
+  return false;
 }
 
 /**
  * Check if day matches with availability.
  *
  * @export
- * @param {Date} availableFrom - time the user is available from
- * @param {Date} timeBegin - time for the beginning of the workshop
- * @returns {boolean} - whether they are in the same day of the year
+ * @param {User} user - user to be assessed
+ * @param {string} workshopName - name of workshop
+ * @returns {boolean} - whether the user is trained for this particular workshop
  */
-export function checkDay(availableFrom: Date, timeBegin: Date): boolean {
-  if (availableFrom.getFullYear() === timeBegin.getFullYear()
-    && availableFrom.getMonth() === timeBegin.getMonth()
-    && availableFrom.getDate() === timeBegin.getDate()) {
-    return true;
+export function trainedUser(user: User, workshopName: string): boolean {
+  if (user._facilitator instanceof FacilitatorModel) {
+    const facilitator = user._facilitator as Facilitator;
+    const trainedWorkshops = facilitator.trained;
+    for (let i = 0; i < trainedWorkshops.length; i++) {
+      if (trainedWorkshops[i] === workshopName) {
+        return true;
+      }
+    }
+  } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
+    const guestSpeaker = user._guestSpeaker as GuestSpeaker;
+    const trainedWorkshops = guestSpeaker.trained;
+    for (let j = 0; j < trainedWorkshops.length; j++) {
+      if (trainedWorkshops[j] === workshopName) {
+        return true;
+      }
+    }
   }
 
   return false;
@@ -100,13 +133,53 @@ export function checkDay(availableFrom: Date, timeBegin: Date): boolean {
 export function eligible(user: User, workshop: Ref<Workshop>): boolean {
   if (workshop instanceof WorkshopModel) {
     const workshop1 = workshop as Workshop;
-    if (user.userType === UserType.FACILITATOR && workshop1.requireFacilitator) {
-      return true;
-    } else if (user.userType === UserType.GUEST_SPEAKER && workshop1.requireGuestSpeaker) {
+    if (trainedUser(user, workshop1.workshopName)) {
       return true;
     }
   }
+
   return false;
+}
+
+/**
+ * Check if user is available for specified time.
+ *
+ * @export
+ * @param {User} user - user to check
+ * @param {Date} timeBegin - start of time block
+ * @param {Date} timeEnd - end of time block
+ * @returns {boolean} - whether the user is available
+ */
+export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boolean {
+  let availabilities: Availability[] = [];
+  let assignedTimes: Availability[] = [];
+
+  if (user._facilitator instanceof FacilitatorModel) {
+    const facilitator = user._facilitator as Facilitator;
+    availabilities = facilitator.availabilities;
+    assignedTimes = facilitator.assignedTimes;
+  } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
+    const guestSpeaker = user._guestSpeaker as GuestSpeaker;
+    availabilities = guestSpeaker.availabilities;
+    assignedTimes = guestSpeaker.assignedTimes;
+  }
+
+  let available = false;
+
+  for (let i = 0; i < availabilities.length; i++) {
+    if (availabilities[i].availableFrom <= timeBegin && availabilities[i].availableUntil >= timeEnd) {
+      available = true;
+    }
+  }
+
+  for (let i = 0; i < assignedTimes.length; i++) {
+    if (assignedTimes[i].availableFrom <= timeBegin && assignedTimes[i].availableUntil > timeBegin
+      || assignedTimes[i].availableFrom < timeEnd && assignedTimes[i].availableUntil >= timeEnd) {
+      available = false;
+    }
+  }
+
+  return available;
 }
 
 /**
@@ -118,23 +191,16 @@ export function eligible(user: User, workshop: Ref<Workshop>): boolean {
  * @returns {number} - count of back to back workshops this user has done before current booking time
  */
 export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Date): number {
+  const formatedTimeBegin = new Date(timeBegin);
   let counter = 1;
 
   if (assignedTimes.length > 1) {
     for (let i = 0; i < (assignedTimes.length - 1); i++) {
-      if ((!checkDay(assignedTimes[i].availableFrom, assignedTimes[i + 1].availableFrom)
-        && (!(assignedTimes[i].availableUntil === assignedTimes[i + 1].availableFrom && assignedTimes[i + 1].availableUntil <= timeBegin)))
-        || (!checkDay(assignedTimes[i + 1].availableFrom, timeBegin))) {
-        counter = 0;
-      } else {
+      if (checkSameTime(assignedTimes[i].availableUntil, assignedTimes[i + 1].availableFrom) && assignedTimes[i + 1].availableUntil <= formatedTimeBegin) {
         counter++;
       }
     }
-  } else if (assignedTimes.length === 1 && assignedTimes[0].availableUntil <= timeBegin && checkDay(assignedTimes[0].availableUntil, timeBegin)) {
-    counter = 1;
   } else if (assignedTimes.length === 0) {
-    counter = 0;
-  } else {
     counter = 0;
   }
 
@@ -154,15 +220,20 @@ export function checkBackToBackFacilitator(previousBooking: Booking, currentBook
   let sameLocation = false;
   let eligibleForWorkshop = false;
   let maxAmount = false;
+  let available = false;
 
-  if (previousBooking.city === currentBooking.city) {
-    sameCity = true;
+  if (previousBooking.city instanceof CityModel && currentBooking.city instanceof CityModel) {
+    const previousCity = previousBooking.city as City;
+    const currentCity = currentBooking.city as City;
+    if (previousCity.city === currentCity.city) {
+      sameCity = true;
+    }
   }
 
   if (previousBooking.location instanceof LocationModel && currentBooking.location instanceof LocationModel) {
     const previousLocation = previousBooking.location as Location;
     const currentLocation = currentBooking.location as Location;
-    if (previousLocation.address === currentLocation.address) {
+    if (previousLocation.name === currentLocation.name) {
       sameLocation = true;
     }
   }
@@ -176,13 +247,17 @@ export function checkBackToBackFacilitator(previousBooking: Booking, currentBook
     if (facilitator._facilitator instanceof FacilitatorModel) {
       const _facilitator = facilitator._facilitator as Facilitator;
       const counter = checkBackToBackTime(_facilitator.assignedTimes, currentBooking.sessionTime.timeBegin);
-      if (counter >= 3 || counter === 0) {
+      if (counter >= 3) {
         maxAmount = true;
       }
     }
   }
 
-  if (sameCity && sameLocation && eligibleForWorkshop && !maxAmount) {
+  if (previousBooking.facilitator instanceof UserModel) {
+    available = userAvailable(previousBooking.facilitator as User, previousBooking.sessionTime.timeBegin, previousBooking.sessionTime.timeEnd);
+  }
+
+  if (sameCity && sameLocation && eligibleForWorkshop && !maxAmount && available) {
     return true;
   }
   return false;
@@ -201,15 +276,20 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
   let sameLocation = false;
   let eligibleForWorkshop = false;
   let maxAmount = false;
+  let available = false;
 
-  if (previousBooking.city === currentBooking.city) {
-    sameCity = true;
+  if (previousBooking.city instanceof CityModel && currentBooking.city instanceof CityModel) {
+    const previousCity = previousBooking.city as City;
+    const currentCity = currentBooking.city as City;
+    if (previousCity.city === currentCity.city) {
+      sameCity = true;
+    }
   }
 
   if (previousBooking.location instanceof LocationModel && currentBooking.location instanceof LocationModel) {
     const previousLocation = previousBooking.location as Location;
     const currentLocation = currentBooking.location as Location;
-    if (previousLocation.address === currentLocation.address) {
+    if (previousLocation.name === currentLocation.name) {
       sameLocation = true;
     }
   }
@@ -223,13 +303,17 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
     if (guestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
       const _guestSpeaker = guestSpeaker._guestSpeaker as GuestSpeaker;
       const counter = checkBackToBackTime(_guestSpeaker.assignedTimes, currentBooking.sessionTime.timeBegin);
-      if (counter >= 2 || counter === 0) {
+      if (counter >= 2) {
         maxAmount = true;
       }
     }
   }
 
-  if (sameCity && sameLocation && eligibleForWorkshop && !maxAmount) {
+  if (previousBooking.guestSpeaker instanceof UserModel) {
+    available = userAvailable(previousBooking.guestSpeaker as User, previousBooking.sessionTime.timeBegin, previousBooking.sessionTime.timeEnd);
+  }
+
+  if (sameCity && sameLocation && eligibleForWorkshop && !maxAmount && available) {
     return true;
   }
   return false;
@@ -244,76 +328,13 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
  * @returns {void} void
  */
 export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date): void {
-  let availabilities: Availability[] = [];
-  let assignedTimes: Availability[] = [];
-
   if (user._facilitator instanceof FacilitatorModel) {
     const facilitator = user._facilitator as Facilitator;
-    availabilities = facilitator.availabilities;
-    assignedTimes = facilitator.assignedTimes;
+    facilitator.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd });
   } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
     const guestSpeaker = user._guestSpeaker as GuestSpeaker;
-    availabilities = guestSpeaker.availabilities;
-    assignedTimes = guestSpeaker.assignedTimes;
+    guestSpeaker.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd });
   }
-
-  for (let i = 0; i < availabilities.length; i++) {
-    const availableFrom = availabilities[i].availableFrom;
-    const availableUntil = availabilities[i].availableUntil;
-
-    if (checkDay(availableFrom, timeBegin)) {
-      const stringFrom = availableFrom.toTimeString().slice(0, 8);
-      const stringUntil = availableUntil.toTimeString().slice(0, 8);
-
-      const stringBegin = timeBegin.toTimeString().slice(0, 8);
-      const stringEnd = timeEnd.toTimeString().slice(0, 8);
-
-      assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd, dayOfWeek: availabilities[i].dayOfWeek });
-
-      if (stringFrom === stringBegin && stringUntil === stringEnd) { //If the availability is just a 1 hour block
-        availabilities.splice(i, 1);
-      } else if (stringFrom === stringBegin && stringEnd < stringUntil) { // If the booking starts at the same time as the beginning of the user's availability
-        availabilities[i].availableFrom = timeEnd;
-      } else if (stringFrom < stringEnd && stringEnd === stringUntil) { // If the booking end at the same time as the end of the user's availability
-        availabilities[i].availableUntil = timeBegin;
-      } else if (stringFrom < stringEnd && stringEnd < stringUntil) { // If the booking starts and ends in the middle of the user's availability
-        availabilities[i].availableUntil = timeBegin;
-        availabilities.splice(i + 1, 0, availabilities[i]);
-        availabilities[i + 1].availableFrom = timeEnd;
-      }
-    }
-  }
-}
-
-/**
- * Check if user is available for specified time.
- *
- * @export
- * @param {User} user - user to check
- * @param {Date} timeBegin - start of time block
- * @param {Date} timeEnd - end of time block
- * @returns {boolean} - whether the user is available
- */
-export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boolean {
-  let availabilities: Availability[] = [];
-
-  if (user._facilitator instanceof FacilitatorModel) {
-    const facilitator = user._facilitator as Facilitator;
-    availabilities = facilitator.availabilities;
-  } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
-    const guestSpeaker = user._guestSpeaker as GuestSpeaker;
-    availabilities = guestSpeaker.availabilities;
-  }
-
-  for (let i = 0; i < availabilities.length; i++) {
-    if (checkDay(availabilities[i].availableFrom, timeBegin)
-      && availabilities[i].availableFrom.toTimeString().slice(0, 8) <= timeBegin.toTimeString().slice(0, 8)
-      && availabilities[i].availableUntil.toTimeString().slice(0, 8) >= timeEnd.toTimeString().slice(0, 8)) {
-      return true;
-    }
-  }
-
-  return false;
 }
 
 /**
@@ -323,21 +344,99 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
  * @export
  * @param {User} possibleFacilitator - facilitator to check
  * @param {User} possibleGuestSpeaker - guestSpeaker to check
+ * @param {Ref<Workshop>} workshop - workshop of current booking
  * @returns {(null | [User, User])} - null if the users can't be paired, array
  *                                    containing users if the can be
  */
-export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User): null | [User, User] {
+export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User, workshop: Ref<Workshop>): null | [User, User] {
   let team: [User, User];
 
-  if (possibleFacilitator._facilitator instanceof FacilitatorModel && possibleGuestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
-    const facilitator = possibleFacilitator._facilitator as Facilitator;
-    const guestSpeaker = possibleGuestSpeaker._guestSpeaker as GuestSpeaker;
-    if ((guestSpeaker.trained && facilitator.trained)
-      || (!(guestSpeaker.trained) && facilitator.trained)) {
-      team = [possibleFacilitator, possibleGuestSpeaker];
-      return team;
+  if (possibleFacilitator._facilitator instanceof FacilitatorModel && possibleGuestSpeaker._guestSpeaker instanceof GuestSpeakerModel && workshop instanceof WorkshopModel) {
+    const workshop1 = workshop as Workshop;
+    const workshopName = workshop1.workshopName;
+
+    if (workshop1.requireFacilitator && workshop1.requireGuestSpeaker) {
+      if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER) {
+        if (trainedUser(possibleFacilitator, workshopName) && trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [possibleFacilitator, possibleGuestSpeaker];
+          return team;
+        } else if (trainedUser(possibleFacilitator, workshopName) && !trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [possibleFacilitator, EMPTY_GUEST_SPEAKER];
+          return team;
+        } else if (!trainedUser(possibleFacilitator, workshopName) && trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [EMPTY_FACILITATOR, possibleGuestSpeaker];
+          return team;
+        } else if (!trainedUser(possibleFacilitator, workshopName) && !trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [EMPTY_FACILITATOR, EMPTY_GUEST_SPEAKER];
+          return team;
+        }
+      } else if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUEST_SPEAKER) {
+        if (trainedUser(possibleFacilitator, workshopName)) {
+          team = [possibleFacilitator, possibleGuestSpeaker];
+          return team;
+        } else if (!trainedUser(possibleFacilitator, workshopName)) {
+          team = [EMPTY_FACILITATOR, possibleGuestSpeaker];
+          return team;
+        }
+      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER) {
+        if (trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [possibleFacilitator, possibleGuestSpeaker];
+          return team;
+        } else if (!trainedUser(possibleGuestSpeaker, workshopName)) {
+          team = [possibleFacilitator, EMPTY_GUEST_SPEAKER];
+          return team;
+        }
+      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUEST_SPEAKER) {
+        team = [possibleFacilitator, possibleGuestSpeaker];
+        return team;
+      }
+    } else if (workshop1.requireFacilitator && !workshop1.requireGuestSpeaker) {
+      if (!(possibleFacilitator === EMPTY_FACILITATOR) && trainedUser(possibleFacilitator, workshopName)) {
+        team = [possibleFacilitator, NA_GUESTSPEAKER];
+        return team;
+      } else {
+        team = [EMPTY_FACILITATOR, NA_GUESTSPEAKER];
+        return team;
+      }
+    } else if (!workshop1.requireFacilitator && workshop1.requireGuestSpeaker) {
+      if (possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER && trainedUser(possibleGuestSpeaker, workshopName)) {
+        team = [NA_FACILITATOR, possibleGuestSpeaker];
+        return team;
+      } else {
+        team = [NA_FACILITATOR, EMPTY_GUEST_SPEAKER];
+        return team;
+      }
     }
   }
 
   return null;
+}
+
+/**
+ * Check if facilitator and guest speaker can work with each other and pair them
+ * for booking.
+ *
+ * @export
+ * @param {[User, User][]} teams - array of possible teams
+ * @returns {[User, User][]} - array of most suitable teams
+ */
+export function filterTeams(teams: [User, User][]): [User, User][] {
+  const noEmptyUsers = teams.filter(team => team[0] !== EMPTY_FACILITATOR && team[1] !== EMPTY_GUEST_SPEAKER);
+  let noEmptyFacilitators: [User, User][];
+  let noEmptyGuestSpeakers: [User, User][];
+
+  if (noEmptyUsers.length > 0) {
+    return noEmptyUsers;
+  } else if (noEmptyUsers.length === 0) {
+    noEmptyFacilitators = teams.filter(team => team[0] !== EMPTY_FACILITATOR);
+    noEmptyGuestSpeakers = teams.filter(team => team[1] !== EMPTY_GUEST_SPEAKER);
+
+    if (noEmptyFacilitators.length > 0) {
+      return noEmptyFacilitators;
+    } else if (noEmptyGuestSpeakers.length > 0) {
+      return noEmptyGuestSpeakers;
+    }
+  }
+
+  return teams;
 }

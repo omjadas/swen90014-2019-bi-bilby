@@ -1,14 +1,14 @@
 import { arrayProp, prop, Typegoose, Ref } from "@hasezoey/typegoose";
 import { City } from "./city.model";
-import { Availability, SpecificUnavailability } from "./availability";
+import { Availability, Unavailability } from "./availability";
 
 export class Facilitator extends Typegoose {
 
   @prop({ required: true, ref: City })
   public city!: Ref<City>;
 
-  @prop({ required: true })
-  public trained!: boolean;
+  @arrayProp({ required: true, items: String })
+  public trained!: string[];
 
   @prop({ required: true })
   public reliable!: boolean;
@@ -17,7 +17,7 @@ export class Facilitator extends Typegoose {
   public availabilities!: Availability[];
 
   @arrayProp({ required: true, items: Object })
-  public specificUnavailabilities!: SpecificUnavailability[];
+  public specificUnavailabilities!: Unavailability[];
 
   @arrayProp({ required: true, items: Object })
   public assignedTimes!: Availability[];
