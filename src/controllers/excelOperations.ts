@@ -26,11 +26,11 @@ function getConversionDate(excelDate: number): Date {
  */
 export function getCities(file: Buffer): City[] {
   const wb = XLSX.read(file, { type: "buffer" });
-  const s = wb.Sheets["Locations | Workshops"];
-  const myDataCity: any[] = XLSX.utils.sheet_to_json(s);
+  const s = wb.Sheets["Locations"];
+  const myDataCities: any[] = XLSX.utils.sheet_to_json(s);
   const cities: City[] = [];
 
-  Object.values(myDataCity[0]).forEach((city) => {
+  Object.values(myDataCities[0]).forEach((city) => {
     cities.push(new CityModel({ city: city }));
   });
   return cities;
@@ -298,15 +298,15 @@ export function getSchools(file: Buffer): User[] {
   */
 export function getWorkshopTypes(file: Buffer): Workshop[] {
   const wb = XLSX.read(file, { type: "buffer" });
-  const s = wb.Sheets["Locations | Workshops"];
-  const myDataCity: any[] = XLSX.utils.sheet_to_json(s, { header: "A" });
+  const s = wb.Sheets["Workshops"];
+  const myDataWorkshops: any[] = XLSX.utils.sheet_to_json(s, { header: "A" });
   const workshops: Workshop[] = [];
 
-  for (let i = 2; i < Object.keys(myDataCity).length; i++) {
+  for (let i = 2; i < Object.keys(myDataWorkshops).length; i++) {
     workshops.push(new WorkshopModel({
-      workshopName: myDataCity[i]["E"],
-      requireFacilitator: (myDataCity[i]["F"]),
-      requireGuestSpeaker: (myDataCity[i]["G"])
+      workshopName: myDataWorkshops[i]["A"],
+      requireFacilitator: (myDataWorkshops[i]["B"]),
+      requireGuestSpeaker: (myDataWorkshops[i]["C"])
     }));
   }
   return workshops;
