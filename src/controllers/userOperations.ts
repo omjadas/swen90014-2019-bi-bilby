@@ -142,151 +142,6 @@ export function eligible(user: User, workshop: Ref<Workshop>): boolean {
 }
 
 /**
- * Check how many back to back workshops has the user done.
- *
- * @export
- * @param {Availability[]} assignedTimes - array of times to which the user has been assigned
- * @param {Date} timeBegin - time for the booking we are currently trying to assign
- * @returns {number} - count of back to back workshops this user has done before current booking time
- */
-export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Date): number {
-  const formatedTimeBegin = new Date(timeBegin);
-  let counter = 1;
-
-  if (assignedTimes.length > 1) {
-    for (let i = 0; i < (assignedTimes.length - 1); i++) {
-      if (checkSameTime(assignedTimes[i].availableUntil, assignedTimes[i + 1].availableFrom) && assignedTimes[i + 1].availableUntil <= formatedTimeBegin) {
-        counter++;
-      }
-    }
-  } else if (assignedTimes.length === 0) {
-    counter = 0;
-  }
-
-  return counter;
-}
-
-/**
- * Check if a facilitator can be rostered to a back to back booking.
- *
- * @export
- * @param {Booking} previousBooking - information from previously assigned booking
- * @param {Booking} currentBooking - current booking in need of assignment
- * @returns {boolean} - returns whether the facilitator from last booking can do this new booking or not
- */
-export function checkBackToBackFacilitator(previousBooking: Booking, currentBooking: Booking): boolean {
-  let sameCity = false;
-  let sameLocation = false;
-  let eligibleForWorkshop = false;
-  let maxAmount = false;
-
-  if (previousBooking.city instanceof CityModel && currentBooking.city instanceof CityModel) {
-    const previousCity = previousBooking.city as City;
-    const currentCity = currentBooking.city as City;
-    if (previousCity.city === currentCity.city) {
-      sameCity = true;
-    }
-  }
-
-  if (previousBooking.location instanceof LocationModel && currentBooking.location instanceof LocationModel) {
-    const previousLocation = previousBooking.location as Location;
-    const currentLocation = currentBooking.location as Location;
-    if (previousLocation.name === currentLocation.name) {
-      sameLocation = true;
-    }
-  }
-
-  if (previousBooking.facilitator instanceof UserModel) {
-    const facilitator = previousBooking.facilitator as User;
-    if (eligible(facilitator, currentBooking.workshop)) {
-      eligibleForWorkshop = true;
-    }
-
-    if (facilitator._facilitator instanceof FacilitatorModel) {
-      const _facilitator = facilitator._facilitator as Facilitator;
-      const counter = checkBackToBackTime(_facilitator.assignedTimes, currentBooking.sessionTime.timeBegin);
-      if (counter >= 3) {
-        maxAmount = true;
-      }
-    }
-  }
-
-  if (sameCity && sameLocation && eligibleForWorkshop && !maxAmount) {
-    return true;
-  }
-  return false;
-}
-
-/**
- * Check if a guest speaker can be rostered to a back to back booking.
- *
- * @export
- * @param {Booking} previousBooking - information from previously assigned booking
- * @param {Booking} currentBooking - current booking in need of assignment
- * @returns {boolean} - returns whether the guest speaker from last booking can do this new booking or not
- */
-export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBooking: Booking): boolean {
-  let sameCity = false;
-  let sameLocation = false;
-  let eligibleForWorkshop = false;
-  let maxAmount = false;
-
-  if (previousBooking.city instanceof CityModel && currentBooking.city instanceof CityModel) {
-    const previousCity = previousBooking.city as City;
-    const currentCity = currentBooking.city as City;
-    if (previousCity.city === currentCity.city) {
-      sameCity = true;
-    }
-  }
-
-  if (previousBooking.location instanceof LocationModel && currentBooking.location instanceof LocationModel) {
-    const previousLocation = previousBooking.location as Location;
-    const currentLocation = currentBooking.location as Location;
-    if (previousLocation.name === currentLocation.name) {
-      sameLocation = true;
-    }
-  }
-
-  if (previousBooking.guestSpeaker instanceof UserModel) {
-    const guestSpeaker = previousBooking.guestSpeaker as User;
-    if (eligible(guestSpeaker, currentBooking.workshop)) {
-      eligibleForWorkshop = true;
-    }
-
-    if (guestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
-      const _guestSpeaker = guestSpeaker._guestSpeaker as GuestSpeaker;
-      const counter = checkBackToBackTime(_guestSpeaker.assignedTimes, currentBooking.sessionTime.timeBegin);
-      if (counter >= 2) {
-        maxAmount = true;
-      }
-    }
-  }
-
-  if (sameCity && sameLocation && eligibleForWorkshop && !maxAmount) {
-    return true;
-  }
-  return false;
-}
-
-/**
- * Adjust availabilities when user is rostered for a booking.
- *
- * @param {User} user - user to whom we want to change availabilities
- * @param {Date} timeBegin - time from which we want to make user unavailable
- * @param {Date} timeEnd - time until which we want to make user unavailable
- * @returns {void} void
- */
-export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date): void {
-  if (user._facilitator instanceof FacilitatorModel) {
-    const facilitator = user._facilitator as Facilitator;
-    facilitator.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd });
-  } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
-    const guestSpeaker = user._guestSpeaker as GuestSpeaker;
-    guestSpeaker.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd });
-  }
-}
-
-/**
  * Check if user is available for specified time.
  *
  * @export
@@ -325,6 +180,161 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
   }
 
   return available;
+}
+
+/**
+ * Check how many back to back workshops has the user done.
+ *
+ * @export
+ * @param {Availability[]} assignedTimes - array of times to which the user has been assigned
+ * @param {Date} timeBegin - time for the booking we are currently trying to assign
+ * @returns {number} - count of back to back workshops this user has done before current booking time
+ */
+export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Date): number {
+  const formatedTimeBegin = new Date(timeBegin);
+  let counter = 1;
+
+  if (assignedTimes.length > 1) {
+    for (let i = 0; i < (assignedTimes.length - 1); i++) {
+      if (checkSameTime(assignedTimes[i].availableUntil, assignedTimes[i + 1].availableFrom) && assignedTimes[i + 1].availableUntil <= formatedTimeBegin) {
+        counter++;
+      }
+    }
+  } else if (assignedTimes.length === 0) {
+    counter = 0;
+  }
+
+  return counter;
+}
+
+/**
+ * Check if a facilitator can be rostered to a back to back booking.
+ *
+ * @export
+ * @param {Booking} previousBooking - information from previously assigned booking
+ * @param {Booking} currentBooking - current booking in need of assignment
+ * @returns {boolean} - returns whether the facilitator from last booking can do this new booking or not
+ */
+export function checkBackToBackFacilitator(previousBooking: Booking, currentBooking: Booking): boolean {
+  let sameCity = false;
+  let sameLocation = false;
+  let eligibleForWorkshop = false;
+  let maxAmount = false;
+  let available = false;
+
+  if (previousBooking.city instanceof CityModel && currentBooking.city instanceof CityModel) {
+    const previousCity = previousBooking.city as City;
+    const currentCity = currentBooking.city as City;
+    if (previousCity.city === currentCity.city) {
+      sameCity = true;
+    }
+  }
+
+  if (previousBooking.location instanceof LocationModel && currentBooking.location instanceof LocationModel) {
+    const previousLocation = previousBooking.location as Location;
+    const currentLocation = currentBooking.location as Location;
+    if (previousLocation.name === currentLocation.name) {
+      sameLocation = true;
+    }
+  }
+
+  if (previousBooking.facilitator instanceof UserModel) {
+    const facilitator = previousBooking.facilitator as User;
+    if (eligible(facilitator, currentBooking.workshop)) {
+      eligibleForWorkshop = true;
+    }
+
+    if (facilitator._facilitator instanceof FacilitatorModel) {
+      const _facilitator = facilitator._facilitator as Facilitator;
+      const counter = checkBackToBackTime(_facilitator.assignedTimes, currentBooking.sessionTime.timeBegin);
+      if (counter >= 3) {
+        maxAmount = true;
+      }
+    }
+  }
+
+  if (previousBooking.facilitator instanceof UserModel) {
+    available = userAvailable(previousBooking.facilitator as User, previousBooking.sessionTime.timeBegin, previousBooking.sessionTime.timeEnd);
+  }
+
+  if (sameCity && sameLocation && eligibleForWorkshop && !maxAmount && available) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Check if a guest speaker can be rostered to a back to back booking.
+ *
+ * @export
+ * @param {Booking} previousBooking - information from previously assigned booking
+ * @param {Booking} currentBooking - current booking in need of assignment
+ * @returns {boolean} - returns whether the guest speaker from last booking can do this new booking or not
+ */
+export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBooking: Booking): boolean {
+  let sameCity = false;
+  let sameLocation = false;
+  let eligibleForWorkshop = false;
+  let maxAmount = false;
+  let available = false;
+
+  if (previousBooking.city instanceof CityModel && currentBooking.city instanceof CityModel) {
+    const previousCity = previousBooking.city as City;
+    const currentCity = currentBooking.city as City;
+    if (previousCity.city === currentCity.city) {
+      sameCity = true;
+    }
+  }
+
+  if (previousBooking.location instanceof LocationModel && currentBooking.location instanceof LocationModel) {
+    const previousLocation = previousBooking.location as Location;
+    const currentLocation = currentBooking.location as Location;
+    if (previousLocation.name === currentLocation.name) {
+      sameLocation = true;
+    }
+  }
+
+  if (previousBooking.guestSpeaker instanceof UserModel) {
+    const guestSpeaker = previousBooking.guestSpeaker as User;
+    if (eligible(guestSpeaker, currentBooking.workshop)) {
+      eligibleForWorkshop = true;
+    }
+
+    if (guestSpeaker._guestSpeaker instanceof GuestSpeakerModel) {
+      const _guestSpeaker = guestSpeaker._guestSpeaker as GuestSpeaker;
+      const counter = checkBackToBackTime(_guestSpeaker.assignedTimes, currentBooking.sessionTime.timeBegin);
+      if (counter >= 2) {
+        maxAmount = true;
+      }
+    }
+  }
+
+  if (previousBooking.guestSpeaker instanceof UserModel) {
+    available = userAvailable(previousBooking.guestSpeaker as User, previousBooking.sessionTime.timeBegin, previousBooking.sessionTime.timeEnd);
+  }
+
+  if (sameCity && sameLocation && eligibleForWorkshop && !maxAmount && available) {
+    return true;
+  }
+  return false;
+}
+
+/**
+ * Adjust availabilities when user is rostered for a booking.
+ *
+ * @param {User} user - user to whom we want to change availabilities
+ * @param {Date} timeBegin - time from which we want to make user unavailable
+ * @param {Date} timeEnd - time until which we want to make user unavailable
+ * @returns {void} void
+ */
+export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date): void {
+  if (user._facilitator instanceof FacilitatorModel) {
+    const facilitator = user._facilitator as Facilitator;
+    facilitator.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd });
+  } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
+    const guestSpeaker = user._guestSpeaker as GuestSpeaker;
+    guestSpeaker.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd });
+  }
 }
 
 /**
