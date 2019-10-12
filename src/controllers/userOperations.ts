@@ -85,15 +85,9 @@ export const NA_GUESTSPEAKER = new UserModel({
  * @returns {boolean} - whether the dates are the same
  */
 export function checkSameTime(time1: Date, time2: Date): boolean {
-  if (time1.getUTCFullYear() === time2.getUTCFullYear()
-    && time1.getUTCMonth() === time2.getUTCMonth()
-    && time1.getUTCDate() === time2.getUTCDate()
-    && time1.getUTCHours() === time2.getUTCHours()
-    && time1.getUTCMinutes() === time2.getUTCMinutes()
-    && time1.getUTCMilliseconds() === time2.getUTCMilliseconds()) {
+  if (time1.getTime() === time2.getTime()) {
     return true;
   }
-
   return false;
 }
 
