@@ -335,12 +335,8 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
     availabilities = guestSpeaker.availabilities;
   }
 
-  const formatedTimeBegin = new Date(timeBegin);
-  const formatedTimeEnd = new Date(timeEnd);
-
   for (let i = 0; i < availabilities.length; i++) {
-    if (availabilities[i].availableFrom <= formatedTimeBegin && availabilities[i].availableUntil >= formatedTimeEnd
-      && availabilities[i].availableFrom.getUTCDate() === formatedTimeBegin.getUTCDate() && availabilities[i].availableUntil.getUTCDate() === formatedTimeEnd.getUTCDate()) {
+    if (availabilities[i].availableFrom <= timeBegin && availabilities[i].availableUntil >= timeEnd) {
       return true;
     }
   }
