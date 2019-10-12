@@ -277,41 +277,12 @@ export function checkBackToBackGuestSpeaker(previousBooking: Booking, currentBoo
  * @returns {void} void
  */
 export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date): void {
-  let availabilities: Availability[] = [];
-  const buffer: any = [];
-
-  const formatedTimeBegin = new Date(timeBegin);
-  const formatedTimeEnd = new Date(timeEnd);
-
   if (user._facilitator instanceof FacilitatorModel) {
     const facilitator = user._facilitator as Facilitator;
-    availabilities = facilitator.availabilities;
-    facilitator.assignedTimes.push({ availableFrom: formatedTimeBegin, availableUntil: formatedTimeEnd });
+    facilitator.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd });
   } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
     const guestSpeaker = user._guestSpeaker as GuestSpeaker;
-    availabilities = guestSpeaker.availabilities;
-    guestSpeaker.assignedTimes.push({ availableFrom: formatedTimeBegin, availableUntil: formatedTimeEnd });
-  }
-
-  for (let i = 0; i < availabilities.length; i++) {
-    const availableFrom = new Date(availabilities[i].availableFrom);
-    const availableUntil = new Date(availabilities[i].availableUntil);
-
-    if (checkSameTime(availableFrom, timeBegin) && checkSameTime(availableUntil, timeEnd)) { //If the availability is just a 1 hour block
-      availabilities.splice(i, 1);
-    } else if (checkSameTime(availableFrom, timeBegin) && timeEnd < availableUntil) { // If the booking starts at the same time as the beginning of the user's availability
-      availabilities[i].availableFrom = formatedTimeEnd;
-    } else if (availableFrom < timeBegin && checkSameTime(timeEnd, availableUntil)) { // If the booking end at the same time as the end of the user's availability
-      availabilities[i].availableUntil = formatedTimeBegin;
-    } else if (availableFrom < timeBegin && timeEnd < availableUntil) { // If the booking starts and ends in the middle of the user's availability
-      availabilities[i].availableFrom = formatedTimeEnd;
-      const tuple = [i, { availableFrom: availableFrom, availableUntil: formatedTimeBegin }];
-      buffer.push(tuple);
-    }
-  }
-
-  for (let j = 0; j < buffer.length; j++) {
-    availabilities.splice(buffer[j][0], 0, buffer[j][1]);
+    guestSpeaker.assignedTimes.push({ availableFrom: timeBegin, availableUntil: timeEnd });
   }
 }
 
@@ -326,22 +297,34 @@ export function adjustAvailabilities(user: User, timeBegin: Date, timeEnd: Date)
  */
 export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boolean {
   let availabilities: Availability[] = [];
+  let assignedTimes: Availability[] = [];
 
   if (user._facilitator instanceof FacilitatorModel) {
     const facilitator = user._facilitator as Facilitator;
     availabilities = facilitator.availabilities;
+    assignedTimes = facilitator.assignedTimes;
   } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
     const guestSpeaker = user._guestSpeaker as GuestSpeaker;
     availabilities = guestSpeaker.availabilities;
+    assignedTimes = guestSpeaker.assignedTimes;
   }
+
+  let available = false;
 
   for (let i = 0; i < availabilities.length; i++) {
     if (availabilities[i].availableFrom <= timeBegin && availabilities[i].availableUntil >= timeEnd) {
-      return true;
+      available = true;
     }
   }
 
-  return false;
+  for (let i = 0; i < assignedTimes.length; i++) {
+    if (assignedTimes[i].availableFrom <= timeBegin && assignedTimes[i].availableUntil > timeBegin
+      || assignedTimes[i].availableFrom < timeEnd && assignedTimes[i].availableUntil >= timeEnd) {
+      available = false;
+    }
+  }
+
+  return available;
 }
 
 /**
