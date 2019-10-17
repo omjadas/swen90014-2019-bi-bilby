@@ -3,7 +3,7 @@ import { GuestSpeaker, GuestSpeakerModel } from "../models/guestSpeaker.model";
 import { Workshop, WorkshopModel } from "../models/workshop.model";
 import { User, UserModel, UserType } from "../models/user.model";
 import { Ref } from "@hasezoey/typegoose";
-import { Availability } from "../models/availability";
+import { Availability, Unavailability } from "../models/availability";
 import { Booking } from "../models/booking.model";
 import { Location, LocationModel } from "../models/location.model";
 import { City, CityModel } from "../models/city.model";
@@ -152,15 +152,18 @@ export function eligible(user: User, workshop: Ref<Workshop>): boolean {
  */
 export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boolean {
   let availabilities: Availability[] = [];
+  let unavailabilities: Unavailability[] = [];
   let assignedTimes: Availability[] = [];
 
   if (user._facilitator instanceof FacilitatorModel) {
     const facilitator = user._facilitator as Facilitator;
     availabilities = facilitator.availabilities;
+    unavailabilities = facilitator.specificUnavailabilities;
     assignedTimes = facilitator.assignedTimes;
   } else if (user._guestSpeaker instanceof GuestSpeakerModel) {
     const guestSpeaker = user._guestSpeaker as GuestSpeaker;
     availabilities = guestSpeaker.availabilities;
+    unavailabilities = guestSpeaker.specificUnavailabilities;
     assignedTimes = guestSpeaker.assignedTimes;
   }
 
@@ -169,6 +172,12 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
   for (let i = 0; i < availabilities.length; i++) {
     if (availabilities[i].availableFrom <= timeBegin && availabilities[i].availableUntil >= timeEnd) {
       available = true;
+    }
+  }
+
+  for (let i = 0; i < unavailabilities.length; i++) {
+    if (unavailabilities[i].notAvailableFrom <= timeBegin && unavailabilities[i].notAvailableUntil >= timeEnd) {
+      available = false;
     }
   }
 
