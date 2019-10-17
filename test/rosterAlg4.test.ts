@@ -117,7 +117,7 @@ new UserModel({
     reliable: true,
     availabilities: [{
       availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0)
+      availableUntil: new Date(2018, 8, 6, 13, 0)
     }],
     specificUnavailabilities: [],
     assignedTimes: []
