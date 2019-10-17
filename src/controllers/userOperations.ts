@@ -173,8 +173,8 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
   }
 
   for (let i = 0; i < assignedTimes.length; i++) {
-    if (assignedTimes[i].availableFrom <= timeBegin && assignedTimes[i].availableUntil > timeBegin
-      || assignedTimes[i].availableFrom < timeEnd && assignedTimes[i].availableUntil >= timeEnd) {
+    if (assignedTimes[i].availableFrom < timeBegin && assignedTimes[i].availableUntil > timeBegin
+      || assignedTimes[i].availableFrom < timeEnd && assignedTimes[i].availableUntil > timeEnd) {
       available = false;
     }
   }
@@ -191,12 +191,11 @@ export function userAvailable(user: User, timeBegin: Date, timeEnd: Date): boole
  * @returns {number} - count of back to back workshops this user has done before current booking time
  */
 export function checkBackToBackTime(assignedTimes: Availability[], timeBegin: Date): number {
-  const formatedTimeBegin = new Date(timeBegin);
   let counter = 1;
 
   if (assignedTimes.length > 1) {
     for (let i = 0; i < (assignedTimes.length - 1); i++) {
-      if (checkSameTime(assignedTimes[i].availableUntil, assignedTimes[i + 1].availableFrom) && assignedTimes[i + 1].availableUntil <= formatedTimeBegin) {
+      if (checkSameTime(assignedTimes[i].availableUntil, assignedTimes[i + 1].availableFrom) && assignedTimes[i + 1].availableUntil <= timeBegin) {
         counter++;
       }
     }

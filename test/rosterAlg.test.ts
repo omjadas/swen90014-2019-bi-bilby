@@ -1,9 +1,9 @@
 import rosterByPreferences from "../src/controllers/rosterAlg";
 import { CityModel } from "../src/models/city.model";
 import { SchoolModel } from "../src/models/school.model";
-import { UserModel, UserType } from "../src/models/user.model";
-import { GuestSpeakerModel } from "../src/models/guestSpeaker.model";
-import { FacilitatorModel } from "../src/models/facilitator.model";
+import { User, UserModel, UserType } from "../src/models/user.model";
+import { GuestSpeaker, GuestSpeakerModel } from "../src/models/guestSpeaker.model";
+import { Facilitator, FacilitatorModel } from "../src/models/facilitator.model";
 import { LocationModel } from "../src/models/location.model";
 import { WorkshopModel } from "../src/models/workshop.model";
 import { BookingModel, BookingState } from "../src/models/booking.model";
@@ -128,75 +128,25 @@ const bookings = [new BookingModel({
   numberOfStudents: 25
 })];
 
-const facilitators2 = [{
-  firstName: "Phil",
-  lastName: "",
-  email: "",
-  address: "",
-  userType: UserType.FACILITATOR,
-  phoneNumber: "",
-  _facilitator: {
-    city: cities[0],
-    trained: ["Discussions of Homelessness and Disadvantage"],
-    reliable: true,
-    availabilities: [{
-      availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 11, 0)
-    }],
-    specificUnavailabilities: [{
-      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
-      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
-      notes: "On holiday"
-    }],
-    assignedTimes: [{
-      availableFrom: new Date(2018, 8, 6, 11, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0)
-    }]
-  }
-}];
-
-const guestSpeakers2 = [{
-  firstName: "Pete",
-  lastName: "B",
-  email: "",
-  address: "",
-  userType: UserType.GUEST_SPEAKER,
-  phoneNumber: "",
-  _guestSpeaker: {
-    city: cities[0],
-    trained: ["Discussions of Homelessness and Disadvantage"],
-    reliable: true,
-    availabilities: [{
-      availableFrom: new Date(2018, 8, 6, 10, 0),
-      availableUntil: new Date(2018, 8, 6, 11, 0)
-    }],
-    specificUnavailabilities: [{
-      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
-      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
-      notes: "On holiday"
-    }],
-    assignedTimes: [{
-      availableFrom: new Date(2018, 8, 6, 11, 0),
-      availableUntil: new Date(2018, 8, 6, 12, 0)
-    }]
-  }
-}];
-
-// Expected result for input bookings. Facilitator and guest speaker should be assigned and state should be UNCONFIRMED.
-const afterRosterBookings = [{
-  state: BookingState.UNCONFIRMED,
-  facilitator: facilitators[0],
-  guestSpeaker: guestSpeakers[0],
-  sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
-  city: cities[0],
-  location: locations[0],
-  workshop: workshops[0],
-  level: "9",
-  teacher: teachers[0],
-  firstTime: true,
-  numberOfStudents: 25
-}];
-
 test("assign facilitator and guest speaker to booking", () => {
-  expect(rosterByPreferences(bookings, guestSpeakers, facilitators)).toMatchObject(afterRosterBookings);
+  const bookingsResult = rosterByPreferences(bookings, guestSpeakers, facilitators);
+
+  expect(bookingsResult[0].facilitator).toMatchObject(facilitators[0]);
+  expect(bookingsResult[0].guestSpeaker).toMatchObject(guestSpeakers[0]);
+
+  if (bookingsResult[0].facilitator instanceof UserModel) {
+    const user = bookingsResult[0].facilitator as User;
+    if (user._facilitator instanceof FacilitatorModel) {
+      const facilitator = user._facilitator as Facilitator;
+      expect(facilitator.assignedTimes[0].availableFrom).toMatchObject(bookingsResult[0].sessionTime.timeBegin);
+      expect(facilitator.assignedTimes[0].availableUntil).toMatchObject(bookingsResult[0].sessionTime.timeEnd);
+    }
+  } else if (bookingsResult[0].guestSpeaker instanceof UserModel) {
+    const user = bookingsResult[0].guestSpeaker as User;
+    if (user._guestSpeaker instanceof GuestSpeakerModel) {
+      const guestSpeaker = user._guestSpeaker as GuestSpeaker;
+      expect(guestSpeaker.assignedTimes[0].availableFrom).toMatchObject(bookingsResult[0].sessionTime.timeBegin);
+      expect(guestSpeaker.assignedTimes[0].availableUntil).toMatchObject(bookingsResult[0].sessionTime.timeEnd);
+    }
+  }
 });
