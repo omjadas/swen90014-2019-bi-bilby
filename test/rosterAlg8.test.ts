@@ -2,12 +2,13 @@ import rosterByPreferences from "../src/controllers/rosterAlg";
 import { CityModel } from "../src/models/city.model";
 import { SchoolModel } from "../src/models/school.model";
 import { User, UserModel, UserType } from "../src/models/user.model";
-import { GuestSpeaker, GuestSpeakerModel } from "../src/models/guestSpeaker.model";
+import { GuestSpeakerModel } from "../src/models/guestSpeaker.model";
 import { Facilitator, FacilitatorModel } from "../src/models/facilitator.model";
 import { LocationModel } from "../src/models/location.model";
 import { WorkshopModel } from "../src/models/workshop.model";
 import { BookingModel, BookingState } from "../src/models/booking.model";
 import { TeacherModel } from "../src/models/teacher.model";
+import { EMPTY_GUEST_SPEAKER } from "../src/controllers/userOperations";
 
 // We want to pass in all the PENDING bookings
 // rosterByPreferences(teacherPreferences, guestSpeakers:, facilitators, locations)
@@ -58,10 +59,14 @@ const facilitators = [new UserModel({
     trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
-      availableFrom: new Date(2018, 8, 6, 9, 0),
-      availableUntil: new Date(2018, 8, 6, 13, 0)
+      availableFrom: new Date(2018, 8, 6, 10, 0),
+      availableUntil: new Date(2018, 8, 6, 12, 0)
     }],
-    specificUnavailabilities: [],
+    specificUnavailabilities: [{
+      notAvailableFrom: new Date(2018, 8, 7, 11, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 11, 0),
+      notes: "On holiday"
+    }],
     assignedTimes: []
   })
 })];
@@ -78,10 +83,14 @@ const guestSpeakers = [new UserModel({
     trained: ["Discussions of Homelessness and Disadvantage"],
     reliable: true,
     availabilities: [{
-      availableFrom: new Date(2018, 8, 6, 9, 0),
+      availableFrom: new Date(2018, 8, 6, 10, 0),
       availableUntil: new Date(2018, 8, 6, 12, 0)
     }],
-    specificUnavailabilities: [],
+    specificUnavailabilities: [{
+      notAvailableFrom: new Date(2018, 8, 6, 0, 0),
+      notAvailableUntil: new Date(2018, 8, 10, 24, 0),
+      notes: "On holiday"
+    }],
     assignedTimes: []
   })
 })];
@@ -110,18 +119,7 @@ const workshops = [new WorkshopModel({
 
 const bookings = [new BookingModel({
   state: BookingState.PENDING,
-  sessionTime: { timeBegin: new Date(2018, 8, 6, 9, 0), timeEnd: new Date(2018, 8, 6, 10, 0) },
-  city: cities[0],
-  location: locations[0],
-  workshop: workshops[0],
-  level: "9",
-  teacher: teachers[0],
-  firstTime: true,
-  numberOfStudents: 30
-}),
-new BookingModel({
-  state: BookingState.PENDING,
-  sessionTime: { timeBegin: new Date(2018, 8, 6, 10, 0), timeEnd: new Date(2018, 8, 6, 11, 0) },
+  sessionTime: { timeBegin: new Date(2018, 8, 6, 11, 0), timeEnd: new Date(2018, 8, 6, 12, 0) },
   city: cities[0],
   location: locations[0],
   workshop: workshops[0],
@@ -131,34 +129,18 @@ new BookingModel({
   numberOfStudents: 25
 })];
 
-test("several back to back bookings for the same facilitator", () => {
+test("unavailable guest speaker", () => {
   const bookingsResult = rosterByPreferences(bookings, guestSpeakers, facilitators);
 
   expect(bookingsResult[0].facilitator).toMatchObject(facilitators[0]);
-  expect(bookingsResult[0].guestSpeaker).toMatchObject(guestSpeakers[0]);
+  expect(bookingsResult[0].guestSpeaker).toMatchObject(EMPTY_GUEST_SPEAKER);
 
-  expect(bookingsResult[1].facilitator).toMatchObject(facilitators[0]);
-  expect(bookingsResult[1].guestSpeaker).toMatchObject(guestSpeakers[0]);
-
-  if (bookingsResult[1].facilitator instanceof UserModel) {
-    const user = bookingsResult[1].facilitator as User;
+  if (bookingsResult[0].facilitator instanceof UserModel) {
+    const user = bookingsResult[0].facilitator as User;
     if (user._facilitator instanceof FacilitatorModel) {
       const facilitator = user._facilitator as Facilitator;
       expect(facilitator.assignedTimes[0].availableFrom).toMatchObject(bookingsResult[0].sessionTime.timeBegin);
       expect(facilitator.assignedTimes[0].availableUntil).toMatchObject(bookingsResult[0].sessionTime.timeEnd);
-
-      expect(facilitator.assignedTimes[1].availableFrom).toMatchObject(bookingsResult[1].sessionTime.timeBegin);
-      expect(facilitator.assignedTimes[1].availableUntil).toMatchObject(bookingsResult[1].sessionTime.timeEnd);
-    }
-  } else if (bookingsResult[1].guestSpeaker instanceof UserModel) {
-    const user = bookingsResult[1].guestSpeaker as User;
-    if (user._guestSpeaker instanceof GuestSpeakerModel) {
-      const guestSpeaker = user._guestSpeaker as GuestSpeaker;
-      expect(guestSpeaker.assignedTimes[0].availableFrom).toMatchObject(bookingsResult[0].sessionTime.timeBegin);
-      expect(guestSpeaker.assignedTimes[0].availableUntil).toMatchObject(bookingsResult[0].sessionTime.timeEnd);
-
-      expect(guestSpeaker.assignedTimes[1].availableFrom).toMatchObject(bookingsResult[1].sessionTime.timeBegin);
-      expect(guestSpeaker.assignedTimes[1].availableUntil).toMatchObject(bookingsResult[1].sessionTime.timeEnd);
     }
   }
 });
