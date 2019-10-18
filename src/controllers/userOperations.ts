@@ -449,3 +449,45 @@ export function filterTeams(teams: [User, User][]): [User, User][] {
 
   return teams;
 }
+
+/**
+ * Check if facilitator and guest speaker can work with each other and pair them
+ * for booking.
+ *
+ * @export
+ * @param {[User, User][]} teams - array of possible teams
+ * @param {Ref<Location>} currentLocation - location of the current booking
+ * @param {Booking[]} bookings - array of all bookings
+ * @returns {[User, User][]} - array of most suitable teams
+ */
+export function filterLocation(teams: [User, User][], currentLocation: Ref<Location>, bookings: Booking[]): [User, User][] {
+  const newTeams: [User, User][] = [];
+
+  for (let i = 0; i < teams.length; i++) {
+    const rosteredFacilitatorBookings = bookings.filter(booking => booking.facilitator === teams[i][0]);
+    const rosteredGuestSpeakerBookings = bookings.filter(booking => booking.guestSpeaker === teams[i][1]);
+
+    if (rosteredFacilitatorBookings.length !== 0 && rosteredGuestSpeakerBookings.length !== 0) {
+      if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation
+        && rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
+        newTeams.push(teams[i]);
+      }
+    } else if (rosteredFacilitatorBookings.length === 0 && rosteredGuestSpeakerBookings.length !== 0) {
+      if (rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
+        newTeams.push(teams[i]);
+      }
+    } else if (rosteredFacilitatorBookings.length !== 0 && rosteredGuestSpeakerBookings.length === 0) {
+      if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation) {
+        newTeams.push(teams[i]);
+      }
+    } else if (rosteredFacilitatorBookings.length === 0 && rosteredGuestSpeakerBookings.length === 0) {
+      newTeams.push(teams[i]);
+    }
+  }
+
+  if (newTeams.length > 0) {
+    return newTeams;
+  }
+
+  return teams;
+}
