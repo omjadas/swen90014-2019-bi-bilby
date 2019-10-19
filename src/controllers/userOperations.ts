@@ -472,16 +472,16 @@ export function filterLocation(teams: [User, User][], currentLocation: Ref<Locat
     if (rosteredFacilitatorBookings.length !== 0 && rosteredGuestSpeakerBookings.length !== 0) {
       if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation
         && rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
-          if (!goodPair) {
-            newTeams = []
-            goodPair = true;
-          }
+        if (!goodPair) {
+          newTeams = [];
+          goodPair = true;
+        }
         newTeams.push(teams[i]);
       }
     } else if (rosteredGuestSpeakerBookings.length !== 0 && !goodPair) {
       if (rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
         if (!goodIndividual) {
-          newTeams = []
+          newTeams = [];
           goodIndividual = true;
         }
         newTeams.push(teams[i]);
@@ -489,7 +489,7 @@ export function filterLocation(teams: [User, User][], currentLocation: Ref<Locat
     } else if (rosteredFacilitatorBookings.length !== 0 && !goodPair) {
       if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation) {
         if (!goodIndividual) {
-          newTeams = []
+          newTeams = [];
           goodIndividual = true;
         }
         newTeams.push(teams[i]);
