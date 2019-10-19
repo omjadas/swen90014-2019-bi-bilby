@@ -461,9 +461,9 @@ export function filterTeams(teams: [User, User][]): [User, User][] {
  * @returns {[User, User][]} - array of most suitable teams
  */
 export function filterLocation(teams: [User, User][], currentLocation: Ref<Location>, bookings: Booking[]): [User, User][] {
-  const newTeams: [User, User][] = [];
-  let noGoodPair = false;
-  let noGooIndividual = false;
+  let newTeams: [User, User][] = [];
+  let goodPair = false;
+  let goodIndividual = false;
 
   for (let i = 0; i < teams.length; i++) {
     const rosteredFacilitatorBookings = bookings.filter(booking => booking.facilitator === teams[i][0]);
@@ -472,20 +472,29 @@ export function filterLocation(teams: [User, User][], currentLocation: Ref<Locat
     if (rosteredFacilitatorBookings.length !== 0 && rosteredGuestSpeakerBookings.length !== 0) {
       if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation
         && rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
+          if (!goodPair) {
+            newTeams = []
+            goodPair = true;
+          }
         newTeams.push(teams[i]);
-        noGoodPair = true;
       }
-    } else if (rosteredGuestSpeakerBookings.length !== 0 && !noGoodPair) {
+    } else if (rosteredGuestSpeakerBookings.length !== 0 && !goodPair) {
       if (rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
+        if (!goodIndividual) {
+          newTeams = []
+          goodIndividual = true;
+        }
         newTeams.push(teams[i]);
-        noGooIndividual = true;
       }
-    } else if (rosteredFacilitatorBookings.length !== 0 && !noGoodPair) {
+    } else if (rosteredFacilitatorBookings.length !== 0 && !goodPair) {
       if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation) {
+        if (!goodIndividual) {
+          newTeams = []
+          goodIndividual = true;
+        }
         newTeams.push(teams[i]);
-        noGooIndividual = true;
       }
-    } else if (!(noGoodPair && noGooIndividual)) {
+    } else if (!(goodPair && goodIndividual)) {
       newTeams.push(teams[i]);
     }
   }
