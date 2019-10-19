@@ -19,3 +19,21 @@ To start the server (once it has been built) run the following command in the pr
 ```bash
 npm run start
 ```
+
+To run the unit tests run the following command
+
+```bash
+npm run test
+```
+
+To build a docker image for deployment run the following command
+
+```bash
+npm run docker-build
+```
+
+To start the docker container the following command is used
+
+```bash
+npm run docker-run
+```
