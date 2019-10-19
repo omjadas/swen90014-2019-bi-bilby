@@ -462,6 +462,8 @@ export function filterTeams(teams: [User, User][]): [User, User][] {
  */
 export function filterLocation(teams: [User, User][], currentLocation: Ref<Location>, bookings: Booking[]): [User, User][] {
   const newTeams: [User, User][] = [];
+  let noGoodPair = false;
+  let noGooIndividual = false;
 
   for (let i = 0; i < teams.length; i++) {
     const rosteredFacilitatorBookings = bookings.filter(booking => booking.facilitator === teams[i][0]);
@@ -471,16 +473,19 @@ export function filterLocation(teams: [User, User][], currentLocation: Ref<Locat
       if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation
         && rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
         newTeams.push(teams[i]);
+        noGoodPair = true;
       }
-    } else if (rosteredGuestSpeakerBookings.length !== 0) {
+    } else if (rosteredGuestSpeakerBookings.length !== 0 && !noGoodPair) {
       if (rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
         newTeams.push(teams[i]);
+        noGooIndividual = true;
       }
-    } else if (rosteredFacilitatorBookings.length !== 0) {
+    } else if (rosteredFacilitatorBookings.length !== 0 && !noGoodPair) {
       if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation) {
         newTeams.push(teams[i]);
+        noGooIndividual = true;
       }
-    } else {
+    } else if (!(noGoodPair && noGooIndividual)) {
       newTeams.push(teams[i]);
     }
   }
