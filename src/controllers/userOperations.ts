@@ -379,7 +379,7 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
           team = [EMPTY_FACILITATOR, EMPTY_GUEST_SPEAKER];
           return team;
         }
-      } else if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUEST_SPEAKER) {
+      } else if (possibleFacilitator !== EMPTY_FACILITATOR) {
         if (trainedUser(possibleFacilitator, workshopName)) {
           team = [possibleFacilitator, possibleGuestSpeaker];
           return team;
@@ -387,7 +387,7 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
           team = [EMPTY_FACILITATOR, possibleGuestSpeaker];
           return team;
         }
-      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER) {
+      } else if (possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER) {
         if (trainedUser(possibleGuestSpeaker, workshopName)) {
           team = [possibleFacilitator, possibleGuestSpeaker];
           return team;
@@ -395,7 +395,7 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
           team = [possibleFacilitator, EMPTY_GUEST_SPEAKER];
           return team;
         }
-      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUEST_SPEAKER) {
+      } else {
         team = [possibleFacilitator, possibleGuestSpeaker];
         return team;
       }
@@ -445,6 +445,62 @@ export function filterTeams(teams: [User, User][]): [User, User][] {
     } else if (noEmptyGuestSpeakers.length > 0) {
       return noEmptyGuestSpeakers;
     }
+  }
+
+  return teams;
+}
+
+/**
+ * Check if facilitator and guest speaker can work with each other and pair them
+ * for booking.
+ *
+ * @export
+ * @param {[User, User][]} teams - array of possible teams
+ * @param {Ref<Location>} currentLocation - location of the current booking
+ * @param {Booking[]} bookings - array of all bookings
+ * @returns {[User, User][]} - array of most suitable teams
+ */
+export function filterLocation(teams: [User, User][], currentLocation: Ref<Location>, bookings: Booking[]): [User, User][] {
+  let newTeams: [User, User][] = [];
+  let goodPair = false;
+  let goodIndividual = false;
+
+  for (let i = 0; i < teams.length; i++) {
+    const rosteredFacilitatorBookings = bookings.filter(booking => booking.facilitator === teams[i][0]);
+    const rosteredGuestSpeakerBookings = bookings.filter(booking => booking.guestSpeaker === teams[i][1]);
+
+    if (rosteredFacilitatorBookings.length !== 0 && rosteredGuestSpeakerBookings.length !== 0) {
+      if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation
+        && rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
+          if (!goodPair) {
+            newTeams = []
+            goodPair = true;
+          }
+        newTeams.push(teams[i]);
+      }
+    } else if (rosteredGuestSpeakerBookings.length !== 0 && !goodPair) {
+      if (rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
+        if (!goodIndividual) {
+          newTeams = []
+          goodIndividual = true;
+        }
+        newTeams.push(teams[i]);
+      }
+    } else if (rosteredFacilitatorBookings.length !== 0 && !goodPair) {
+      if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation) {
+        if (!goodIndividual) {
+          newTeams = []
+          goodIndividual = true;
+        }
+        newTeams.push(teams[i]);
+      }
+    } else if (!(goodPair && goodIndividual)) {
+      newTeams.push(teams[i]);
+    }
+  }
+
+  if (newTeams.length > 0) {
+    return newTeams;
   }
 
   return teams;

@@ -5,8 +5,10 @@ import {
   adjustAvailabilities,
   checkBackToBackFacilitator,
   checkBackToBackGuestSpeaker,
+  filterTeams,
+  filterLocation,
   EMPTY_GUEST_SPEAKER,
-  EMPTY_FACILITATOR, filterTeams,
+  EMPTY_FACILITATOR,
 } from "./userOperations";
 import { Booking, BookingState } from "../models/booking.model";
 import { User } from "../models/user.model";
@@ -115,6 +117,10 @@ export default function rosterByPreferences(bookings: Booking[], guestSpeakers: 
     }
     // Filter the pairs of users as to remove all accuracies of empty users whenever possible.
     teams = filterTeams(teams);
+
+    if (i > 0) {
+      teams = filterLocation(teams, bookings[i].location, bookings);
+    }
 
     if (!(backToBackFacilitator && backToBackGuestSpeaker) && teams.length > 0) {
       const index = Math.floor(Math.random() * teams.length);
