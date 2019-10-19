@@ -379,7 +379,7 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
           team = [EMPTY_FACILITATOR, EMPTY_GUEST_SPEAKER];
           return team;
         }
-      } else if (possibleFacilitator !== EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUEST_SPEAKER) {
+      } else if (possibleFacilitator !== EMPTY_FACILITATOR) {
         if (trainedUser(possibleFacilitator, workshopName)) {
           team = [possibleFacilitator, possibleGuestSpeaker];
           return team;
@@ -387,7 +387,7 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
           team = [EMPTY_FACILITATOR, possibleGuestSpeaker];
           return team;
         }
-      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER) {
+      } else if (possibleGuestSpeaker !== EMPTY_GUEST_SPEAKER) {
         if (trainedUser(possibleGuestSpeaker, workshopName)) {
           team = [possibleFacilitator, possibleGuestSpeaker];
           return team;
@@ -395,7 +395,7 @@ export function pairTeams(possibleFacilitator: User, possibleGuestSpeaker: User,
           team = [possibleFacilitator, EMPTY_GUEST_SPEAKER];
           return team;
         }
-      } else if (possibleFacilitator === EMPTY_FACILITATOR && possibleGuestSpeaker === EMPTY_GUEST_SPEAKER) {
+      } else {
         team = [possibleFacilitator, possibleGuestSpeaker];
         return team;
       }
@@ -472,15 +472,15 @@ export function filterLocation(teams: [User, User][], currentLocation: Ref<Locat
         && rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
         newTeams.push(teams[i]);
       }
-    } else if (rosteredFacilitatorBookings.length === 0 && rosteredGuestSpeakerBookings.length !== 0) {
+    } else if (rosteredGuestSpeakerBookings.length !== 0) {
       if (rosteredGuestSpeakerBookings[rosteredGuestSpeakerBookings.length - 1].location === currentLocation) {
         newTeams.push(teams[i]);
       }
-    } else if (rosteredFacilitatorBookings.length !== 0 && rosteredGuestSpeakerBookings.length === 0) {
+    } else if (rosteredFacilitatorBookings.length !== 0) {
       if (rosteredFacilitatorBookings[rosteredFacilitatorBookings.length - 1].location === currentLocation) {
         newTeams.push(teams[i]);
       }
-    } else if (rosteredFacilitatorBookings.length === 0 && rosteredGuestSpeakerBookings.length === 0) {
+    } else {
       newTeams.push(teams[i]);
     }
   }
