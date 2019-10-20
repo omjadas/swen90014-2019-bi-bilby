@@ -26,7 +26,7 @@ To run the unit tests run the following command
 npm run test
 ```
 
-![asciicast](https://asciinema.org/a/WNcGA94966y44xOrggVLQkgpo.svg)](https://asciinema.org/a/WNcGA94966y44xOrggVLQkgpo)
+[![asciicast](https://asciinema.org/a/WNcGA94966y44xOrggVLQkgpo.svg)](https://asciinema.org/a/WNcGA94966y44xOrggVLQkgpo)
 
 To build a docker image for deployment run the following command
 
