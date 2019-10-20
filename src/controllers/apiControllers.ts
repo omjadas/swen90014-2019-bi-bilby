@@ -13,16 +13,20 @@ import { Booking } from "../models/booking.model";
  * @param {Buffer} file excel file to roster
  * @returns {Buffer} output file
  */
-export function rosterFile(from: Date, to: Date, file: Buffer): Buffer {
-  const cities = getCities(file);
-  let bookings: Booking[] = [];
-  cities.forEach(city => {
-    bookings = bookings.concat(getBookings(file, city.city, new Date(from), new Date(to)));
-  });
-  const guestSpeakers = getGuestSpeakers(file, new Date(from), new Date(to));
-  const facilitators = getFacilitators(file, new Date(from), new Date(to));
-  const roster = rosterByPreferences(bookings, guestSpeakers, facilitators);
-  return printBooking(roster);
+export function rosterFile(from: Date, to: Date, file: Buffer): Buffer | null {
+  try {
+    const cities = getCities(file);
+    let bookings: Booking[] = [];
+    cities.forEach(city => {
+      bookings = bookings.concat(getBookings(file, city.city, new Date(from), new Date(to)));
+    });
+    const guestSpeakers = getGuestSpeakers(file, new Date(from), new Date(to));
+    const facilitators = getFacilitators(file, new Date(from), new Date(to));
+    const roster = rosterByPreferences(bookings, guestSpeakers, facilitators);
+    return printBooking(roster);
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -50,6 +54,11 @@ export function upload(req: Request, res: Response): any {
 
   const file = req.files.excel.data;
   const out = rosterFile(from, to, file);
+
+  if (out === null) {
+    res.status(400).send("File does not follow specified format.");
+    return;
+  }
 
   const readStream = new stream.PassThrough();
   readStream.end(out);
